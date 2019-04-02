@@ -3,11 +3,11 @@
   "scripts": {
     "clean": "rimraf ./build",
     "build": "cross-env NODE_ENV=production webpack",
-    "start": "cross-env NODE_ENV=production node ./build/server/main.js",
-    "predevelop": "mkdirp ./build/server && nodetouch ./build/server/main.js",
+    "start": "cross-env NODE_ENV=production node ./build/server.js",
+    "predevelop": "mkdirp ./build && nodetouch ./build/server.js",
     "develop": "run-p develop:build develop:start",
     "develop:build": "cross-env NODE_ENV=development webpack --watch",
-    "develop:start": "cross-env NODE_ENV=development node-dev --respawn --no-notify ./build/server/main.js",
+    "develop:start": "cross-env NODE_ENV=development node-dev --respawn --no-notify ./build/server.js",
     "lint": "eslint --ext .js .",
     "test": "jest",
     "format": "prettier --write '**/*.{js,json,md}'"

@@ -2,19 +2,14 @@ import express from "express";
 import serveStatic from "serve-static";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
-import path from "path";
 import fs from "fs";
 import util from "util";
 import App from "../app";
 import Document from "./document";
 
-const port = 3000;
-const assetsPath = path.join(process.cwd(), "build/client");
-const manifestPath = path.join(assetsPath, ".manifest.json");
-
 const app = express();
 
-app.use("/static", serveStatic(assetsPath));
+app.use(process.env.STATIC_PREFIX, serveStatic(process.env.STATIC_PATH));
 
 app.get("/*", async (req, res) => {
   try {
@@ -42,8 +37,8 @@ app.get("/*", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.info(`Listening on http://localhost:${port}`);
+app.listen(process.env.PORT, () => {
+  console.info(`Listening on http://localhost:${process.env.PORT}`);
 });
 
 const readFile = util.promisify(fs.readFile);
@@ -53,7 +48,7 @@ async function readManifest() {
     return cachedManifest;
   }
 
-  const contents = await readFile(manifestPath);
+  const contents = await readFile(process.env.MANIFEST_PATH);
   const manifest = JSON.parse(contents.toString());
 
   if (!__DEV__) {

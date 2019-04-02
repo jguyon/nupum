@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const path = require("path");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
@@ -78,10 +79,12 @@ module.exports = [
     bail,
     entry: path.join(__dirname, "src/client"),
     output: {
-      path: path.join(__dirname, "build/client"),
-      filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
-      chunkFilename: isDev ? "[name].js" : "[name].[contenthash:8].js",
-      publicPath: "/static/",
+      path: path.join(__dirname, "build"),
+      filename: isDev ? "static/[name].js" : "static/[name].[contenthash:8].js",
+      chunkFilename: isDev
+        ? "static/[name].js"
+        : "static/[name].[contenthash:8].js",
+      publicPath: "/",
     },
     optimization: {
       runtimeChunk: "single",
@@ -100,7 +103,14 @@ module.exports = [
       // generate a mapping of all assets to their corresponding output path
       new ManifestPlugin({
         // save as a dotfile so that it can be ignored by serve-static
-        fileName: ".manifest.json",
+        fileName: "assets.json",
+      }),
+      // environment variables
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(
+          isDev ? "development" : "production",
+        ),
+        "process.env.TARGET": JSON.stringify("client"),
       }),
     ],
   },
@@ -113,14 +123,8 @@ module.exports = [
     bail,
     entry: path.join(__dirname, "src/server"),
     output: {
-      path: path.join(__dirname, "build/server"),
-      filename: "[name].js",
-      chunkFilename: "[name].js",
-    },
-    optimization: {
-      splitChunks: {
-        chunks: "all",
-      },
+      path: path.join(__dirname, "build"),
+      filename: "server.js",
     },
     resolve: {
       extensions,
@@ -128,6 +132,23 @@ module.exports = [
     module: {
       rules,
     },
-    plugins: createPlugins(),
+    plugins: [
+      ...createPlugins(),
+      // environment variables
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(
+          isDev ? "development" : "production",
+        ),
+        "process.env.TARGET": JSON.stringify("server"),
+        "process.env.STATIC_PATH": JSON.stringify(
+          path.join(__dirname, "build/static"),
+        ),
+        "process.env.STATIC_PREFIX": JSON.stringify("/static"),
+        "process.env.MANIFEST_PATH": JSON.stringify(
+          path.join(__dirname, "build/assets.json"),
+        ),
+        "process.env.PORT": JSON.stringify(process.env.PORT || "3000"),
+      }),
+    ],
   },
 ];
