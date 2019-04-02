@@ -18,7 +18,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "serve-static": "^1.13.2"
+    "serve-static": "^1.13.2",
+    "tiny-invariant": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -53,7 +54,6 @@
     "touch": "^3.1.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "webpack-manifest-plugin": "^2.0.4",
     "webpack-node-externals": "^1.7.2"
   }
 }

@@ -2,7 +2,6 @@ const webpack = require("webpack");
 const path = require("path");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
-const ManifestPlugin = require("webpack-manifest-plugin");
 const nodeExternals = require("webpack-node-externals");
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -70,6 +69,39 @@ function createPlugins() {
   ].filter(Boolean);
 }
 
+// adapted from https://github.com/smooth-code/loadable-components/blob/3767f28240ffd87676d6e965c649188aedd9d301/packages/webpack-plugin/src/index.js
+class AssetManifestPlugin {
+  constructor(filename) {
+    this.filename = filename;
+  }
+
+  apply(compiler) {
+    const handleEmit = (hookCompiler, callback) => {
+      const stats = hookCompiler.getStats().toJson({
+        hash: false,
+        publicPath: true,
+        assets: true,
+        chunks: false,
+        modules: false,
+        source: false,
+        errorDetails: false,
+        timings: false,
+      });
+
+      const json = JSON.stringify(stats);
+
+      hookCompiler.assets[this.filename] = {
+        source: () => json,
+        size: () => json.length,
+      };
+
+      callback();
+    };
+
+    compiler.hooks.emit.tapAsync("nupum", handleEmit);
+  }
+}
+
 module.exports = [
   {
     name: "client",
@@ -100,11 +132,8 @@ module.exports = [
     },
     plugins: [
       ...createPlugins(),
-      // generate a mapping of all assets to their corresponding output path
-      new ManifestPlugin({
-        // save as a dotfile so that it can be ignored by serve-static
-        fileName: "assets.json",
-      }),
+      // generate an asset manifest for server use
+      new AssetManifestPlugin("assets.json"),
       // environment variables
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify(

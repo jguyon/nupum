@@ -14,16 +14,12 @@ export default function Document({ html, scripts }) {
         <title>nupum</title>
 
         {scripts.map(uri => (
-          <link key={uri} rel="preload" href={uri} as="script" />
+          <script key={uri} src={uri} defer />
         ))}
       </head>
 
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: html }} />
-
-        {scripts.map(uri => (
-          <script key={uri} src={uri} />
-        ))}
       </body>
     </html>
   );
