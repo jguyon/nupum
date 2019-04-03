@@ -12,6 +12,7 @@ const app = express();
 export default app;
 
 app.use(process.env.STATIC_PREFIX, serveStatic(process.env.STATIC_PATH));
+app.use(serveStatic(process.env.PUBLIC_PATH));
 
 app.get("/*", async (req, res) => {
   try {

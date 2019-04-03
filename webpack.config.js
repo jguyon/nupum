@@ -6,7 +6,6 @@ const StartServerPlugin = require("start-server-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 
 const isDev = process.env.NODE_ENV !== "production";
-
 const mode = isDev ? "development" : "production";
 const stats = "minimal";
 const devtool = isDev ? "cheap-module-source-map" : "source-map";
@@ -185,6 +184,9 @@ module.exports = [
         "process.env.STATIC_PREFIX": JSON.stringify("/static"),
         "process.env.MANIFEST_PATH": JSON.stringify(
           path.join(__dirname, "build/assets.json"),
+        ),
+        "process.env.PUBLIC_PATH": JSON.stringify(
+          path.join(__dirname, "public"),
         ),
         "process.env.PORT": JSON.stringify(process.env.PORT || "3000"),
       }),
