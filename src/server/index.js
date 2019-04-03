@@ -1,80 +1,29 @@
-import express from "express";
-import serveStatic from "serve-static";
-import React from "react";
-import { renderToString, renderToStaticMarkup } from "react-dom/server";
-import fs from "fs";
-import util from "util";
-import invariant from "tiny-invariant";
-import App from "../app";
-import Document from "./document";
+import http from "http";
 
-const app = express();
+let { default: currentApp } = require("./app");
+const server = http.createServer(currentApp);
 
-app.use(process.env.STATIC_PREFIX, serveStatic(process.env.STATIC_PATH));
-
-app.get("/*", async (req, res) => {
-  try {
-    const scripts = await scriptsFor("main");
-    const appHtml = renderToString(<App />);
-    const html = renderToStaticMarkup(
-      <Document html={appHtml} scripts={scripts} />,
-    );
-
-    res
-      .status(200)
-      .set("content-type", "text/html")
-      .send(`<!doctype html>${html}`);
-  } catch (error) {
+server.listen(process.env.PORT, error => {
+  if (error) {
     console.error(error);
-
-    res
-      .status(500)
-      .set("content-type", "text/plain")
-      .send("Internal Server Error");
+  } else {
+    console.log(`Listening on http://localhost:${process.env.PORT}/`);
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.info(`Listening on http://localhost:${process.env.PORT}`);
-});
+if (module.hot) {
+  console.log("Server-side HMR enabled");
 
-const JS_REGEXP = /\.js$/;
-async function scriptsFor(entry, chunks = []) {
-  const manifest = await readManifest();
-  const scripts = new Set();
+  module.hot.accept("./app", () => {
+    console.log("[HMR] Reloading...");
 
-  const processAsset = asset => {
-    if (JS_REGEXP.test(asset)) {
-      scripts.add(`${manifest.publicPath}${asset}`);
+    try {
+      const { default: nextApp } = require("./app");
+      server.off("request", currentApp);
+      server.on("request", nextApp);
+      currentApp = nextApp;
+    } catch (error) {
+      console.error(error);
     }
-  };
-
-  chunks.forEach(chunk => {
-    const chunkGroup = manifest.namedChunkGroups[chunk];
-    invariant(chunkGroup, `invalid chunk name ${JSON.stringify(chunk)}`);
-    chunkGroup.assets.forEach(processAsset);
   });
-
-  const entrypoint = manifest.entrypoints[entry];
-  invariant(entrypoint, `invalid entry name ${JSON.stringify(entry)}`);
-  entrypoint.assets.forEach(processAsset);
-
-  return [...scripts];
-}
-
-const readFile = util.promisify(fs.readFile);
-let cachedManifest = null;
-async function readManifest() {
-  if (cachedManifest) {
-    return cachedManifest;
-  }
-
-  const contents = await readFile(process.env.MANIFEST_PATH);
-  const manifest = JSON.parse(contents.toString());
-
-  if (!__DEV__) {
-    cachedManifest = manifest;
-  }
-
-  return manifest;
 }

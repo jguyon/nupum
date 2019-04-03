@@ -2,11 +2,13 @@ const webpack = require("webpack");
 const path = require("path");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
+const StartServerPlugin = require("start-server-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 
 const isDev = process.env.NODE_ENV !== "production";
 
 const mode = isDev ? "development" : "production";
+const stats = "minimal";
 const devtool = isDev ? "cheap-module-source-map" : "source-map";
 const bail = !isDev;
 const extensions = [".js"];
@@ -106,17 +108,16 @@ module.exports = [
   {
     name: "client",
     target: "web",
+    stats,
     mode,
     devtool,
     bail,
     entry: path.join(__dirname, "src/client"),
     output: {
-      path: path.join(__dirname, "build"),
-      filename: isDev ? "static/[name].js" : "static/[name].[contenthash:8].js",
-      chunkFilename: isDev
-        ? "static/[name].js"
-        : "static/[name].[contenthash:8].js",
-      publicPath: "/",
+      path: path.join(__dirname, "build/static"),
+      filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
+      chunkFilename: isDev ? "[name].js" : "[name].[contenthash:8].js",
+      publicPath: "/static/",
     },
     optimization: {
       runtimeChunk: "single",
@@ -133,7 +134,7 @@ module.exports = [
     plugins: [
       ...createPlugins(),
       // generate an asset manifest for server use
-      new AssetManifestPlugin("assets.json"),
+      new AssetManifestPlugin("../assets.json"),
       // environment variables
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify(
@@ -146,11 +147,20 @@ module.exports = [
   {
     name: "server",
     target: "node",
-    externals: [nodeExternals()],
+    stats,
+    externals: [
+      // we don't want to bundle node_modules in the server
+      nodeExternals({
+        whitelist: isDev ? ["webpack/hot/poll?300"] : [],
+      }),
+    ],
     mode,
     devtool,
     bail,
-    entry: path.join(__dirname, "src/server"),
+    entry: [
+      isDev && "webpack/hot/poll?300",
+      path.join(__dirname, "src/server"),
+    ].filter(Boolean),
     output: {
       path: path.join(__dirname, "build"),
       filename: "server.js",
@@ -178,6 +188,16 @@ module.exports = [
         ),
         "process.env.PORT": JSON.stringify(process.env.PORT || "3000"),
       }),
-    ],
+      // prevent creating multiple chunks
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
+      }),
+      // in development, use hot reloading and start a server
+      isDev && new webpack.HotModuleReplacementPlugin(),
+      isDev &&
+        new StartServerPlugin({
+          name: "server.js",
+        }),
+    ].filter(Boolean),
   },
 ];
