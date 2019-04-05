@@ -91,3 +91,34 @@ function matchSegments(pathSegments, uriSegments) {
     childUri,
   };
 }
+
+export function preloadMatches(matches, extraProps) {
+  warning(
+    extraProps.params === undefined,
+    "extraProps.params will be erased passing extraProps to preload functions",
+  );
+
+  return Promise.all(
+    matches.map(({ route, params }) => {
+      warning(
+        !route.preload || typeof route.preload === "function",
+        "route.preload was present but was not a function",
+      );
+
+      if (route.preload && typeof route.preload === "function") {
+        return Promise.resolve()
+          .then(() =>
+            route.preload({
+              ...extraProps,
+              params,
+            }),
+          )
+          .then(noop);
+      } else {
+        return Promise.resolve();
+      }
+    }),
+  ).then(noop);
+}
+
+const noop = () => {};

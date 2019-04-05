@@ -1,4 +1,4 @@
-import { matchPath, matchRoutes } from "./helpers";
+import { matchPath, matchRoutes, preloadMatches } from "./helpers";
 
 describe("matchPath", () => {
   test("root path matches root uri", () => {
@@ -225,6 +225,7 @@ describe("matchPath", () => {
 describe("matchRoutes", () => {
   test("empty array is returned when no matches are found", () => {
     const routes = [{ path: "/one" }, { path: "/two" }, { path: "/three" }];
+
     const matches = matchRoutes(routes, "/four");
 
     expect(matches).toEqual([]);
@@ -232,6 +233,7 @@ describe("matchRoutes", () => {
 
   test("first match is returned", () => {
     const routes = [{ path: "/static" }, { path: "/:param" }, { path: "/*" }];
+
     const matches = matchRoutes(routes, "/dynamic");
 
     expect(matches).toEqual([
@@ -251,6 +253,7 @@ describe("matchRoutes", () => {
         routes: [{ path: "/static" }, { path: "/:param" }, { path: "/*" }],
       },
     ];
+
     const matches = matchRoutes(routes, "/parent/dynamic");
 
     expect(matches).toEqual([
@@ -276,6 +279,7 @@ describe("matchRoutes", () => {
         routes: [{ path: "/static" }, { path: "/:param" }, { path: "/*" }],
       },
     ];
+
     const matches = matchRoutes(routes, "/parent/dynamic");
 
     expect(matches).toEqual([]);
@@ -288,6 +292,7 @@ describe("matchRoutes", () => {
         routes: [{ path: "/" }],
       },
     ];
+
     const matches = matchRoutes(routes, "/parent");
 
     expect(matches).toEqual([
@@ -318,6 +323,7 @@ describe("matchRoutes", () => {
         ],
       },
     ];
+
     const matches = matchRoutes(routes, "/one/two/three");
 
     expect(matches).toEqual([
@@ -340,5 +346,104 @@ describe("matchRoutes", () => {
         route: routes[0].routes[0].routes[0],
       },
     ]);
+  });
+});
+
+describe("preloadMatches", () => {
+  test("promise resolves when all route.preload functions resolve", async () => {
+    const routes = [
+      {
+        path: "/one/*",
+        preload: () => Promise.resolve(),
+        routes: [
+          {
+            path: "/two/*",
+            preload: () => Promise.resolve(),
+            routes: [
+              {
+                path: "/three",
+                preload: () => Promise.resolve(),
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const matches = matchRoutes(routes, "/one/two/three");
+    expect(matches).toHaveLength(3);
+    const promise = preloadMatches(matches, {});
+
+    await expect(promise).resolves.toBe(undefined);
+  });
+
+  test("promise rejects when one route.preload function rejects", async () => {
+    const routes = [
+      {
+        path: "/one/*",
+        preload: () => Promise.resolve(),
+        routes: [
+          {
+            path: "/two/*",
+            preload: () => Promise.reject(new Error("failure")),
+            routes: [
+              {
+                path: "/three",
+                preload: () => Promise.resolve(),
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const matches = matchRoutes(routes, "/one/two/three");
+    expect(matches).toHaveLength(3);
+    const promise = preloadMatches(matches, {});
+
+    await expect(promise).rejects.toThrow("failure");
+  });
+
+  test("all present route.preload functions are called", async () => {
+    const preloadOne = jest.fn(() => Promise.resolve());
+    const preloadThree = jest.fn(() => Promise.resolve());
+    const routes = [
+      {
+        path: "/one/*",
+        preload: preloadOne,
+        routes: [
+          {
+            path: "/two/*",
+            routes: [
+              {
+                path: "/three",
+                preload: preloadThree,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const matches = matchRoutes(routes, "/one/two/three");
+    expect(matches).toHaveLength(3);
+    await preloadMatches(matches, {});
+
+    expect(preloadOne).toHaveBeenCalledTimes(1);
+    expect(preloadThree).toHaveBeenCalledTimes(1);
+  });
+
+  test("route.preload functions are called with params and extra props", async () => {
+    const preload = jest.fn(() => Promise.resolve());
+    const routes = [{ path: "/:param", preload }];
+
+    const matches = matchRoutes(routes, "/one");
+    expect(matches).toHaveLength(1);
+    await preloadMatches(matches, { extra: "prop" });
+
+    expect(preload).toHaveBeenCalledWith({
+      params: { param: "one" },
+      extra: "prop",
+    });
   });
 });
