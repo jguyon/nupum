@@ -1,28 +1,14 @@
-import invariant from "tiny-invariant";
 import warning from "tiny-warning";
 
 export function matchPath(path, uri) {
-  invariant(typeof path === "string", "expected path to be a string");
-  invariant(typeof uri === "string", "expected uri to be a string");
-
   return matchSegments(segmentize(path), segmentize(uri));
 }
 
 export function matchRoutes(routes, uri) {
-  invariant(Array.isArray(routes), "expected routes to be an array");
-  invariant(typeof uri === "string", "expected uri to be a string");
-
   const uriSegments = segmentize(uri);
 
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
-
-    invariant(typeof route === "object", "expected route to be an object");
-    invariant(
-      typeof route.path === "string",
-      "expected route.path to be a string",
-    );
-
     const match = matchSegments(segmentize(route.path), uriSegments);
 
     if (match) {
