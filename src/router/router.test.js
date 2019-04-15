@@ -1,7 +1,7 @@
 import React from "react";
 import { createMemoryHistory } from "history";
-import { render, act, wait } from "../test";
-import Router, { preloadRoutes } from "./router";
+import { render, act, wait, fireEvent } from "../test";
+import Router, { preloadRoutes, useNavigate } from "./router";
 
 jest.useFakeTimers();
 
@@ -498,5 +498,159 @@ describe("preloadRoutes", () => {
       params: {},
       preloadProp: "preloadValue",
     });
+  });
+});
+
+describe("useNavigate", () => {
+  test("given path is pushed", () => {
+    function Root() {
+      const navigate = useNavigate();
+
+      return (
+        <a
+          href="/match"
+          onClick={event => {
+            event.preventDefault();
+            navigate("/match");
+          }}
+        >
+          go
+        </a>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        render: () => "match",
+      },
+    ];
+
+    const { container, getByText } = render(
+      <Router history={history} routes={routes} />,
+    );
+    fireEvent.click(getByText("go"));
+
+    expect(history.location.pathname).toBe("/match");
+    expect(history.length).toBe(2);
+    expect(container).toHaveTextContent("match");
+  });
+
+  test("given path is replaced", () => {
+    function Root() {
+      const navigate = useNavigate();
+
+      return (
+        <a
+          href="/match"
+          onClick={event => {
+            event.preventDefault();
+            navigate("/match", { replace: true });
+          }}
+        >
+          go
+        </a>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        render: () => "match",
+      },
+    ];
+
+    const { container, getByText } = render(
+      <Router history={history} routes={routes} />,
+    );
+    fireEvent.click(getByText("go"));
+
+    expect(history.location.pathname).toBe("/match");
+    expect(history.length).toBe(1);
+    expect(container).toHaveTextContent("match");
+  });
+
+  test("given state is pushed", () => {
+    function Root() {
+      const navigate = useNavigate();
+
+      return (
+        <a
+          href="/match"
+          onClick={event => {
+            event.preventDefault();
+            navigate("/match", { state: "some state" });
+          }}
+        >
+          go
+        </a>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        render: () => "match",
+      },
+    ];
+
+    const { getByText } = render(<Router history={history} routes={routes} />);
+    fireEvent.click(getByText("go"));
+
+    expect(history.location.pathname).toBe("/match");
+    expect(history.length).toBe(2);
+    expect(history.location.state).toBe("some state");
+  });
+
+  test("given state is replaced", () => {
+    function Root() {
+      const navigate = useNavigate();
+
+      return (
+        <a
+          href="/match"
+          onClick={event => {
+            event.preventDefault();
+            navigate("/match", { state: "some state", replace: true });
+          }}
+        >
+          go
+        </a>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        render: () => "match",
+      },
+    ];
+
+    const { getByText } = render(<Router history={history} routes={routes} />);
+    fireEvent.click(getByText("go"));
+
+    expect(history.location.pathname).toBe("/match");
+    expect(history.length).toBe(1);
+    expect(history.location.state).toBe("some state");
   });
 });

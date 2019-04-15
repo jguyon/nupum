@@ -1,4 +1,11 @@
-import { useReducer, useEffect, useState } from "react";
+import React, {
+  useReducer,
+  useEffect,
+  useState,
+  createContext,
+  useContext,
+  useCallback,
+} from "react";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import warning from "tiny-warning";
@@ -16,15 +23,19 @@ export default function Router({
     useRouter(history, routes),
   );
 
-  return matches.reduceRight(
-    (children, { route, params }) =>
-      route.render({
-        location,
-        action,
-        params,
-        children,
-      }),
-    null,
+  return (
+    <NavigateProvider history={history}>
+      {matches.reduceRight(
+        (children, { route, params }) =>
+          route.render({
+            location,
+            action,
+            params,
+            children,
+          }),
+        null,
+      )}
+    </NavigateProvider>
   );
 }
 
@@ -203,4 +214,34 @@ function usePreload(timeout, props, routerState) {
   }, [routerState, currentState, timeout]);
 
   return currentState;
+}
+
+const NavigateContext = createContext(null);
+
+function NavigateProvider({ history, children }) {
+  const navigate = useCallback(
+    (path, { state, replace = false } = {}) => {
+      invariant(typeof path === "string", "expected path to be a string");
+      invariant(path[0] === "/", "expected path to be absolute");
+
+      if (replace) {
+        history.replace(path, state);
+      } else {
+        history.push(path, state);
+      }
+    },
+    [history],
+  );
+
+  return (
+    <NavigateContext.Provider value={navigate}>
+      {children}
+    </NavigateContext.Provider>
+  );
+}
+
+export function useNavigate() {
+  const navigate = useContext(NavigateContext);
+  invariant(navigate, "`navigate` can only be used inside a <Router/>");
+  return navigate;
 }
