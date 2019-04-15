@@ -1,7 +1,7 @@
 import React from "react";
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, createLocation } from "history";
 import { render, act, wait, fireEvent } from "../test";
-import Router, { preloadRoutes, useNavigate } from "./router";
+import Router, { preloadRoutes, useNavigate, usePreload } from "./router";
 
 jest.useFakeTimers();
 
@@ -652,5 +652,164 @@ describe("useNavigate", () => {
     expect(history.location.pathname).toBe("/match");
     expect(history.length).toBe(1);
     expect(history.location.state).toBe("some state");
+  });
+});
+
+describe("usePreload", () => {
+  test("given path is preloaded", () => {
+    function Root() {
+      const preload = usePreload();
+
+      return (
+        <button type="button" onClick={() => preload("/match")}>
+          preload
+        </button>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const rootPreload = jest.fn(() => Promise.resolve());
+    const matchPreload = jest.fn(() => Promise.resolve());
+    const routes = [
+      {
+        path: "/",
+        preload: rootPreload,
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        preload: matchPreload,
+        render: () => "match",
+      },
+    ];
+
+    const { getByText } = render(<Router history={history} routes={routes} />);
+    fireEvent.click(getByText("preload"));
+
+    expect(rootPreload).not.toHaveBeenCalled();
+    expect(matchPreload).toHaveBeenCalledTimes(1);
+    expect(matchPreload).toHaveBeenCalledWith({
+      location: createLocation("/match"),
+      action: "PRELOAD",
+      params: {},
+    });
+  });
+
+  test("given path is preloaded with params", () => {
+    function Root() {
+      const preload = usePreload();
+
+      return (
+        <button type="button" onClick={() => preload("/match/one")}>
+          preload
+        </button>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const matchPreload = jest.fn(() => Promise.resolve());
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match/:param",
+        preload: matchPreload,
+        render: () => "match",
+      },
+    ];
+
+    const { getByText } = render(<Router history={history} routes={routes} />);
+    fireEvent.click(getByText("preload"));
+
+    expect(matchPreload).toHaveBeenCalledTimes(1);
+    expect(matchPreload).toHaveBeenCalledWith({
+      location: createLocation("/match/one"),
+      action: "PRELOAD",
+      params: { param: "one" },
+    });
+  });
+
+  test("given path is preloaded with props", () => {
+    function Root() {
+      const preload = usePreload();
+
+      return (
+        <button type="button" onClick={() => preload("/match")}>
+          preload
+        </button>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const matchPreload = jest.fn(() => Promise.resolve());
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        preload: matchPreload,
+        render: () => "match",
+      },
+    ];
+
+    const { getByText } = render(
+      <Router
+        history={history}
+        routes={routes}
+        preloadProps={{ preloadProp: "preloadValue" }}
+      />,
+    );
+    fireEvent.click(getByText("preload"));
+
+    expect(matchPreload).toHaveBeenCalledTimes(1);
+    expect(matchPreload).toHaveBeenCalledWith({
+      location: createLocation("/match"),
+      action: "PRELOAD",
+      params: {},
+      preloadProp: "preloadValue",
+    });
+  });
+
+  test("given path is preloaded with state", () => {
+    function Root() {
+      const preload = usePreload();
+
+      return (
+        <button
+          type="button"
+          onClick={() => preload("/match", { state: "some state" })}
+        >
+          preload
+        </button>
+      );
+    }
+
+    const history = createMemoryHistory();
+    const matchPreload = jest.fn(() => Promise.resolve());
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+      {
+        path: "/match",
+        preload: matchPreload,
+        render: () => "match",
+      },
+    ];
+
+    const { getByText } = render(<Router history={history} routes={routes} />);
+    fireEvent.click(getByText("preload"));
+
+    expect(matchPreload).toHaveBeenCalledTimes(1);
+    expect(matchPreload).toHaveBeenCalledWith({
+      location: createLocation("/match", "some state"),
+      action: "PRELOAD",
+      params: {},
+    });
   });
 });

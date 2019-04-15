@@ -9,6 +9,7 @@ import React, {
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import warning from "tiny-warning";
+import { createLocation } from "history";
 import { matchRoutes, preloadMatches } from "./helpers";
 
 export default function Router({
@@ -17,7 +18,7 @@ export default function Router({
   preloadTimeout = 0,
   preloadProps = {},
 }) {
-  const { location, action, matches } = usePreload(
+  const { location, action, matches } = usePreloadingRouter(
     preloadTimeout,
     preloadProps,
     useRouter(history, routes),
@@ -25,16 +26,18 @@ export default function Router({
 
   return (
     <NavigateProvider history={history}>
-      {matches.reduceRight(
-        (children, { route, params }) =>
-          route.render({
-            location,
-            action,
-            params,
-            children,
-          }),
-        null,
-      )}
+      <PreloadProvider routes={routes} props={preloadProps}>
+        {matches.reduceRight(
+          (children, { route, params }) =>
+            route.render({
+              location,
+              action,
+              params,
+              children,
+            }),
+          null,
+        )}
+      </PreloadProvider>
     </NavigateProvider>
   );
 }
@@ -163,7 +166,7 @@ export function preloadRoutes(history, routes, props = {}) {
   });
 }
 
-function usePreload(timeout, props, routerState) {
+function usePreloadingRouter(timeout, props, routerState) {
   warning(
     props.location === undefined,
     `"location" preload prop will be erased`,
@@ -244,4 +247,39 @@ export function useNavigate() {
   const navigate = useContext(NavigateContext);
   invariant(navigate, "`navigate` can only be used inside a <Router/>");
   return navigate;
+}
+
+const PreloadContext = createContext(null);
+
+function PreloadProvider({ routes, props, children }) {
+  const preload = useCallback(
+    (path, { state } = {}) => {
+      invariant(typeof path === "string", "expected path to be a string");
+      invariant(path[0] === "/", "expected path to be absolute");
+
+      const location = createLocation(path, state);
+      const action = "PRELOAD";
+
+      preloadMatches(matchRoutes(routes, location.pathname), {
+        ...props,
+        location,
+        action,
+      }).catch(error => {
+        console.error("preload error:", error);
+      });
+    },
+    [routes, props],
+  );
+
+  return (
+    <PreloadContext.Provider value={preload}>
+      {children}
+    </PreloadContext.Provider>
+  );
+}
+
+export function usePreload() {
+  const preload = useContext(PreloadContext);
+  invariant(preload, "`preload` can only be used inside a <Router/>");
+  return preload;
 }
