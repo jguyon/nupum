@@ -1,7 +1,12 @@
 import React from "react";
 import { createMemoryHistory, createLocation } from "history";
 import { render, act, wait, fireEvent } from "../test";
-import Router, { preloadRoutes, useNavigate, usePreload } from "./router";
+import Router, {
+  preloadRoutes,
+  useNavigate,
+  usePreload,
+  useMatch,
+} from "./router";
 
 jest.useFakeTimers();
 
@@ -811,5 +816,68 @@ describe("usePreload", () => {
       action: "PRELOAD",
       params: {},
     });
+  });
+});
+
+describe("useMatch", () => {
+  test("null is returned when path does not match", () => {
+    function Root() {
+      const params = useMatch("/match/:param");
+      return params ? "a match" : "no match";
+    }
+
+    const history = createMemoryHistory();
+    const routes = [
+      {
+        path: "/",
+        render: () => <Root />,
+      },
+    ];
+
+    const { container } = render(<Router history={history} routes={routes} />);
+
+    expect(container).toHaveTextContent("no match");
+  });
+
+  test("match is returned when path matches", () => {
+    function Match() {
+      const match = useMatch("/match");
+      return match ? `location: ${JSON.stringify(match.location)}` : "no match";
+    }
+
+    const history = createMemoryHistory({ initialEntries: ["/match"] });
+    const routes = [
+      {
+        path: "/match",
+        render: () => <Match />,
+      },
+    ];
+
+    const { container } = render(<Router history={history} routes={routes} />);
+
+    expect(container).toHaveTextContent(
+      `location: ${JSON.stringify(history.location)}`,
+    );
+  });
+
+  test("match is returned with params", () => {
+    function Match() {
+      const match = useMatch("/match/:param");
+      return match ? `params: ${JSON.stringify(match.params)}` : "no match";
+    }
+
+    const history = createMemoryHistory({ initialEntries: ["/match/one"] });
+    const routes = [
+      {
+        path: "/match/one",
+        render: () => <Match />,
+      },
+    ];
+
+    const { container } = render(<Router history={history} routes={routes} />);
+
+    expect(container).toHaveTextContent(
+      `params: ${JSON.stringify({ param: "one" })}`,
+    );
   });
 });

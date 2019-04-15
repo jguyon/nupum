@@ -5,12 +5,13 @@ import React, {
   createContext,
   useContext,
   useCallback,
+  useMemo,
 } from "react";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import warning from "tiny-warning";
 import { createLocation } from "history";
-import { matchRoutes, preloadMatches } from "./helpers";
+import { matchPath, matchRoutes, preloadMatches } from "./helpers";
 
 export default function Router({
   history,
@@ -27,16 +28,18 @@ export default function Router({
   return (
     <NavigateProvider history={history}>
       <PreloadProvider routes={routes} props={preloadProps}>
-        {matches.reduceRight(
-          (children, { route, params }) =>
-            route.render({
-              location,
-              action,
-              params,
-              children,
-            }),
-          null,
-        )}
+        <MatchProvider location={location}>
+          {matches.reduceRight(
+            (children, { route, params }) =>
+              route.render({
+                location,
+                action,
+                params,
+                children,
+              }),
+            null,
+          )}
+        </MatchProvider>
       </PreloadProvider>
     </NavigateProvider>
   );
@@ -245,7 +248,7 @@ function NavigateProvider({ history, children }) {
 
 export function useNavigate() {
   const navigate = useContext(NavigateContext);
-  invariant(navigate, "`navigate` can only be used inside a <Router/>");
+  invariant(navigate, "`useNavigate` can only be used inside a <Router/>");
   return navigate;
 }
 
@@ -280,6 +283,42 @@ function PreloadProvider({ routes, props, children }) {
 
 export function usePreload() {
   const preload = useContext(PreloadContext);
-  invariant(preload, "`preload` can only be used inside a <Router/>");
+  invariant(preload, "`usePreload` can only be used inside a <Router/>");
   return preload;
+}
+
+const MatchContext = createContext(null);
+
+function MatchProvider({ location, children }) {
+  const match = useCallback(
+    path => {
+      invariant(typeof path === "string", "expected path to be a string");
+      invariant(path[0] === "/", "expected path to be absolute");
+
+      const maybeMatch = matchPath(path, location.pathname);
+
+      if (maybeMatch) {
+        const { params } = maybeMatch;
+
+        return {
+          params,
+          location,
+        };
+      } else {
+        return null;
+      }
+    },
+    [location],
+  );
+
+  return (
+    <MatchContext.Provider value={match}>{children}</MatchContext.Provider>
+  );
+}
+
+export function useMatch(path) {
+  const match = useContext(MatchContext);
+  invariant(match, "`useMatch` can only be used inside a <Router/>");
+
+  return useMemo(() => match(path), [path, match]);
 }
