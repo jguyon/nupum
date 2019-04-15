@@ -78,11 +78,8 @@ function matchSegments(pathSegments, uriSegments) {
   };
 }
 
-export function preloadMatches(matches, extraProps) {
-  warning(
-    extraProps.params === undefined,
-    "extraProps.params will be erased passing extraProps to preload functions",
-  );
+export function preloadMatches(matches, props) {
+  warning(props.params === undefined, `"params" preload prop will be erased`);
 
   return Promise.all(
     matches.map(({ route, params }) => {
@@ -92,13 +89,11 @@ export function preloadMatches(matches, extraProps) {
       );
 
       if (route.preload && typeof route.preload === "function") {
-        return Promise.resolve()
-          .then(() =>
-            route.preload({
-              ...extraProps,
-              params,
-            }),
-          )
+        return route
+          .preload({
+            ...props,
+            params,
+          })
           .then(noop);
       } else {
         return Promise.resolve();
