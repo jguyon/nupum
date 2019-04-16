@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`link is rendered 1`] = `
+<div>
+  <a
+    data-testid="link"
+    href="/path"
+  >
+    go to path
+  </a>
+</div>
+`;
