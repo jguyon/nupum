@@ -1,11 +1,14 @@
 import React from "react";
+import { renderToString } from "react-dom/server";
 import { createMemoryHistory, createLocation } from "history";
 import { render, act, wait, fireEvent } from "../test";
+import createStaticHistory from "./create-static-history";
 import Router, {
   preloadRoutes,
   useNavigate,
   usePreload,
   useMatch,
+  useStatusCode,
 } from "./router";
 
 jest.useFakeTimers();
@@ -434,6 +437,24 @@ describe("Router", () => {
     await wait(() => {
       expect(container).toHaveTextContent("match");
     });
+  });
+
+  test("matching route is rendered to string", () => {
+    const history = createStaticHistory("/match");
+    const routes = [
+      {
+        path: "/",
+        render: () => "root",
+      },
+      {
+        path: "/match",
+        render: () => "match",
+      },
+    ];
+
+    const html = renderToString(<Router history={history} routes={routes} />);
+
+    expect(html).toBe("match");
   });
 });
 
@@ -879,5 +900,35 @@ describe("useMatch", () => {
     expect(container).toHaveTextContent(
       `params: ${JSON.stringify({ param: "one" })}`,
     );
+  });
+});
+
+describe("useStatusCode", () => {
+  function NotFound() {
+    useStatusCode(404);
+    return null;
+  }
+
+  const routes = [
+    {
+      path: "/*",
+      render: () => <NotFound />,
+    },
+  ];
+
+  test("statusCode is set on static history", () => {
+    const history = createStaticHistory("/");
+
+    renderToString(<Router history={history} routes={routes} />);
+
+    expect(history.statusCode).toBe(404);
+  });
+
+  test("statusCode is not set on non-static history", () => {
+    const history = createMemoryHistory();
+
+    renderToString(<Router history={history} routes={routes} />);
+
+    expect(history.statusCode).toBe(undefined);
   });
 });

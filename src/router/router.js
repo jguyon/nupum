@@ -12,6 +12,7 @@ import invariant from "tiny-invariant";
 import warning from "tiny-warning";
 import { createLocation } from "history";
 import { matchPath, matchRoutes, preloadMatches } from "./helpers";
+import { IS_STATIC_HISTORY } from "./create-static-history";
 
 export default function Router({
   history,
@@ -29,16 +30,18 @@ export default function Router({
     <NavigateProvider history={history}>
       <PreloadProvider routes={routes} props={preloadProps}>
         <MatchProvider location={location}>
-          {matches.reduceRight(
-            (children, { route, params }) =>
-              route.render({
-                location,
-                action,
-                params,
-                children,
-              }),
-            null,
-          )}
+          <StatusCodeProvider history={history}>
+            {matches.reduceRight(
+              (children, { route, params }) =>
+                route.render({
+                  location,
+                  action,
+                  params,
+                  children,
+                }),
+              null,
+            )}
+          </StatusCodeProvider>
         </MatchProvider>
       </PreloadProvider>
     </NavigateProvider>
@@ -321,4 +324,38 @@ export function useMatch(path) {
   invariant(match, "`useMatch` can only be used inside a <Router/>");
 
   return useMemo(() => match(path), [path, match]);
+}
+
+const StatusCodeContext = createContext(null);
+
+function StatusCodeProvider({ history, children }) {
+  const setStatusCode = useCallback(
+    statusCode => {
+      invariant(
+        typeof statusCode === "number",
+        "expected statusCode to be a number",
+      );
+
+      if (history[IS_STATIC_HISTORY]) {
+        history.statusCode = statusCode;
+      }
+    },
+    [history],
+  );
+
+  return (
+    <StatusCodeContext.Provider value={setStatusCode}>
+      {children}
+    </StatusCodeContext.Provider>
+  );
+}
+
+export function useStatusCode(statusCode) {
+  const setStatusCode = useContext(StatusCodeContext);
+  invariant(
+    setStatusCode,
+    "`useStatusCode` can only be used inside a <Router/>",
+  );
+
+  setStatusCode(statusCode);
 }
