@@ -14,11 +14,13 @@ import { createLocation } from "history";
 import { matchPath, matchRoutes, preloadMatches } from "./helpers";
 import { IS_STATIC_HISTORY } from "./create-static-history";
 
+const emptyProps = {};
+
 export default function Router({
   history,
   routes,
   preloadTimeout = 0,
-  preloadProps = {},
+  preloadProps = emptyProps,
 }) {
   const { location, action, matches } = usePreloadingRouter(
     preloadTimeout,
@@ -26,22 +28,17 @@ export default function Router({
     useRouter(history, routes),
   );
 
+  const children = useMemo(() => renderMatches(location, action, matches), [
+    location,
+    action,
+    matches,
+  ]);
+
   return (
     <NavigateProvider history={history}>
       <PreloadProvider routes={routes} props={preloadProps}>
         <MatchProvider location={location}>
-          <StatusCodeProvider history={history}>
-            {matches.reduceRight(
-              (children, { route, params }) =>
-                route.render({
-                  location,
-                  action,
-                  params,
-                  children,
-                }),
-              null,
-            )}
-          </StatusCodeProvider>
+          <StatusCodeProvider history={history}>{children}</StatusCodeProvider>
         </MatchProvider>
       </PreloadProvider>
     </NavigateProvider>
@@ -154,6 +151,19 @@ function routerReducer(state, action) {
       invariant(false, `invalid action type: ${action.type}`);
     }
   }
+}
+
+function renderMatches(location, action, matches) {
+  return matches.reduceRight(
+    (children, { route, params }) =>
+      route.render({
+        location,
+        action,
+        params,
+        children,
+      }),
+    null,
+  );
 }
 
 export function preloadRoutes(history, routes, props = {}) {
