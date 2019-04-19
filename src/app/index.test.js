@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "../test";
+import { render } from "../test/react";
 import App from ".";
 
 test("content is rendered", () => {

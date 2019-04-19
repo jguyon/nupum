@@ -1,7 +1,7 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { createMemoryHistory, createLocation } from "history";
-import { render, act, wait, fireEvent } from "../test";
+import { render, act, wait, fireEvent } from "../test/react";
 import createStaticHistory from "./create-static-history";
 import Router, {
   preloadRoutes,

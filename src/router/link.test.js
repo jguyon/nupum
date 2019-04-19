@@ -1,5 +1,9 @@
 import React from "react";
-import { renderWithContext, renderRoutesWithContext, fireEvent } from "../test";
+import {
+  renderWithContext,
+  renderRoutesWithContext,
+  fireEvent,
+} from "../test/react";
 import Link from "./link";
 
 test("link is rendered", () => {

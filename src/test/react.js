@@ -3,7 +3,7 @@ import { render as rtlRender, cleanup } from "react-testing-library";
 import "jest-dom/extend-expect";
 import serializer from "jest-emotion";
 import { createMemoryHistory } from "history";
-import Router from "./router";
+import Router from "../router";
 
 expect.addSnapshotSerializer(serializer);
 
