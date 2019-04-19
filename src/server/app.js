@@ -5,6 +5,7 @@ import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import invariant from "tiny-invariant";
 import fs from "fs";
 import util from "util";
+import { createStaticHistory } from "../router";
 import App from "../app";
 import Document from "./document";
 
@@ -17,13 +18,14 @@ app.use(serveStatic(process.env.PUBLIC_PATH));
 app.get("/*", async (req, res) => {
   try {
     const scripts = await scriptsFor("main");
-    const appHtml = renderToString(<App />);
+    const history = createStaticHistory(req.url);
+    const appHtml = renderToString(<App history={history} />);
     const html = renderToStaticMarkup(
       <Document html={appHtml} scripts={scripts} />,
     );
 
     res
-      .status(200)
+      .status(history.statusCode || 200)
       .set("content-type", "text/html")
       .send(`<!doctype html>${html}`);
   } catch (error) {

@@ -1,27 +1,55 @@
 import React from "react";
-import { css } from "@emotion/core";
+import PropTypes from "prop-types";
+import Router from "../router";
+import Root from "./root";
+import { SearchFormProvider } from "./search-form";
+import Layout from "./layout";
+import HomePage from "./home-page";
+import SearchPage from "./search-page";
+import PackagePage from "./package-page";
+import PageNotFound from "./page-not-found";
 
-const wrapperStyles = css`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const headingStyles = css`
-  font-family: sans-serif;
-  color: pink;
-`;
-
-export default function App() {
-  return (
-    <div css={wrapperStyles}>
-      <h1 css={headingStyles}>Hello, world!</h1>
-    </div>
-  );
+export default function App({ history }) {
+  return <Router history={history} routes={routes} />;
 }
+
+App.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+const routes = [
+  {
+    path: "/*",
+    render: ({ children }) => (
+      <Root>
+        <SearchFormProvider>{children}</SearchFormProvider>
+      </Root>
+    ),
+    routes: [
+      {
+        path: "/",
+        render: () => <HomePage />,
+      },
+      {
+        path: "/*",
+        render: ({ children }) => <Layout>{children}</Layout>,
+        routes: [
+          {
+            path: "/search",
+            render: ({ location }) => <SearchPage location={location} />,
+          },
+          {
+            path: "/package/:name",
+            render: ({ params: { name } }) => (
+              <PackagePage key={name} name={name} />
+            ),
+          },
+          {
+            path: "/*",
+            render: () => <PageNotFound />,
+          },
+        ],
+      },
+    ],
+  },
+];
