@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Router from "../router";
 import Root from "./root";
+import { LocationFocusProvider } from "./location-focus";
 import { SearchFormProvider } from "./search-form";
 import Layout from "./layout";
 import HomePage from "./home-page";
@@ -20,9 +21,11 @@ App.propTypes = {
 const routes = [
   {
     path: "/*",
-    render: ({ children }) => (
+    render: ({ location, children }) => (
       <Root>
-        <SearchFormProvider>{children}</SearchFormProvider>
+        <LocationFocusProvider location={location}>
+          <SearchFormProvider>{children}</SearchFormProvider>
+        </LocationFocusProvider>
       </Root>
     ),
     routes: [

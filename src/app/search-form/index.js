@@ -3,12 +3,17 @@ import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import { useNavigate, useMatch } from "../../router";
 
-export default function SearchForm() {
+export default function SearchForm({ inputRef }) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
+  const inputAutoFocus = !!useMatch("/");
 
   function onInputChange(event) {
     setQuery(event.target.value);
+  }
+
+  function onInputFocus(event) {
+    event.target.select();
   }
 
   function onFormSubmit(event) {
@@ -20,10 +25,13 @@ export default function SearchForm() {
     <div role="search">
       <form onSubmit={onFormSubmit}>
         <input
+          ref={inputRef}
+          autoFocus={inputAutoFocus}
           type="search"
           aria-label="Search query"
           value={query}
           onChange={onInputChange}
+          onFocus={onInputFocus}
         />
 
         <button type="submit">Search</button>
@@ -31,6 +39,10 @@ export default function SearchForm() {
     </div>
   );
 }
+
+SearchForm.propTypes = {
+  inputRef: PropTypes.object,
+};
 
 const SearchFormContext = createContext(null);
 

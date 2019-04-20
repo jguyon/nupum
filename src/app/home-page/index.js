@@ -1,13 +1,16 @@
 import React from "react";
 import { css } from "@emotion/core";
 import SearchForm from "../search-form";
+import { useLocationFocus } from "../location-focus";
 
 export default function HomePage() {
+  const focusRef = useLocationFocus();
+
   return (
     <div css={parentStyles}>
       <div css={childStyles}>
         <h1>nupum</h1>
-        <SearchForm />
+        <SearchForm inputRef={focusRef} />
       </div>
     </div>
   );

@@ -3,8 +3,11 @@ import PropTypes from "prop-types";
 import { css } from "@emotion/core";
 import { Link } from "../router";
 import SearchForm from "./search-form";
+import { useLocationFocus } from "./location-focus";
 
 export default function Layout({ children }) {
+  const focusRef = useLocationFocus();
+
   return (
     <>
       <header css={headerStyles}>
@@ -17,7 +20,9 @@ export default function Layout({ children }) {
 
       <hr />
 
-      <main>{children}</main>
+      <main ref={focusRef} tabIndex={-1} css={mainStyles}>
+        {children}
+      </main>
     </>
   );
 }
@@ -28,4 +33,8 @@ Layout.propTypes = {
 
 const headerStyles = css`
   text-align: center;
+`;
+
+const mainStyles = css`
+  outline: none;
 `;
