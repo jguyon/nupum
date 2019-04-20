@@ -11,14 +11,15 @@ export default function SearchPage({ location }) {
       <h2>Search results for "{query || ""}"</h2>
 
       {query
-        ? ["one", "two", "three"].map(name => (
-            <Fragment key={name}>
-              <Link to={`/package/${encodeURIComponent(`${query}-${name}`)}`}>
-                {query}-{name}
-              </Link>
-              <br />
-            </Fragment>
-          ))
+        ? query
+            .split(/\s/)
+            .filter(Boolean)
+            .map(name => (
+              <Fragment key={name}>
+                <Link to={`/package/${encodeURIComponent(name)}`}>{name}</Link>
+                <br />
+              </Fragment>
+            ))
         : null}
     </>
   );
