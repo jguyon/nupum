@@ -4,6 +4,7 @@ import "jest-dom/extend-expect";
 import serializer from "jest-emotion";
 import { createMemoryHistory } from "history";
 import Router from "../router";
+import { createClientModuleCache, ModuleCacheProvider } from "../module-cache";
 
 expect.addSnapshotSerializer(serializer);
 
@@ -32,14 +33,17 @@ function wrapUi(ui) {
 
 export function renderRoutesWithContext(
   routes,
-  { history = createMemoryHistory() } = {},
+  {
+    history = createMemoryHistory(),
+    moduleCache = createClientModuleCache(),
+  } = {},
 ) {
   const { rerender: baseRerender, ...rest } = render(
-    wrapRoutesWithContext(routes, { history }),
+    wrapRoutesWithContext(routes, { history, moduleCache }),
   );
 
   function rerender(nextRoutes) {
-    baseRerender(wrapRoutesWithContext(nextRoutes, { history }));
+    baseRerender(wrapRoutesWithContext(nextRoutes, { history, moduleCache }));
   }
 
   return {
@@ -49,13 +53,18 @@ export function renderRoutesWithContext(
   };
 }
 
-function wrapRoutesWithContext(routes, { history }) {
-  return <Router history={history} routes={routes} />;
+function wrapRoutesWithContext(routes, { history, moduleCache }) {
+  return (
+    <ModuleCacheProvider cache={moduleCache}>
+      <Router history={history} routes={routes} />
+    </ModuleCacheProvider>
+  );
 }
 
 export function renderWithContext(ui, options) {
   const { rerender: rerenderRoutes, ...rest } = renderRoutesWithContext(
     routesFromUi(ui),
+    options,
   );
 
   function rerender(nextUi) {
