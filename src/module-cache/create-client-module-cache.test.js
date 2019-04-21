@@ -257,13 +257,13 @@ test("failed result is rendered when requested module has unsuccessfully been pr
   expect(container).toHaveTextContent("failure: module error");
 });
 
-test("preloading a module multiple times does not refetch it", () => {
+test("preloading a module multiple times does not refetch it", async () => {
   const fetch = jest.fn(() => Promise.resolve());
   const module = createModule(fetch);
   const cache = createClientModuleCache();
 
   cache.preload(module);
   expect(fetch).toHaveBeenCalledTimes(1);
-  cache.preload(module);
+  await cache.preload(module);
   expect(fetch).toHaveBeenCalledTimes(1);
 });

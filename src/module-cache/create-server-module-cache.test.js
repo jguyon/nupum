@@ -89,24 +89,22 @@ test("failed result is rendered when requested module has unsuccessfully been pr
   expect(result).toBe("failure: module error");
 });
 
-test("preloading a module multiple times does not refetch it", () => {
+test("preloading a module multiple times does not refetch it", async () => {
   const fetch = jest.fn(() => Promise.resolve());
   const module = createModule(fetch, "module-name");
   const cache = createServerModuleCache();
 
   cache.preload(module);
   expect(fetch).toHaveBeenCalledTimes(1);
-  cache.preload(module);
+  await cache.preload(module);
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
-test("preloading modules saves chunk names", () => {
+test("preloading modules saves chunk names", async () => {
   const moduleOne = createModule(() => Promise.resolve(), "module-one");
   const moduleTwo = createModule(() => Promise.resolve(), "module-two");
   const cache = createServerModuleCache();
 
-  cache.preload(moduleOne);
-  cache.preload(moduleTwo);
-
+  await Promise.all([cache.preload(moduleOne), cache.preload(moduleTwo)]);
   expect(cache.chunks()).toEqual(["module-one", "module-two"]);
 });
