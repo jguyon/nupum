@@ -1,30 +1,41 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
-import { Link } from "../../router";
+import React from "react";
+import invariant from "tiny-invariant";
+import {
+  createModule,
+  useModule,
+  MODULE_PENDING,
+  MODULE_SUCCESS,
+  MODULE_FAILURE,
+} from "../../module-cache";
 
-export default function SearchPage({ location }) {
-  const params = new URLSearchParams(location.search);
-  const query = params.get("q");
+const searchPageModule = createModule(
+  () => import(/* webpackChunkName: "search-page" */ "./search-page"),
+  "search-page",
+);
 
-  return (
-    <>
-      <h2>Search results for "{query || ""}"</h2>
+export default function LazySearchPage(props) {
+  const searchPage = useModule(searchPageModule);
 
-      {query
-        ? query
-            .split(/\s/)
-            .filter(Boolean)
-            .map(name => (
-              <Fragment key={name}>
-                <Link to={`/package/${encodeURIComponent(name)}`}>{name}</Link>
-                <br />
-              </Fragment>
-            ))
-        : null}
-    </>
-  );
+  switch (searchPage.status) {
+    case MODULE_PENDING: {
+      return <p>Loading&hellip;</p>;
+    }
+
+    case MODULE_FAILURE: {
+      return <p>Error!</p>;
+    }
+
+    case MODULE_SUCCESS: {
+      const SearchPage = searchPage.module.default;
+      return <SearchPage {...props} />;
+    }
+
+    default: {
+      invariant(false, `invalid status ${searchPage.status}`);
+    }
+  }
 }
 
-SearchPage.propTypes = {
-  location: PropTypes.object.isRequired,
-};
+export function preloadSearchPage({ moduleCache }) {
+  return moduleCache.preload(searchPageModule);
+}

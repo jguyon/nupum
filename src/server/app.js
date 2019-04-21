@@ -6,7 +6,8 @@ import invariant from "tiny-invariant";
 import fs from "fs";
 import util from "util";
 import { createStaticHistory } from "../router";
-import App from "../app";
+import { createServerModuleCache } from "../module-cache";
+import App, { preloadApp } from "../app";
 import Document from "./document";
 
 const app = express();
@@ -17,9 +18,15 @@ app.use(serveStatic(process.env.PUBLIC_PATH));
 
 app.get("/*", async (req, res) => {
   try {
-    const scripts = await scriptsFor("main");
     const history = createStaticHistory(req.url);
-    const appHtml = renderToString(<App history={history} />);
+    const moduleCache = createServerModuleCache();
+
+    await preloadApp({ history, moduleCache });
+
+    const scripts = await scriptsFor("main", moduleCache.chunks());
+    const appHtml = renderToString(
+      <App history={history} moduleCache={moduleCache} />,
+    );
     const html = renderToStaticMarkup(
       <Document html={appHtml} scripts={scripts} />,
     );

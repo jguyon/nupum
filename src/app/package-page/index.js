@@ -1,10 +1,41 @@
 import React from "react";
-import PropTypes from "prop-types";
+import invariant from "tiny-invariant";
+import {
+  createModule,
+  useModule,
+  MODULE_PENDING,
+  MODULE_SUCCESS,
+  MODULE_FAILURE,
+} from "../../module-cache";
 
-export default function PackagePage({ name }) {
-  return <h2>{name}</h2>;
+const packagePageModule = createModule(
+  () => import(/* webpackChunkName: "package-page" */ "./package-page"),
+  "package-page",
+);
+
+export default function LazyPackagePage(props) {
+  const packagePage = useModule(packagePageModule);
+
+  switch (packagePage.status) {
+    case MODULE_PENDING: {
+      return <p>Loading&hellip;</p>;
+    }
+
+    case MODULE_FAILURE: {
+      return <p>Error!</p>;
+    }
+
+    case MODULE_SUCCESS: {
+      const PackagePage = packagePage.module.default;
+      return <PackagePage {...props} />;
+    }
+
+    default: {
+      invariant(false, `invalid status ${packagePage.status}`);
+    }
+  }
 }
 
-PackagePage.propTypes = {
-  name: PropTypes.string.isRequired,
-};
+export function preloadPackagePage({ moduleCache }) {
+  return moduleCache.preload(packagePageModule);
+}
