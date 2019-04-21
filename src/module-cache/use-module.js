@@ -134,7 +134,7 @@ function useModuleCache() {
   const cache = useContext(ModuleCacheContext);
   invariant(
     cache,
-    "`useModuleCache` can only be used inside a <ModuleCacheProvider/>",
+    "`useModule` can only be used inside a <ModuleCacheProvider/>",
   );
 
   return cache;
