@@ -15,6 +15,7 @@ export default function createClientModuleCache() {
   return {
     [IS_MODULE_CACHE]: true,
     [MODULE_CACHE_FETCH]: module => fetchEntry(entries, module),
+    preload: module => preloadEntry(entries, module),
   };
 }
 
@@ -32,7 +33,7 @@ function fetchEntry(entries, module) {
     const promise = module[MODULE_FETCH]();
     invariant(
       promise instanceof Promise,
-      "expected module.fetch() to return a promise",
+      "expected module fetch function to return a promise",
     );
 
     return createEntry(entries, module, promise);
@@ -70,4 +71,23 @@ function createEntry(entries, module, promise) {
 
   entries.set(module, pendingEntry);
   return pendingEntry;
+}
+
+function preloadEntry(entries, module) {
+  invariant(
+    module && typeof module === "object" && module[IS_MODULE],
+    "expected module to be an object returned by `createModule`",
+  );
+
+  const result = fetchEntry(entries, module);
+
+  if (result.status === MODULE_PENDING) {
+    return new Promise(resolve => {
+      result.listen(() => {
+        resolve();
+      });
+    });
+  } else {
+    return Promise.resolve();
+  }
 }

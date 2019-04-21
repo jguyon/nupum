@@ -226,3 +226,44 @@ test("previous fetching is canceled when refetching", async () => {
     expect(container).toHaveTextContent("success: module two");
   });
 });
+
+test("successful result is rendered when requested module has successfully been preloaded", async () => {
+  const module = createModule(() => Promise.resolve("module data"));
+  const cache = createClientModuleCache();
+
+  await cache.preload(module);
+
+  const { container } = render(
+    <ModuleCacheProvider cache={cache}>
+      <AsyncModule module={module} />
+    </ModuleCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("success: module data");
+});
+
+test("failed result is rendered when requested module has unsuccessfully been preloaded", async () => {
+  const module = createModule(() => Promise.reject("module error"));
+  const cache = createClientModuleCache();
+
+  await cache.preload(module);
+
+  const { container } = render(
+    <ModuleCacheProvider cache={cache}>
+      <AsyncModule module={module} />
+    </ModuleCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("failure: module error");
+});
+
+test("preloading a module multiple times does not refetch it", () => {
+  const fetch = jest.fn(() => Promise.resolve());
+  const module = createModule(fetch);
+  const cache = createClientModuleCache();
+
+  cache.preload(module);
+  expect(fetch).toHaveBeenCalledTimes(1);
+  cache.preload(module);
+  expect(fetch).toHaveBeenCalledTimes(1);
+});
