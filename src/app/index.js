@@ -32,6 +32,19 @@ App.propTypes = {
   moduleCache: PropTypes.object.isRequired,
 };
 
+export function preloadApp({ history, moduleCache }) {
+  invariant(
+    history && typeof history === "object",
+    "expected `history` prop to be present",
+  );
+  invariant(
+    moduleCache && typeof moduleCache === "object",
+    "expected `moduleCache` prop to be present",
+  );
+
+  return preloadRoutes(history, routes, { moduleCache });
+}
+
 const routes = [
   {
     path: "/*",
@@ -72,16 +85,3 @@ const routes = [
     ],
   },
 ];
-
-export function preloadApp({ history, moduleCache }) {
-  invariant(
-    history && typeof history === "object",
-    "expected `history` prop to be present",
-  );
-  invariant(
-    moduleCache && typeof moduleCache === "object",
-    "expected `moduleCache` prop to be present",
-  );
-
-  return preloadRoutes(history, routes, { moduleCache });
-}
