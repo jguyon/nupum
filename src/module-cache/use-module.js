@@ -52,9 +52,8 @@ export default function useModule(module) {
   }, [state.entry]);
 
   return useMemo(() => {
-    // pending entries have shape { status, promise },
-    // but we don't want to return the promise
     if (state.entry.status === MODULE_PENDING) {
+      // filtering out extra properties
       return {
         status: MODULE_PENDING,
       };
