@@ -8,11 +8,9 @@ export default function createModule(fetch, chunkName) {
     "expected chunkName to be falsy or a string",
   );
 
-  const module = {
+  return {
     [IS_MODULE]: true,
     [MODULE_FETCH]: fetch,
     [MODULE_CHUNK_NAME]: chunkName,
   };
-
-  return module;
 }
