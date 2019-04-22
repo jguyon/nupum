@@ -9,19 +9,21 @@ import {
   RESOURCE_SUCCESS,
   RESOURCE_FAILURE,
 } from "./constants";
+import createLRU from "./create-lru";
 
-export default function createClientResourceCache() {
+export default function createClientResourceCache(opts) {
   const entries = new Map();
+  const lru = createLRU(opts);
 
   return {
     [IS_RESOURCE_CACHE]: true,
     [RESOURCE_CACHE_FETCH]: (resource, input) =>
-      fetchEntry(entries, resource, input),
-    preload: (resource, input) => preloadEntry(entries, resource, input),
+      fetchEntry(entries, lru, resource, input),
+    preload: (resource, input) => preloadEntry(entries, lru, resource, input),
   };
 }
 
-function fetchEntry(entries, resource, input) {
+function fetchEntry(entries, lru, resource, input) {
   invariant(
     resource && typeof resource === "object" && resource[IS_RESOURCE],
     "expected resource to be an object returned by `createResource`",
@@ -32,10 +34,11 @@ function fetchEntry(entries, resource, input) {
   const entry = resourceEntries.get(hash);
 
   if (entry) {
-    return entry;
+    return lru.access(entry);
   } else {
     return createResourceEntry(
       resourceEntries,
+      lru,
       hash,
       resource[RESOURCE_FETCH](input),
     );
@@ -54,34 +57,34 @@ function getResourceEntries(entries, resource) {
   }
 }
 
-function createResourceEntry(resourceEntries, hash, promise) {
-  const entryPromise = promise.then(
+function createResourceEntry(resourceEntries, lru, hash, promise) {
+  const resultPromise = promise.then(
     data => {
-      const successEntry = {
+      const successResult = {
         status: RESOURCE_SUCCESS,
         data,
       };
 
-      resourceEntries.set(hash, successEntry);
-      return successEntry;
+      lru.update(entry, successResult);
+      return successResult;
     },
     error => {
-      const failureEntry = {
+      const failureResult = {
         status: RESOURCE_FAILURE,
         error,
       };
 
-      resourceEntries.set(hash, failureEntry);
-      return failureEntry;
+      lru.update(entry, failureResult);
+      return failureResult;
     },
   );
 
-  const pendingEntry = {
+  const pendingResult = {
     status: RESOURCE_PENDING,
     listen: cb => {
       let isCanceled = false;
 
-      entryPromise.then(result => {
+      resultPromise.then(result => {
         if (!isCanceled) {
           cb(result);
         }
@@ -93,12 +96,13 @@ function createResourceEntry(resourceEntries, hash, promise) {
     },
   };
 
-  resourceEntries.set(hash, pendingEntry);
-  return pendingEntry;
+  const entry = lru.add(pendingResult, () => resourceEntries.delete(hash));
+  resourceEntries.set(hash, entry);
+  return pendingResult;
 }
 
-function preloadEntry(entries, resource, input) {
-  const result = fetchEntry(entries, resource, input);
+function preloadEntry(entries, lru, resource, input) {
+  const result = fetchEntry(entries, lru, resource, input);
 
   if (result.status === RESOURCE_PENDING) {
     return new Promise(resolve => {

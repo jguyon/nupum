@@ -298,6 +298,75 @@ test("input is hashed with provided hash function", async () => {
   expect(container).toHaveTextContent("success: resource data text");
 });
 
+test("least recently used items are evicted", async () => {
+  const resource = createResource(input =>
+    Promise.resolve(`resource data ${input}`),
+  );
+  const cache = createClientResourceCache({
+    maxSize: 3,
+  });
+
+  const { container, rerender } = render(
+    <ResourceCacheProvider key="one" cache={cache}>
+      <AsyncResource resource={resource} input="one" />
+      {" | "}
+      <AsyncResource resource={resource} input="two" />
+      {" | "}
+      <AsyncResource resource={resource} input="three" />
+    </ResourceCacheProvider>,
+  );
+
+  await wait(() => {
+    expect(container).toHaveTextContent(
+      "success: resource data one | " +
+        "success: resource data two | " +
+        "success: resource data three",
+    );
+  });
+
+  rerender(
+    <ResourceCacheProvider key="two" cache={cache}>
+      <AsyncResource resource={resource} input="one" />
+      {" | "}
+      <AsyncResource resource={resource} input="four" />
+      {" | "}
+      <AsyncResource resource={resource} input="five" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent(
+    "success: resource data one | pending | pending",
+  );
+  await wait(() => {
+    expect(container).toHaveTextContent(
+      "success: resource data one | " +
+        "success: resource data four | " +
+        "success: resource data five",
+    );
+  });
+
+  rerender(
+    <ResourceCacheProvider key="three" cache={cache}>
+      <AsyncResource resource={resource} input="one" />
+      {" | "}
+      <AsyncResource resource={resource} input="two" />
+      {" | "}
+      <AsyncResource resource={resource} input="three" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent(
+    "success: resource data one | pending | pending",
+  );
+  await wait(() => {
+    expect(container).toHaveTextContent(
+      "success: resource data one | " +
+        "success: resource data two | " +
+        "success: resource data three",
+    );
+  });
+});
+
 test("successful result is rendered when requested resource has successfully been preloaded", async () => {
   const resource = createResource(() => Promise.resolve("resource data"));
   const cache = createClientResourceCache();
