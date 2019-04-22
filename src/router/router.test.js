@@ -439,6 +439,42 @@ describe("Router", () => {
     });
   });
 
+  test("previous preloading is canceled when changing routes", async () => {
+    const history = createMemoryHistory();
+    const routes = [
+      {
+        path: "/",
+        render: () => "root",
+      },
+      {
+        path: "/match/one",
+        preload: () => delay(500),
+        render: () => "match one",
+      },
+      {
+        path: "/match/two",
+        preload: () => delay(250),
+        render: () => "match two",
+      },
+    ];
+
+    const { container } = render(
+      <Router history={history} routes={routes} preloadTimeout={1000} />,
+    );
+    act(() => {
+      history.push("/match/one");
+    });
+    act(() => {
+      history.push("/match/two");
+    });
+    expect(container).toHaveTextContent("root");
+    jest.advanceTimersByTime(500);
+
+    await wait(() => {
+      expect(container).toHaveTextContent("match two");
+    });
+  });
+
   test("matching route is rendered to string", () => {
     const history = createStaticHistory("/match");
     const routes = [
