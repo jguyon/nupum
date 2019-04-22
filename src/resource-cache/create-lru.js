@@ -1,6 +1,8 @@
 import invariant from "tiny-invariant";
 import warning from "tiny-warning";
 
+// simplified version of
+// https://github.com/facebook/react/blob/4d5cb64aa2beacf982cf0e01628ddda6bd92014c/packages/react-cache/src/LRU.js
 export default function createLRU({ maxSize = Infinity } = {}) {
   invariant(typeof maxSize === "number", "expected maxSize to be a number");
   invariant(maxSize > 1, "expected maxSize to be greater than 1");
