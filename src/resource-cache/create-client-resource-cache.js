@@ -17,6 +17,7 @@ export default function createClientResourceCache() {
     [IS_RESOURCE_CACHE]: true,
     [RESOURCE_CACHE_FETCH]: (resource, input) =>
       fetchEntry(entries, resource, input),
+    preload: (resource, input) => preloadEntry(entries, resource, input),
   };
 }
 
@@ -94,4 +95,18 @@ function createResourceEntry(resourceEntries, hash, promise) {
 
   resourceEntries.set(hash, pendingEntry);
   return pendingEntry;
+}
+
+function preloadEntry(entries, resource, input) {
+  const result = fetchEntry(entries, resource, input);
+
+  if (result.status === RESOURCE_PENDING) {
+    return new Promise(resolve => {
+      result.listen(() => {
+        resolve();
+      });
+    });
+  } else {
+    return result;
+  }
 }

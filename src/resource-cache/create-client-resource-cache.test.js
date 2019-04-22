@@ -265,3 +265,45 @@ test("previous fetching is canceled when refetching", async () => {
     expect(container).toHaveTextContent("success: resource data 100");
   });
 });
+
+test("successful result is rendered when requested resource has successfully been preloaded", async () => {
+  const resource = createResource(() => Promise.resolve("resource data"));
+  const cache = createClientResourceCache();
+
+  await cache.preload(resource, "input");
+
+  const { container } = render(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource resource={resource} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("success: resource data");
+});
+
+test("failed result is rendered when requested resource has unsuccessfully been preloaded", async () => {
+  const resource = createResource(() => Promise.reject("resource error"));
+  const cache = createClientResourceCache();
+
+  await cache.preload(resource, "input");
+
+  const { container } = render(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource resource={resource} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("failure: resource error");
+});
+
+test("preloading a resource multiple times does not refetch it", async () => {
+  const fetch = jest.fn(() => Promise.resolve());
+  const resource = createResource(fetch);
+  const cache = createClientResourceCache();
+
+  cache.preload(resource, "input");
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetch).toHaveBeenCalledWith("input");
+  await cache.preload(resource, "input");
+  expect(fetch).toHaveBeenCalledTimes(1);
+});
