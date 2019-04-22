@@ -266,6 +266,38 @@ test("previous fetching is canceled when refetching", async () => {
   });
 });
 
+test("input is hashed with provided hash function", async () => {
+  const resource = createResource(
+    ({ text }) => Promise.resolve(`resource data ${text}`),
+    ({ text }) => text,
+  );
+  const cache = createClientResourceCache();
+
+  const { container, rerender } = render(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource
+        resource={resource}
+        input={{ text: "text", other: "one" }}
+      />
+    </ResourceCacheProvider>,
+  );
+
+  await wait(() => {
+    expect(container).toHaveTextContent("success: resource data text");
+  });
+
+  rerender(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource
+        resource={resource}
+        input={{ text: "text", other: "two" }}
+      />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("success: resource data text");
+});
+
 test("successful result is rendered when requested resource has successfully been preloaded", async () => {
   const resource = createResource(() => Promise.resolve("resource data"));
   const cache = createClientResourceCache();
