@@ -49,6 +49,7 @@ export function renderRoutesWithContext(
   return {
     ...rest,
     history,
+    moduleCache,
     rerender,
   };
 }
