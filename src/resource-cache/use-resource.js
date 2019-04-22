@@ -15,9 +15,9 @@ import {
 } from "./constants";
 
 // IMPORTANT NOTE:
-// the input is checked for strict equality, so if it is not a primitive type
-// it needs to be returned from a useMemo call, otherwise strange errors
-// are going to be thrown
+// The input is checked for strict equality, so if it is not a primitive type
+// it needs to be returned from a useMemo call. Otherwise strange errors are
+// going to be thrown.
 export default function useResource(resource, input) {
   invariant(
     resource && typeof resource === "object" && resource[IS_RESOURCE],
