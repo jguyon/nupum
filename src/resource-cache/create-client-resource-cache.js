@@ -113,7 +113,7 @@ export default function createClientResourceCache(opts) {
         });
       });
     } else {
-      return result;
+      return Promise.resolve();
     }
   }
 
