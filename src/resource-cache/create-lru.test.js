@@ -27,15 +27,13 @@ test("accessing an item marks it as most recently used", () => {
   const lru = createLRU({ maxSize: 3 });
 
   const deleteOne = jest.fn(() => {});
-  const entryOne = lru.add(1, deleteOne);
+  lru.add(1, deleteOne);
   const deleteTwo = jest.fn(() => {});
   const entryTwo = lru.add(2, deleteTwo);
   const deleteThree = jest.fn(() => {});
   lru.add(3, deleteThree);
   const valueTwo = lru.access(entryTwo);
-  const valueOne = lru.access(entryOne);
 
-  expect(valueOne).toBe(1);
   expect(valueTwo).toBe(2);
   expect(deleteOne).not.toHaveBeenCalled();
   expect(deleteTwo).not.toHaveBeenCalled();
@@ -43,21 +41,70 @@ test("accessing an item marks it as most recently used", () => {
 
   const deleteFour = jest.fn(() => {});
   lru.add(4, deleteFour);
+  const deleteFive = jest.fn(() => {});
+  lru.add(5, deleteFive);
 
+  expect(deleteFive).not.toHaveBeenCalled();
   expect(deleteFour).not.toHaveBeenCalled();
   expect(deleteTwo).not.toHaveBeenCalled();
+  expect(deleteThree).toHaveBeenCalledTimes(1);
+  expect(deleteOne).toHaveBeenCalledTimes(1);
+});
+
+test("accessing least recently used item marks it as most recently used", () => {
+  const lru = createLRU({ maxSize: 3 });
+
+  const deleteOne = jest.fn(() => {});
+  const entryOne = lru.add(1, deleteOne);
+  const deleteTwo = jest.fn(() => {});
+  lru.add(2, deleteTwo);
+  const deleteThree = jest.fn(() => {});
+  lru.add(3, deleteThree);
+  const valueOne = lru.access(entryOne);
+
+  expect(valueOne).toBe(1);
+  expect(deleteOne).not.toHaveBeenCalled();
+  expect(deleteTwo).not.toHaveBeenCalled();
+  expect(deleteThree).not.toHaveBeenCalled();
+
+  const deleteFour = jest.fn(() => {});
+  lru.add(4, deleteFour);
+  const deleteFive = jest.fn(() => {});
+  lru.add(5, deleteFive);
+
+  expect(deleteFive).not.toHaveBeenCalled();
+  expect(deleteFour).not.toHaveBeenCalled();
   expect(deleteOne).not.toHaveBeenCalled();
   expect(deleteThree).toHaveBeenCalledTimes(1);
-  deleteThree.mockClear();
+  expect(deleteTwo).toHaveBeenCalledTimes(1);
+});
 
+test("accessing most recently used item leaves it marked as most recently used", () => {
+  const lru = createLRU({ maxSize: 3 });
+
+  const deleteOne = jest.fn(() => {});
+  lru.add(1, deleteOne);
+  const deleteTwo = jest.fn(() => {});
+  lru.add(2, deleteTwo);
+  const deleteThree = jest.fn(() => {});
+  const entryThree = lru.add(3, deleteThree);
+  const valueThree = lru.access(entryThree);
+
+  expect(valueThree).toBe(3);
+  expect(deleteOne).not.toHaveBeenCalled();
+  expect(deleteTwo).not.toHaveBeenCalled();
+  expect(deleteThree).not.toHaveBeenCalled();
+
+  const deleteFour = jest.fn(() => {});
+  lru.add(4, deleteFour);
   const deleteFive = jest.fn(() => {});
   lru.add(5, deleteFive);
 
   expect(deleteFive).not.toHaveBeenCalled();
   expect(deleteFour).not.toHaveBeenCalled();
   expect(deleteThree).not.toHaveBeenCalled();
-  expect(deleteOne).not.toHaveBeenCalled();
   expect(deleteTwo).toHaveBeenCalledTimes(1);
+  expect(deleteOne).toHaveBeenCalledTimes(1);
 });
 
 test("updating an item stores its new value", () => {
