@@ -103,7 +103,7 @@ export default function createLRU({
         return entry.value;
       }
     } else {
-      warning(false, "trying to access a deleted LRU entry");
+      warning(false, "trying to access an evicted LRU entry");
       return LRU_EVICTED_ENTRY;
     }
   }
