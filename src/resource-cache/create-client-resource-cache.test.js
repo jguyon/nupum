@@ -18,6 +18,12 @@ function delay(ms) {
   });
 }
 
+const dateNow = jest.spyOn(Date, "now");
+
+afterEach(() => {
+  dateNow.mockReset();
+});
+
 // stub console.error until `act(...)` warnings can be fixed
 // https://github.com/facebook/react/issues/14769
 const consoleError = jest.spyOn(console, "error");
@@ -364,6 +370,43 @@ test("least recently used items are evicted", async () => {
         "success: resource data two | " +
         "success: resource data three",
     );
+  });
+});
+
+test("old items are evicted", async () => {
+  const resource = createResource(() => Promise.resolve("resource data"));
+  const cache = createClientResourceCache({ maxAge: 50 });
+
+  dateNow.mockImplementation(() => 1000);
+  const { container, rerender } = render(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource key="one" resource={resource} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  await wait(() => {
+    expect(container).toHaveTextContent("success: resource data");
+  });
+
+  dateNow.mockImplementation(() => 1050);
+  rerender(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource key="two" resource={resource} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("success: resource data");
+
+  dateNow.mockImplementation(() => 1101);
+  rerender(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource key="three" resource={resource} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("pending");
+  await wait(() => {
+    expect(container).toHaveTextContent("success: resource data");
   });
 });
 

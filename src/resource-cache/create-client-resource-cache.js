@@ -1,9 +1,10 @@
 import invariant from "tiny-invariant";
 import {
   IS_RESOURCE,
-  IS_RESOURCE_CACHE,
   RESOURCE_FETCH,
   RESOURCE_HASH,
+  LRU_EVICTED_ENTRY,
+  IS_RESOURCE_CACHE,
   RESOURCE_CACHE_FETCH,
   RESOURCE_PENDING,
   RESOURCE_SUCCESS,
@@ -34,7 +35,18 @@ function fetchEntry(entries, lru, resource, input) {
   const entry = resourceEntries.get(hash);
 
   if (entry) {
-    return lru.access(entry);
+    const value = lru.access(entry);
+
+    if (value === LRU_EVICTED_ENTRY) {
+      return createResourceEntry(
+        resourceEntries,
+        lru,
+        hash,
+        resource[RESOURCE_FETCH](input),
+      );
+    } else {
+      return value;
+    }
   } else {
     return createResourceEntry(
       resourceEntries,
