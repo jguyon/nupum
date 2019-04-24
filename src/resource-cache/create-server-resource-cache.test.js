@@ -1,6 +1,7 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import invariant from "tiny-invariant";
+import { render } from "../test/react";
 import {
   RESOURCE_PENDING,
   RESOURCE_SUCCESS,
@@ -10,6 +11,7 @@ import {
 } from "./constants";
 import createResource from "./create-resource";
 import createServerResourceCache from "./create-server-resource-cache";
+import createClientResourceCache from "./create-client-resource-cache";
 import useResource, { ResourceCacheProvider } from "./use-resource";
 
 function AsyncResource({ resource, input }) {
@@ -209,4 +211,50 @@ test("serializing does not save pending resources", () => {
   cache.preload(resource, "four");
 
   expect(cache.serialize()).toEqual({});
+});
+
+test("client cache can be populated with serialized data", async () => {
+  const resourceOne = createResource(input =>
+    input === "success"
+      ? Promise.resolve("resource one data")
+      : Promise.reject("resource one error"),
+  );
+  const resourceTwo = createResource(
+    ({ status }) =>
+      status === "success"
+        ? Promise.resolve("resource two data")
+        : Promise.reject("resource two error"),
+    ({ status }) => status,
+  );
+  const serverCache = createServerResourceCache({ resourceOne, resourceTwo });
+  const clientCache = createClientResourceCache();
+
+  await Promise.all([
+    serverCache.preload(resourceOne, "success"),
+    serverCache.preload(resourceTwo, { status: "success" }),
+    serverCache.preload(resourceOne, "error"),
+    serverCache.preload(resourceTwo, { status: "error" }),
+  ]);
+
+  const serializedData = serverCache.serialize();
+  clientCache.populate({ resourceOne, resourceTwo }, serializedData);
+
+  const { container } = render(
+    <ResourceCacheProvider cache={clientCache}>
+      <AsyncResource resource={resourceOne} input="success" />
+      {" | "}
+      <AsyncResource resource={resourceTwo} input={{ status: "success" }} />
+      {" | "}
+      <AsyncResource resource={resourceOne} input="error" />
+      {" | "}
+      <AsyncResource resource={resourceTwo} input={{ status: "error" }} />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent(
+    "success: resource one data | " +
+      "success: resource two data | " +
+      "failure: resource one error | " +
+      "failure: resource two error",
+  );
 });
