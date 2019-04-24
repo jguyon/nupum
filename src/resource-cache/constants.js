@@ -10,3 +10,6 @@ export const RESOURCE_CACHE_FETCH = Symbol("RESOURCE_CACHE_FETCH");
 export const RESOURCE_PENDING = Symbol("RESOURCE_PENDING");
 export const RESOURCE_SUCCESS = Symbol("RESOURCE_SUCCESS");
 export const RESOURCE_FAILURE = Symbol("RESOURCE_FAILURE");
+
+export const SERIALIZED_SUCCESS = 0;
+export const SERIALIZED_FAILURE = 1;

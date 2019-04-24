@@ -34,11 +34,11 @@ function AsyncResource({ resource, input }) {
 
   switch (result.status) {
     case RESOURCE_PENDING:
-      return "pending";
+      return <>pending</>;
     case RESOURCE_SUCCESS:
-      return `success: ${result.data}`;
+      return <>success: {result.data}</>;
     case RESOURCE_FAILURE:
-      return `failure: ${result.error}`;
+      return <>failure: {result.error}</>;
     default:
       invariant(false, `invalid status ${result.status}`);
   }
