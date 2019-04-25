@@ -5,6 +5,10 @@ import serializer from "jest-emotion";
 import { createMemoryHistory } from "history";
 import Router from "../router";
 import { createClientModuleCache, ModuleCacheProvider } from "../module-cache";
+import {
+  createTestResourceCache,
+  ResourceCacheProvider,
+} from "../resource-cache";
 
 expect.addSnapshotSerializer(serializer);
 
@@ -36,14 +40,25 @@ export function renderRoutesWithContext(
   {
     history = createMemoryHistory(),
     moduleCache = createClientModuleCache(),
+    resourceCache = createTestResourceCache(),
   } = {},
 ) {
   const { rerender: baseRerender, ...rest } = render(
-    wrapRoutesWithContext(routes, { history, moduleCache }),
+    wrapRoutesWithContext(routes, {
+      history,
+      moduleCache,
+      resourceCache,
+    }),
   );
 
   function rerender(nextRoutes) {
-    baseRerender(wrapRoutesWithContext(nextRoutes, { history, moduleCache }));
+    baseRerender(
+      wrapRoutesWithContext(nextRoutes, {
+        history,
+        moduleCache,
+        resourceCache,
+      }),
+    );
   }
 
   return {
@@ -54,10 +69,15 @@ export function renderRoutesWithContext(
   };
 }
 
-function wrapRoutesWithContext(routes, { history, moduleCache }) {
+function wrapRoutesWithContext(
+  routes,
+  { history, moduleCache, resourceCache },
+) {
   return (
     <ModuleCacheProvider cache={moduleCache}>
-      <Router history={history} routes={routes} />
+      <ResourceCacheProvider cache={resourceCache}>
+        <Router history={history} routes={routes} />
+      </ResourceCacheProvider>
     </ModuleCacheProvider>
   );
 }

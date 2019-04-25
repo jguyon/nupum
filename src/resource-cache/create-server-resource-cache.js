@@ -124,7 +124,7 @@ export default function createServerResourceCache(resourcesToPreload) {
     };
 
     resourceEntries.set(hash, pendingEntry);
-    return pendingEntry;
+    return entryPromise;
   }
 
   function listen() {

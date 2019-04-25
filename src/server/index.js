@@ -1,4 +1,5 @@
 import http from "http";
+import "./polyfill";
 
 let { default: currentApp } = require("./app");
 const server = http.createServer(currentApp);

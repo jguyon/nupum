@@ -7,16 +7,17 @@ import {
   MODULE_SUCCESS,
   MODULE_FAILURE,
 } from "../../module-cache";
+import { packageSearch } from "../../resources";
 
-const searchPageModule = createModule(
+const searchPage = createModule(
   () => import(/* webpackChunkName: "search-page" */ "./search-page"),
   "search-page",
 );
 
 export default function LazySearchPage(props) {
-  const searchPage = useModule(searchPageModule);
+  const searchPageResult = useModule(searchPage);
 
-  switch (searchPage.status) {
+  switch (searchPageResult.status) {
     case MODULE_PENDING: {
       return <p>Loading&hellip;</p>;
     }
@@ -26,16 +27,22 @@ export default function LazySearchPage(props) {
     }
 
     case MODULE_SUCCESS: {
-      const SearchPage = searchPage.module.default;
+      const SearchPage = searchPageResult.module.default;
       return <SearchPage {...props} />;
     }
 
     default: {
-      invariant(false, `invalid status ${searchPage.status}`);
+      invariant(false, `invalid status ${searchPageResult.status}`);
     }
   }
 }
 
-export function preloadSearchPage({ moduleCache }) {
-  return moduleCache.preload(searchPageModule);
+export function preloadSearchPage({ location, moduleCache, resourceCache }) {
+  const params = new URLSearchParams(location.search);
+  const query = params.get("q");
+
+  return Promise.all([
+    moduleCache.preload(searchPage),
+    resourceCache.preload(packageSearch, { query }),
+  ]);
 }

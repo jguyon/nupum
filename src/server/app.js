@@ -7,6 +7,8 @@ import fs from "fs";
 import util from "util";
 import { createStaticHistory } from "../router";
 import { createServerModuleCache } from "../module-cache";
+import { createServerResourceCache } from "../resource-cache";
+import * as resources from "../resources";
 import App, { preloadApp } from "../app";
 import Document from "./document";
 
@@ -20,15 +22,21 @@ app.get("/*", async (req, res) => {
   try {
     const history = createStaticHistory(req.url);
     const moduleCache = createServerModuleCache();
+    const resourceCache = createServerResourceCache(resources);
 
-    await preloadApp({ history, moduleCache });
+    await preloadApp({ history, moduleCache, resourceCache });
 
     const scripts = await scriptsFor("main", moduleCache.chunks());
+    const data = resourceCache.serialize();
     const appHtml = renderToString(
-      <App history={history} moduleCache={moduleCache} />,
+      <App
+        history={history}
+        moduleCache={moduleCache}
+        resourceCache={resourceCache}
+      />,
     );
     const html = renderToStaticMarkup(
-      <Document html={appHtml} scripts={scripts} />,
+      <Document html={appHtml} scripts={scripts} data={data} />,
     );
 
     res

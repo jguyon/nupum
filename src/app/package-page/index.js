@@ -7,16 +7,17 @@ import {
   MODULE_SUCCESS,
   MODULE_FAILURE,
 } from "../../module-cache";
+import { packageInfo } from "../../resources";
 
-const packagePageModule = createModule(
+const packagePage = createModule(
   () => import(/* webpackChunkName: "package-page" */ "./package-page"),
   "package-page",
 );
 
 export default function LazyPackagePage(props) {
-  const packagePage = useModule(packagePageModule);
+  const packagePageResult = useModule(packagePage);
 
-  switch (packagePage.status) {
+  switch (packagePageResult.status) {
     case MODULE_PENDING: {
       return <p>Loading&hellip;</p>;
     }
@@ -26,16 +27,19 @@ export default function LazyPackagePage(props) {
     }
 
     case MODULE_SUCCESS: {
-      const PackagePage = packagePage.module.default;
+      const PackagePage = packagePageResult.module.default;
       return <PackagePage {...props} />;
     }
 
     default: {
-      invariant(false, `invalid status ${packagePage.status}`);
+      invariant(false, `invalid status ${packagePageResult.status}`);
     }
   }
 }
 
-export function preloadPackagePage({ moduleCache }) {
-  return moduleCache.preload(packagePageModule);
+export function preloadPackagePage({ moduleCache, resourceCache, name }) {
+  return Promise.all([
+    moduleCache.preload(packagePage),
+    resourceCache.preload(packageInfo, name),
+  ]);
 }

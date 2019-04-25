@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function Document({ html, scripts }) {
+export default function Document({ html, scripts, data }) {
   return (
     <html lang="en">
       <head>
@@ -20,6 +20,9 @@ export default function Document({ html, scripts }) {
 
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: html }} />
+        <div hidden id="data">
+          {JSON.stringify(data)}
+        </div>
       </body>
     </html>
   );
@@ -28,4 +31,5 @@ export default function Document({ html, scripts }) {
 Document.propTypes = {
   html: PropTypes.string.isRequired,
   scripts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  data: PropTypes.object.isRequired,
 };
