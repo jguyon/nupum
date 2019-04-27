@@ -14,66 +14,47 @@ export default function createServerModuleCache() {
   const entries = new Map();
   const chunks = new Set();
 
-  return {
-    [IS_MODULE_CACHE]: true,
-    [MODULE_CACHE_FETCH]: module => fetchEntry(entries, module),
-    preload: module => preloadEntry(entries, chunks, module),
-    chunks: () => [...chunks],
-  };
-}
-
-function fetchEntry(entries, module) {
-  invariant(
-    module && typeof module === "object" && module[IS_MODULE],
-    "expected module to be an object returned by `createModule`",
-  );
-
-  const entry = entries.get(module);
-
-  if (entry) {
-    return entry;
-  } else {
-    const pendingEntry = {
-      status: MODULE_PENDING,
-      listen: () => {
-        invariant(
-          "cannot listen to entry of server module cache\n" +
-            "did you try to use a server module cache " +
-            "outside a server-rendering context?",
-        );
-      },
-    };
-
-    entries.set(pendingEntry);
-    return pendingEntry;
-  }
-}
-
-function preloadEntry(entries, chunks, module) {
-  invariant(
-    module && typeof module === "object" && module[IS_MODULE],
-    "expected module to be an object returned by `createModule`",
-  );
-
-  const entry = entries.get(module);
-
-  if (entry) {
-    if (entry.status === MODULE_PENDING) {
-      return new Promise(resolve => {
-        entry.listen(() => {
-          resolve();
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
-  } else {
-    const promise = module[MODULE_FETCH]();
+  function fetch(module) {
     invariant(
-      promise instanceof Promise,
-      "expected module fetch function to return a promise",
+      module && typeof module === "object" && module[IS_MODULE],
+      "expected module to be an object returned by `createModule`",
     );
 
+    const entry = entries.get(module);
+
+    if (entry) {
+      return entry;
+    } else {
+      const pendingEntry = {
+        status: MODULE_PENDING,
+        listen,
+      };
+
+      entries.set(module, pendingEntry);
+      return pendingEntry;
+    }
+  }
+
+  function preload(module) {
+    invariant(
+      module && typeof module === "object" && module[IS_MODULE],
+      "expected module to be an object returned by `createModule`",
+    );
+
+    const entry = entries.get(module);
+
+    if (entry) {
+      if (entry.status === MODULE_PENDING && entry.promise) {
+        return entry.promise;
+      } else {
+        return Promise.resolve();
+      }
+    } else {
+      return createEntry(module);
+    }
+  }
+
+  function createEntry(module) {
     const chunkName = module[MODULE_CHUNK_NAME];
     invariant(
       chunkName,
@@ -82,39 +63,49 @@ function preloadEntry(entries, chunks, module) {
     );
 
     chunks.add(chunkName);
-    return createEntry(entries, module, promise);
+
+    const entryPromise = module[MODULE_FETCH]().then(
+      data => {
+        const successEntry = {
+          status: MODULE_SUCCESS,
+          module: data,
+        };
+
+        entries.set(module, successEntry);
+      },
+      error => {
+        const failureEntry = {
+          status: MODULE_FAILURE,
+          error,
+        };
+
+        entries.set(module, failureEntry);
+      },
+    );
+
+    const pendingEntry = {
+      status: MODULE_PENDING,
+      listen,
+      promise: entryPromise,
+    };
+
+    entries.set(module, pendingEntry);
+    return entryPromise;
   }
-}
 
-function createEntry(entries, module, promise) {
-  const entryPromise = promise.then(
-    data => {
-      const successEntry = {
-        status: MODULE_SUCCESS,
-        module: data,
-      };
+  function listen() {
+    invariant(
+      false,
+      "cannot listen to entry of server module cache\n" +
+        "did you try to use a server module cache " +
+        "outside a server-rendering context?",
+    );
+  }
 
-      entries.set(module, successEntry);
-      return successEntry;
-    },
-    error => {
-      const failureEntry = {
-        status: MODULE_FAILURE,
-        error,
-      };
-
-      entries.set(module, failureEntry);
-      return failureEntry;
-    },
-  );
-
-  const pendingEntry = {
-    status: MODULE_PENDING,
-    listen: cb => {
-      entryPromise.then(cb);
-    },
+  return {
+    [IS_MODULE_CACHE]: true,
+    [MODULE_CACHE_FETCH]: fetch,
+    preload,
+    chunks: () => [...chunks],
   };
-
-  entries.set(module, pendingEntry);
-  return entryPromise.then(() => {});
 }

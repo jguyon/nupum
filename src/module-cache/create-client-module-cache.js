@@ -12,82 +12,71 @@ import {
 export default function createClientModuleCache() {
   const entries = new Map();
 
-  return {
-    [IS_MODULE_CACHE]: true,
-    [MODULE_CACHE_FETCH]: module => fetchEntry(entries, module),
-    preload: module => preloadEntry(entries, module),
-  };
-}
-
-function fetchEntry(entries, module) {
-  invariant(
-    module && typeof module === "object" && module[IS_MODULE],
-    "expected module to be an object returned by `createModule`",
-  );
-
-  const entry = entries.get(module);
-
-  if (entry) {
-    return entry;
-  } else {
-    const promise = module[MODULE_FETCH]();
+  function fetch(module) {
     invariant(
-      promise instanceof Promise,
-      "expected module fetch function to return a promise",
+      module && typeof module === "object" && module[IS_MODULE],
+      "expected module to be an object returned by `createModule`",
     );
 
-    return createEntry(entries, module, promise);
+    const entry = entries.get(module);
+
+    if (entry) {
+      return entry;
+    } else {
+      return createEntry(module);
+    }
   }
-}
 
-function createEntry(entries, module, promise) {
-  const entryPromise = promise.then(
-    data => {
-      const successEntry = {
-        status: MODULE_SUCCESS,
-        module: data,
-      };
+  function createEntry(module) {
+    const entryPromise = module[MODULE_FETCH]().then(
+      data => {
+        const successEntry = {
+          status: MODULE_SUCCESS,
+          module: data,
+        };
 
-      entries.set(module, successEntry);
-      return successEntry;
-    },
-    error => {
-      const failureEntry = {
-        status: MODULE_FAILURE,
-        error,
-      };
+        entries.set(module, successEntry);
+        return successEntry;
+      },
+      error => {
+        const failureEntry = {
+          status: MODULE_FAILURE,
+          error,
+        };
 
-      entries.set(module, failureEntry);
-      return failureEntry;
-    },
-  );
+        entries.set(module, failureEntry);
+        return failureEntry;
+      },
+    );
 
-  const pendingEntry = {
-    status: MODULE_PENDING,
-    listen: cb => {
-      entryPromise.then(cb);
-    },
-  };
+    const pendingEntry = {
+      status: MODULE_PENDING,
+      listen: cb => {
+        entryPromise.then(cb);
+      },
+    };
 
-  entries.set(module, pendingEntry);
-  return pendingEntry;
-}
+    entries.set(module, pendingEntry);
+    return pendingEntry;
+  }
 
-function preloadEntry(entries, module) {
-  invariant(
-    module && typeof module === "object" && module[IS_MODULE],
-    "expected module to be an object returned by `createModule`",
-  );
+  function preload(module) {
+    const result = fetch(module);
 
-  const result = fetchEntry(entries, module);
-
-  if (result.status === MODULE_PENDING) {
-    return new Promise(resolve => {
-      result.listen(() => {
-        resolve();
+    if (result.status === MODULE_PENDING) {
+      return new Promise(resolve => {
+        result.listen(() => {
+          resolve();
+        });
       });
-    });
-  } else {
-    return Promise.resolve();
+    } else {
+      return Promise.resolve();
+    }
   }
+
+  return {
+    [IS_MODULE_CACHE]: true,
+    [MODULE_CACHE_FETCH]: fetch,
+    preload,
+  };
 }

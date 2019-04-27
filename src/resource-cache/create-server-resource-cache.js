@@ -61,8 +61,8 @@ export default function createServerResourceCache(resourcesToPreload) {
     const entry = resourceEntries.get(hash);
 
     if (entry) {
-      if (entry.status === RESOURCE_PENDING) {
-        return Promise.resolve(entry.promise);
+      if (entry.status === RESOURCE_PENDING && entry.promise) {
+        return entry.promise;
       } else {
         return Promise.resolve();
       }
@@ -129,8 +129,9 @@ export default function createServerResourceCache(resourcesToPreload) {
 
   function listen() {
     invariant(
-      "cannot listen to entry of server module cache\n" +
-        "did you try to use a server module cache " +
+      false,
+      "cannot listen to entry of server resource cache\n" +
+        "did you try to use a server resource cache " +
         "outside a server-rendering context?",
     );
   }
