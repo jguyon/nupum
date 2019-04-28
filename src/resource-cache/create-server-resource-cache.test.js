@@ -66,30 +66,38 @@ test("successful result is rendered when requested resource has successfully bee
   const resource = createResource(() => Promise.resolve("resource data"));
   const cache = createServerResourceCache({ resource });
 
-  await cache.preload(resource, "input");
+  const preloadResult = await cache.preload(resource, "input");
 
-  const result = renderToStaticMarkup(
+  const renderResult = renderToStaticMarkup(
     <ResourceCacheProvider cache={cache}>
       <AsyncResource resource={resource} input="input" />
     </ResourceCacheProvider>,
   );
 
-  expect(result).toBe("success: resource data");
+  expect(renderResult).toBe("success: resource data");
+  expect(preloadResult).toEqual({
+    status: RESOURCE_SUCCESS,
+    data: "resource data",
+  });
 });
 
 test("failed result is rendered when requested resource has unsuccessfully been preloaded", async () => {
   const resource = createResource(() => Promise.reject("resource error"));
   const cache = createServerResourceCache({ resource });
 
-  await cache.preload(resource, "input");
+  const preloadResult = await cache.preload(resource, "input");
 
-  const result = renderToStaticMarkup(
+  const renderResult = renderToStaticMarkup(
     <ResourceCacheProvider cache={cache}>
       <AsyncResource resource={resource} input="input" />
     </ResourceCacheProvider>,
   );
 
-  expect(result).toBe("failure: resource error");
+  expect(renderResult).toBe("failure: resource error");
+  expect(preloadResult).toEqual({
+    status: RESOURCE_FAILURE,
+    error: "resource error",
+  });
 });
 
 test("preloading a resource multiple times does not refetch it", async () => {

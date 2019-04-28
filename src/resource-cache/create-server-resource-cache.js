@@ -106,6 +106,7 @@ export default function createServerResourceCache(resourcesToPreload) {
         };
 
         resourceEntries.set(hash, successEntry);
+        return successEntry;
       },
       error => {
         const failureEntry = {
@@ -114,6 +115,7 @@ export default function createServerResourceCache(resourcesToPreload) {
         };
 
         resourceEntries.set(hash, failureEntry);
+        return failureEntry;
       },
     );
 

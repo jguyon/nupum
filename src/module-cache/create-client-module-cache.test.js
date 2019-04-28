@@ -231,7 +231,7 @@ test("successful result is rendered when requested module has successfully been 
   const module = createModule(() => Promise.resolve("module data"));
   const cache = createClientModuleCache();
 
-  await cache.preload(module);
+  const result = await cache.preload(module);
 
   const { container } = render(
     <ModuleCacheProvider cache={cache}>
@@ -240,13 +240,17 @@ test("successful result is rendered when requested module has successfully been 
   );
 
   expect(container).toHaveTextContent("success: module data");
+  expect(result).toEqual({
+    status: MODULE_SUCCESS,
+    module: "module data",
+  });
 });
 
 test("failed result is rendered when requested module has unsuccessfully been preloaded", async () => {
   const module = createModule(() => Promise.reject("module error"));
   const cache = createClientModuleCache();
 
-  await cache.preload(module);
+  const result = await cache.preload(module);
 
   const { container } = render(
     <ModuleCacheProvider cache={cache}>
@@ -255,6 +259,10 @@ test("failed result is rendered when requested module has unsuccessfully been pr
   );
 
   expect(container).toHaveTextContent("failure: module error");
+  expect(result).toEqual({
+    status: MODULE_FAILURE,
+    error: "module error",
+  });
 });
 
 test("preloading a module multiple times does not refetch it", async () => {

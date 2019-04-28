@@ -308,7 +308,7 @@ test("successful result is rendered when requested resource has been succeeded d
 
   const promise = cache.preload(resource, "input");
   cache.succeed(resource, "input", "resource data");
-  await promise;
+  const result = await promise;
 
   const { container } = render(
     <ResourceCacheProvider cache={cache}>
@@ -317,6 +317,10 @@ test("successful result is rendered when requested resource has been succeeded d
   );
 
   expect(container).toHaveTextContent("success: resource data");
+  expect(result).toEqual({
+    status: RESOURCE_SUCCESS,
+    data: "resource data",
+  });
 });
 
 test("failed result is rendered when requested resource has been failed during preloading", async () => {
@@ -325,7 +329,7 @@ test("failed result is rendered when requested resource has been failed during p
 
   const promise = cache.preload(resource, "input");
   cache.fail(resource, "input", "resource error");
-  await promise;
+  const result = await promise;
 
   const { container } = render(
     <ResourceCacheProvider cache={cache}>
@@ -334,4 +338,8 @@ test("failed result is rendered when requested resource has been failed during p
   );
 
   expect(container).toHaveTextContent("failure: resource error");
+  expect(result).toEqual({
+    status: RESOURCE_FAILURE,
+    error: "resource error",
+  });
 });

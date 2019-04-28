@@ -89,9 +89,7 @@ export default function createClientResourceCache(opts) {
 
     if (result.status === RESOURCE_PENDING) {
       return new Promise(resolve => {
-        result.listen(() => {
-          resolve();
-        });
+        result.listen(resolve);
       });
     } else {
       return Promise.resolve();

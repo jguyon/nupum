@@ -60,15 +60,19 @@ test("successful result is rendered when requested module has successfully been 
   );
   const cache = createServerModuleCache();
 
-  await cache.preload(module);
+  const preloadResult = await cache.preload(module);
 
-  const result = renderToStaticMarkup(
+  const renderResult = renderToStaticMarkup(
     <ModuleCacheProvider cache={cache}>
       <AsyncModule module={module} />
     </ModuleCacheProvider>,
   );
 
-  expect(result).toBe("success: module data");
+  expect(renderResult).toBe("success: module data");
+  expect(preloadResult).toEqual({
+    status: MODULE_SUCCESS,
+    module: "module data",
+  });
 });
 
 test("failed result is rendered when requested module has unsuccessfully been preloaded", async () => {
@@ -78,15 +82,19 @@ test("failed result is rendered when requested module has unsuccessfully been pr
   );
   const cache = createServerModuleCache();
 
-  await cache.preload(module);
+  const preloadResult = await cache.preload(module);
 
-  const result = renderToStaticMarkup(
+  const renderResult = renderToStaticMarkup(
     <ModuleCacheProvider cache={cache}>
       <AsyncModule module={module} />
     </ModuleCacheProvider>,
   );
 
-  expect(result).toBe("failure: module error");
+  expect(renderResult).toBe("failure: module error");
+  expect(preloadResult).toEqual({
+    status: MODULE_FAILURE,
+    error: "module error",
+  });
 });
 
 test("preloading a module multiple times does not refetch it", async () => {

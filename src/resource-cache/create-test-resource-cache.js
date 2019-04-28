@@ -93,9 +93,7 @@ export default function createTestResourceCache() {
 
     if (entry.status === RESOURCE_PENDING) {
       return new Promise(resolve => {
-        entry.listen(() => {
-          resolve();
-        });
+        entry.listen(resolve);
       });
     } else {
       return Promise.resolve();

@@ -65,9 +65,7 @@ export default function createClientModuleCache() {
 
     if (result.status === MODULE_PENDING) {
       return new Promise(resolve => {
-        result.listen(() => {
-          resolve();
-        });
+        result.listen(resolve);
       });
     } else {
       return Promise.resolve();

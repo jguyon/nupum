@@ -414,7 +414,7 @@ test("successful result is rendered when requested resource has successfully bee
   const resource = createResource(() => Promise.resolve("resource data"));
   const cache = createClientResourceCache();
 
-  await cache.preload(resource, "input");
+  const result = await cache.preload(resource, "input");
 
   const { container } = render(
     <ResourceCacheProvider cache={cache}>
@@ -423,13 +423,17 @@ test("successful result is rendered when requested resource has successfully bee
   );
 
   expect(container).toHaveTextContent("success: resource data");
+  expect(result).toEqual({
+    status: RESOURCE_SUCCESS,
+    data: "resource data",
+  });
 });
 
 test("failed result is rendered when requested resource has unsuccessfully been preloaded", async () => {
   const resource = createResource(() => Promise.reject("resource error"));
   const cache = createClientResourceCache();
 
-  await cache.preload(resource, "input");
+  const result = await cache.preload(resource, "input");
 
   const { container } = render(
     <ResourceCacheProvider cache={cache}>
@@ -438,6 +442,10 @@ test("failed result is rendered when requested resource has unsuccessfully been 
   );
 
   expect(container).toHaveTextContent("failure: resource error");
+  expect(result).toEqual({
+    status: RESOURCE_FAILURE,
+    error: "resource error",
+  });
 });
 
 test("preloading a resource multiple times does not refetch it", async () => {

@@ -72,6 +72,7 @@ export default function createServerModuleCache() {
         };
 
         entries.set(module, successEntry);
+        return successEntry;
       },
       error => {
         const failureEntry = {
@@ -80,6 +81,7 @@ export default function createServerModuleCache() {
         };
 
         entries.set(module, failureEntry);
+        return failureEntry;
       },
     );
 
