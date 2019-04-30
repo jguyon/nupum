@@ -143,6 +143,18 @@ test("failed result is rendered when requested resource has previously been fail
   expect(container).toHaveTextContent("failure: resource error");
 });
 
+test("pending result is rendered when requested resource is null", () => {
+  const cache = createTestResourceCache();
+
+  const { container } = render(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource resource={null} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("pending");
+});
+
 test("result is rerendered when new input is requested", () => {
   const resource = createResource(fetch);
   const cache = createTestResourceCache();

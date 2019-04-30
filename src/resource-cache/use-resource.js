@@ -20,8 +20,9 @@ import {
 // going to be thrown.
 export default function useResource(resource, input) {
   invariant(
-    resource && typeof resource === "object" && resource[IS_RESOURCE],
-    "expected resource to be an object returned by `createResource`",
+    resource === null ||
+      (typeof resource === "object" && resource[IS_RESOURCE]),
+    "expected resource to be an object returned by `createResource` or null",
   );
 
   const cache = useResourceCache();
@@ -46,7 +47,7 @@ export default function useResource(resource, input) {
   }
 
   useEffect(() => {
-    if (state.entry.status === RESOURCE_PENDING) {
+    if (state.entry && state.entry.status === RESOURCE_PENDING) {
       const unlisten = state.entry.listen(nextEntry => {
         dispatch({
           type: ACTION_RESOLVE,
@@ -60,7 +61,7 @@ export default function useResource(resource, input) {
   }, [state.entry]);
 
   return useMemo(() => {
-    if (state.entry.status === RESOURCE_PENDING) {
+    if (!state.entry || state.entry.status === RESOURCE_PENDING) {
       return {
         status: RESOURCE_PENDING,
       };
@@ -71,7 +72,7 @@ export default function useResource(resource, input) {
 }
 
 function initializer({ cache, resource, input }) {
-  const entry = cache[RESOURCE_CACHE_FETCH](resource, input);
+  const entry = resource ? cache[RESOURCE_CACHE_FETCH](resource, input) : null;
 
   return {
     cache,
@@ -88,14 +89,7 @@ function reducer(state, action) {
   switch (action.type) {
     case ACTION_UPDATE: {
       const { cache, resource, input } = action;
-      const entry = cache[RESOURCE_CACHE_FETCH](resource, input);
-
-      return {
-        cache,
-        resource,
-        input,
-        entry,
-      };
+      return initializer({ cache, resource, input });
     }
 
     case ACTION_RESOLVE: {

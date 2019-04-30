@@ -100,6 +100,18 @@ test("failed result is rendered when requested resource has unsuccessfully been 
   });
 });
 
+test("pending result is rendered when requested resource is null", () => {
+  const cache = createServerResourceCache({});
+
+  const renderResult = renderToStaticMarkup(
+    <ResourceCacheProvider cache={cache}>
+      <AsyncResource resource={null} input="input" />
+    </ResourceCacheProvider>,
+  );
+
+  expect(renderResult).toBe("pending");
+});
+
 test("preloading a resource multiple times does not refetch it", async () => {
   const fetch = jest.fn(() => Promise.resolve());
   const resource = createResource(fetch);
