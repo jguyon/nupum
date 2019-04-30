@@ -52,7 +52,17 @@ export default function createClientModuleCache() {
     const pendingEntry = {
       status: MODULE_PENDING,
       listen: cb => {
-        entryPromise.then(cb);
+        let isCanceled = false;
+
+        entryPromise.then(entry => {
+          if (!isCanceled) {
+            cb(entry);
+          }
+        });
+
+        return () => {
+          isCanceled = true;
+        };
       },
     };
 

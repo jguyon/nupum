@@ -33,21 +33,15 @@ export default function useModule(module) {
 
   useEffect(() => {
     if (state.entry.status === MODULE_PENDING) {
-      let isCanceled = false;
-
-      state.entry.listen(nextEntry => {
-        if (!isCanceled) {
-          dispatch({
-            type: ACTION_RESOLVE,
-            nextEntry,
-            prevEntry: state.entry,
-          });
-        }
+      const unlisten = state.entry.listen(nextEntry => {
+        dispatch({
+          type: ACTION_RESOLVE,
+          nextEntry,
+          prevEntry: state.entry,
+        });
       });
 
-      return () => {
-        isCanceled = true;
-      };
+      return unlisten;
     }
   }, [state.entry]);
 
