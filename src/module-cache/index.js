@@ -6,4 +6,5 @@ export {
 export {
   default as createServerModuleCache,
 } from "./create-server-module-cache";
+export { default as createTestModuleCache } from "./create-test-module-cache";
 export { default as useModule, ModuleCacheProvider } from "./use-module";

@@ -4,7 +4,7 @@ import "jest-dom/extend-expect";
 import serializer from "jest-emotion";
 import { createMemoryHistory } from "history";
 import Router from "../router";
-import { createClientModuleCache, ModuleCacheProvider } from "../module-cache";
+import { createTestModuleCache, ModuleCacheProvider } from "../module-cache";
 import {
   createTestResourceCache,
   ResourceCacheProvider,
@@ -39,7 +39,7 @@ export function renderRoutesWithContext(
   routes,
   {
     history = createMemoryHistory(),
-    moduleCache = createClientModuleCache(),
+    moduleCache = createTestModuleCache(),
     resourceCache = createTestResourceCache(),
   } = {},
 ) {
