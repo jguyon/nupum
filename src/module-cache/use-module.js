@@ -16,8 +16,8 @@ import {
 
 export default function useModule(module) {
   invariant(
-    module && typeof module === "object" && module[IS_MODULE],
-    "expected module to be an object returned by `createModule`",
+    module === null || (typeof module === "object" && module[IS_MODULE]),
+    "expected module to be an object returned by `createModule` or null",
   );
 
   const cache = useModuleCache();
@@ -32,7 +32,7 @@ export default function useModule(module) {
   }
 
   useEffect(() => {
-    if (state.entry.status === MODULE_PENDING) {
+    if (state.entry && state.entry.status === MODULE_PENDING) {
       const unlisten = state.entry.listen(nextEntry => {
         dispatch({
           type: ACTION_RESOLVE,
@@ -46,7 +46,7 @@ export default function useModule(module) {
   }, [state.entry]);
 
   return useMemo(() => {
-    if (state.entry.status === MODULE_PENDING) {
+    if (!state.entry || state.entry.status === MODULE_PENDING) {
       // filtering out extra properties
       return {
         status: MODULE_PENDING,
@@ -58,7 +58,7 @@ export default function useModule(module) {
 }
 
 function initializer({ cache, module }) {
-  const entry = cache[MODULE_CACHE_FETCH](module);
+  const entry = module ? cache[MODULE_CACHE_FETCH](module) : null;
 
   return {
     cache,
@@ -74,13 +74,7 @@ function reducer(state, action) {
   switch (action.type) {
     case ACTION_UPDATE: {
       const { cache, module } = action;
-      const entry = cache[MODULE_CACHE_FETCH](module);
-
-      return {
-        cache,
-        module,
-        entry,
-      };
+      return initializer({ cache, module });
     }
 
     case ACTION_RESOLVE: {

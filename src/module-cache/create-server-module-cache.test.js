@@ -97,6 +97,18 @@ test("failed result is rendered when requested module has unsuccessfully been pr
   });
 });
 
+test("pending result is rendered when requested module is null", () => {
+  const cache = createServerModuleCache();
+
+  const renderResult = renderToStaticMarkup(
+    <ModuleCacheProvider cache={cache}>
+      <AsyncModule module={null} />
+    </ModuleCacheProvider>,
+  );
+
+  expect(renderResult).toBe("pending");
+});
+
 test("preloading a module multiple times does not refetch it", async () => {
   const fetch = jest.fn(() => Promise.resolve());
   const module = createModule(fetch, "module-name");

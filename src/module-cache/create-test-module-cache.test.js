@@ -244,6 +244,18 @@ test("failed result is rendered when requested module has previously been failed
   expect(container).toHaveTextContent("failure: module error");
 });
 
+test("pending result is rendered when requested module is null", () => {
+  const cache = createTestModuleCache();
+
+  const { container } = render(
+    <ModuleCacheProvider cache={cache}>
+      <AsyncModule module={null} />
+    </ModuleCacheProvider>,
+  );
+
+  expect(container).toHaveTextContent("pending");
+});
+
 test("result is rerendered when new module is requested", async () => {
   const moduleOne = createModule(() => Promise.resolve("module data one"));
   const moduleTwo = createModule(() => Promise.resolve("module data two"));
