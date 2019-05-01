@@ -1,10 +1,11 @@
+import "./polyfill";
 import React, { StrictMode } from "react";
 import { hydrate } from "react-dom";
 import { createBrowserHistory } from "history";
-import { createClientModuleCache } from "./module-cache";
-import { createClientResourceCache } from "./resource-cache";
-import * as resources from "./resources";
-import App, { preloadApp } from "./app";
+import { createClientModuleCache } from "../module-cache";
+import { createClientResourceCache } from "../resource-cache";
+import * as resources from "../resources";
+import App, { preloadApp } from "../app";
 
 const RESOURCE_CACHE_MAX_SIZE = 100;
 const RESOURCE_CACHE_MAX_AGE = 30 * 60 * 1000; // 30min
@@ -16,7 +17,7 @@ renderApp(true);
 
 if (module.hot) {
   module.hot.accept(
-    ["./module-cache", "./resource-cache", "./resources", "./app"],
+    ["../module-cache", "../resource-cache", "../resources", "../app"],
     () => {
       renderApp(false);
     },
