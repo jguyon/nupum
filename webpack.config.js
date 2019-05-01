@@ -26,37 +26,13 @@ const rules = [
   // process javascript files with babel
   {
     test: /\.js$/,
-    oneOf: [
-      // process project files
-      {
-        include: path.join(__dirname, "src"),
-        loader: require.resolve("babel-loader"),
-        options: {
-          cacheDirectory: true,
-          cacheCompression: !isDev,
-          compact: !isDev,
-        },
-      },
-      // process dependencies
-      {
-        exclude: /@babel(?:\/|\\{1,2})runtime/,
-        loader: require.resolve("babel-loader"),
-        options: {
-          babelrc: false,
-          configFile: false,
-          compact: false,
-          presets: [
-            [
-              require.resolve("babel-preset-react-app/dependencies"),
-              { helpers: true },
-            ],
-          ],
-          cacheDirectory: true,
-          cacheCompression: !isDev,
-          sourceMaps: false,
-        },
-      },
-    ],
+    include: path.join(__dirname, "src"),
+    loader: require.resolve("babel-loader"),
+    options: {
+      cacheDirectory: true,
+      cacheCompression: !isDev,
+      compact: !isDev,
+    },
   },
 ];
 
