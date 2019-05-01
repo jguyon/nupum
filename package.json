@@ -1,24 +1,19 @@
 {
   "private": true,
   "scripts": {
-    "clean": "rimraf ./build",
-    "build": "cross-env NODE_ENV=production webpack",
-    "start": "cross-env NODE_ENV=production node ./build/server.js",
-    "develop": "cross-env NODE_ENV=development webpack --watch",
     "lint": "eslint --ext .js .",
     "test": "jest",
-    "format": "prettier --write '**/*.{js,json,md}'"
+    "format": "prettier --write '**/*.{js,json,md}'",
+    "now-build": "webpack"
   },
   "dependencies": {
     "@emotion/core": "^10.0.10",
-    "express": "^4.16.4",
     "history": "^4.9.0",
     "node-fetch": "^2.3.0",
     "polished": "^3.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "serve-static": "^1.13.2",
     "tiny-invariant": "^1.0.4",
     "tiny-warning": "^1.0.2"
   },
@@ -30,7 +25,6 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-preset-react-app": "^7.0.2",
-    "cross-env": "^5.2.0",
     "eslint": "^5.15.3",
     "eslint-config-react-app": "^3.0.8",
     "eslint-loader": "^2.1.2",
@@ -49,8 +43,6 @@
     "pretty-quick": "^1.10.0",
     "react-dev-utils": "^8.0.0",
     "react-testing-library": "^6.0.3",
-    "rimraf": "^2.6.3",
-    "start-server-webpack-plugin": "^2.2.5",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-node-externals": "^1.7.2"

@@ -2,9 +2,9 @@ const webpack = require("webpack");
 const path = require("path");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
-const StartServerPlugin = require("start-server-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 const isDev = process.env.NODE_ENV !== "production";
 const mode = isDev ? "development" : "production";
 const stats = "minimal";
@@ -113,7 +113,7 @@ module.exports = [
     bail,
     entry: path.join(__dirname, "src/client"),
     output: {
-      path: path.join(__dirname, "build/static"),
+      path: path.join(__dirname, "build/client"),
       filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
       chunkFilename: isDev ? "[name].js" : "[name].[contenthash:8].js",
       publicPath: "/static/",
@@ -132,8 +132,6 @@ module.exports = [
     },
     plugins: [
       ...createPlugins(),
-      // generate an asset manifest for server use
-      new AssetManifestPlugin("../assets.json"),
       // environment variables
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify(
@@ -141,6 +139,8 @@ module.exports = [
         ),
         "process.env.TARGET": JSON.stringify("client"),
       }),
+      // generate an asset manifest for server use
+      new AssetManifestPlugin("../assets.json"),
     ],
   },
   {
@@ -149,20 +149,16 @@ module.exports = [
     stats,
     externals: [
       // we don't want to bundle node_modules in the server
-      nodeExternals({
-        whitelist: isDev ? ["webpack/hot/poll?300"] : [],
-      }),
+      nodeExternals(),
     ],
     mode,
     devtool,
     bail,
-    entry: [
-      isDev && "webpack/hot/poll?300",
-      path.join(__dirname, "src/server"),
-    ].filter(Boolean),
+    entry: path.join(__dirname, "src/server"),
     output: {
-      path: path.join(__dirname, "build"),
-      filename: "server.js",
+      libraryTarget: "commonjs2",
+      path: path.join(__dirname, "build/server"),
+      filename: "[name].js",
     },
     resolve: {
       extensions,
@@ -178,28 +174,14 @@ module.exports = [
           isDev ? "development" : "production",
         ),
         "process.env.TARGET": JSON.stringify("server"),
-        "process.env.STATIC_PATH": JSON.stringify(
-          path.join(__dirname, "build/static"),
-        ),
-        "process.env.STATIC_PREFIX": JSON.stringify("/static"),
         "process.env.MANIFEST_PATH": JSON.stringify(
           path.join(__dirname, "build/assets.json"),
         ),
-        "process.env.PUBLIC_PATH": JSON.stringify(
-          path.join(__dirname, "public"),
-        ),
-        "process.env.PORT": JSON.stringify(process.env.PORT || "3000"),
       }),
       // prevent creating multiple chunks
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
       }),
-      // in development, use hot reloading and start a server
-      isDev && new webpack.HotModuleReplacementPlugin(),
-      isDev &&
-        new StartServerPlugin({
-          name: "server.js",
-        }),
-    ].filter(Boolean),
+    ],
   },
 ];
