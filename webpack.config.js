@@ -118,6 +118,12 @@ module.exports = [
       chunkFilename: isDev ? "[name].js" : "[name].[contenthash:8].js",
       publicPath: "/static/",
     },
+    devServer: {
+      port: process.env.PORT,
+      publicPath: "/client",
+      contentBase: false,
+      hotOnly: isDev,
+    },
     optimization: {
       runtimeChunk: "single",
       splitChunks: {

@@ -4,7 +4,8 @@
     "lint": "eslint --ext .js .",
     "test": "jest",
     "format": "prettier --write '**/*.{js,json,md}'",
-    "now-build": "webpack"
+    "now-build": "webpack",
+    "now-dev": "webpack-dev-server --config-name=client"
   },
   "dependencies": {
     "@emotion/core": "^10.0.10",
@@ -45,6 +46,7 @@
     "react-testing-library": "^6.0.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.1",
     "webpack-node-externals": "^1.7.2"
   }
 }
