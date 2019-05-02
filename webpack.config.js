@@ -121,9 +121,10 @@ module.exports = [
         ),
         "process.env.TARGET": JSON.stringify("client"),
       }),
+      !isDev && new webpack.HashedModuleIdsPlugin(),
       // generate an asset manifest for server use
       new AssetManifestPlugin("../assets.json"),
-    ],
+    ].filter(Boolean),
   },
   {
     name: "server",
