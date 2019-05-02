@@ -11,6 +11,7 @@
     "@emotion/core": "^10.0.10",
     "history": "^4.9.0",
     "node-fetch": "^2.3.0",
+    "open-color": "^1.6.3",
     "polished": "^3.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",

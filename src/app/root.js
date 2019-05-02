@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { css, Global } from "@emotion/core";
 import { normalize } from "polished";
+import { establishRhythm, color, baseFontFamily, primaryColor } from "./theme";
 
 export default function Root({ children }) {
   return (
@@ -18,6 +19,16 @@ Root.propTypes = {
 
 const globalStyles = css`
   ${normalize()}
+  ${establishRhythm()}
+
+  html {
+    box-sizing: border-box;
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
 
   html {
     overflow-y: scroll;
@@ -27,10 +38,14 @@ const globalStyles = css`
     margin: 0;
     padding: 0;
 
-    background-color: white;
-    color: rgba(0, 0, 0, 0.9);
+    background-color: ${color("white")};
+    color: ${color("gray", 9)};
 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-family: ${baseFontFamily};
+  }
+
+  ::selection {
+    background-color: ${color(primaryColor, 5)};
+    color: ${color("white")};
   }
 `;

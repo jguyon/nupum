@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
+import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import { useNavigate, useMatch } from "../../router";
+import { rhythm, color, primaryColor } from "../theme";
 
-export default function SearchForm({ inputRef }) {
+export default function SearchForm({ inputRef, ...props }) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
   const inputAutoFocus = !!useMatch("/");
@@ -22,9 +24,10 @@ export default function SearchForm({ inputRef }) {
   }
 
   return (
-    <div role="search">
-      <form onSubmit={onFormSubmit}>
+    <div {...props} role="search">
+      <form css={formStyles} onSubmit={onFormSubmit}>
         <input
+          css={inputStyles}
           ref={inputRef}
           autoFocus={inputAutoFocus}
           type="search"
@@ -34,7 +37,9 @@ export default function SearchForm({ inputRef }) {
           onFocus={onInputFocus}
         />
 
-        <button type="submit">Search</button>
+        <button css={submitStyles} type="submit">
+          Search
+        </button>
       </form>
     </div>
   );
@@ -43,6 +48,62 @@ export default function SearchForm({ inputRef }) {
 SearchForm.propTypes = {
   inputRef: PropTypes.object,
 };
+
+const formStyles = css`
+  display: flex;
+`;
+
+const inputStyles = css`
+  flex-grow: 1;
+
+  min-width: 0;
+  height: ${rhythm(1, 2)};
+  padding: 0 ${rhythm(1, -1)} 0 ${rhythm(1)};
+
+  border: 1px solid ${color("gray", 5)};
+  border-right-width: 0;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+
+  &:focus {
+    outline: none;
+  }
+
+  // https://blog.maximerouiller.com/post/remove-the-x-from-internet-explorer-and-chrome-input-type-search/
+  &::-ms-clear,
+  &::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    display: none;
+  }
+`;
+
+const submitStyles = css`
+  height: ${rhythm(1, 2)};
+  padding: 0 ${rhythm(1)} 0 ${rhythm(1, -1)};
+
+  border: 0;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+
+  background-color: ${color(primaryColor, 5)};
+  color: ${color("white")};
+
+  cursor: pointer;
+
+  transition: background-color 0.15s ease-out;
+  &:hover,
+  &:focus {
+    outline: none;
+    background-color: ${color(primaryColor, 3)};
+  }
+`;
 
 const SearchFormContext = createContext(null);
 

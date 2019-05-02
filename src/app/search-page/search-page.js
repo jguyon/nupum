@@ -25,7 +25,6 @@ export default function SearchPage({ location }) {
       }
 
       case RESOURCE_FAILURE: {
-        console.error(packageSearchResult.error);
         return <p>Error!</p>;
       }
 
