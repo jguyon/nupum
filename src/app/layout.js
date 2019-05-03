@@ -25,7 +25,7 @@ export default function Layout({ children }) {
         </Container>
       </header>
 
-      <main css={mainStyles} ref={focusRef}>
+      <main css={mainStyles} ref={focusRef} tabIndex="-1">
         {children}
       </main>
     </>
