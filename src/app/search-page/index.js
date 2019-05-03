@@ -1,12 +1,16 @@
-import React from "react";
-import invariant from "tiny-invariant";
+import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import {
   createModule,
   useModule,
-  MODULE_PENDING,
   MODULE_SUCCESS,
   MODULE_FAILURE,
 } from "../../module-cache";
+import {
+  useResource,
+  RESOURCE_SUCCESS,
+  RESOURCE_FAILURE,
+} from "../../resource-cache";
 import { packageSearch } from "../../resources";
 
 const searchPage = createModule(
@@ -14,35 +18,46 @@ const searchPage = createModule(
   "search-page",
 );
 
-export default function LazySearchPage(props) {
+export default function LazySearchPage({ location }) {
+  const query = getQueryParam(location);
   const searchPageResult = useModule(searchPage);
+  const packageSearchResult = useResource(
+    packageSearch,
+    useMemo(() => ({ query }), [query]),
+  );
 
-  switch (searchPageResult.status) {
-    case MODULE_PENDING: {
-      return <p>Loading&hellip;</p>;
-    }
+  if (
+    searchPageResult.status === MODULE_SUCCESS &&
+    packageSearchResult.status === RESOURCE_SUCCESS
+  ) {
+    const SearchPage = searchPageResult.module.default;
+    const searchResults = packageSearchResult.data;
 
-    case MODULE_FAILURE: {
-      return <p>Error!</p>;
-    }
-
-    case MODULE_SUCCESS: {
-      const SearchPage = searchPageResult.module.default;
-      return <SearchPage {...props} />;
-    }
-
-    default: {
-      invariant(false, `invalid status ${searchPageResult.status}`);
-    }
+    return <SearchPage query={query} searchResults={searchResults} />;
+  } else if (
+    searchPageResult.status === MODULE_FAILURE ||
+    packageSearchResult.status === RESOURCE_FAILURE
+  ) {
+    return <p>Error!</p>;
+  } else {
+    return <p>Loading&hellip;</p>;
   }
 }
 
+LazySearchPage.propTypes = {
+  location: PropTypes.object.isRequired,
+};
+
 export function preloadSearchPage({ location, moduleCache, resourceCache }) {
-  const params = new URLSearchParams(location.search);
-  const query = params.get("q");
+  const query = getQueryParam(location);
 
   return Promise.all([
     moduleCache.preload(searchPage),
     resourceCache.preload(packageSearch, { query }),
   ]);
+}
+
+function getQueryParam(location) {
+  const params = new URLSearchParams(location.search);
+  return params.get("q");
 }

@@ -25,9 +25,9 @@ export default function Layout({ children }) {
         </Container>
       </header>
 
-      <Container tag="main" ref={focusRef} tabIndex={-1} css={mainStyles}>
+      <main css={mainStyles} ref={focusRef}>
         {children}
-      </Container>
+      </main>
     </>
   );
 }
@@ -42,7 +42,7 @@ const headerStyles = css`
   border: solid ${color("gray", 3)};
   border-width: 0 0 1px 0;
 
-  padding: ${rhythm(1, -1)} 0;
+  padding: ${rhythm(1, -1)} 0 calc(${rhythm(1, -1)} - 1px) 0;
 `;
 
 const headingStyles = css`

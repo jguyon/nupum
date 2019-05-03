@@ -1,60 +1,97 @@
-import React, { useMemo } from "react";
+import React from "react";
+import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import invariant from "tiny-invariant";
 import { Link } from "../../router";
-import {
-  useResource,
-  RESOURCE_PENDING,
-  RESOURCE_SUCCESS,
-  RESOURCE_FAILURE,
-} from "../../resource-cache";
-import { packageSearch } from "../../resources";
+import { rhythm, scale, color, primaryColor } from "../theme";
+import Container from "../container";
 
-export default function SearchPage({ location }) {
-  const params = new URLSearchParams(location.search);
-  const query = params.get("q");
-  const packageSearchResult = useResource(
-    packageSearch,
-    useMemo(() => ({ query }), [query]),
-  );
-
-  const packages = (() => {
-    switch (packageSearchResult.status) {
-      case RESOURCE_PENDING: {
-        return <p>Loading&hellip;</p>;
-      }
-
-      case RESOURCE_FAILURE: {
-        return <p>Error!</p>;
-      }
-
-      case RESOURCE_SUCCESS: {
-        const { data } = packageSearchResult;
-
-        return data.results.map(({ package: pkg }) => (
-          <div key={pkg.name}>
-            <Link to={`/package/${encodeURIComponent(pkg.name)}`}>
-              {pkg.name}
-            </Link>{" "}
-            <small>{pkg.version}</small>
-          </div>
-        ));
-      }
-
-      default: {
-        invariant(false, `invalid status ${packageSearchResult.status}`);
-      }
-    }
-  })();
-
+export default function SearchPage({ query, searchResults }) {
   return (
     <>
-      <h2>Search results for "{query || ""}"</h2>
-      {packages}
+      <h2 css={searchPageHeadingStyles}>
+        <Container>
+          <strong>{searchResults.total}</strong> results for "{query}"
+        </Container>
+      </h2>
+
+      <Container>
+        {searchResults.results.map(searchResult => (
+          <SearchResult
+            key={searchResult.package.name}
+            searchResult={searchResult}
+          />
+        ))}
+      </Container>
     </>
   );
 }
 
 SearchPage.propTypes = {
-  location: PropTypes.object.isRequired,
+  query: PropTypes.string.isRequired,
+  searchResults: PropTypes.object.isRequired,
 };
+
+const searchPageHeadingStyles = css`
+  ${scale(0, 1)}
+  font-weight: normal;
+
+  background-color: ${color("gray", 1)};
+  border: solid ${color("gray", 3)};
+
+  border-width: 0 0 1px 0;
+  margin: 0 0 ${rhythm(1)} 0;
+  padding: ${rhythm(0, 2)} 0 calc(${rhythm(0, 2)} - 1px) 0;
+`;
+
+function SearchResult({ searchResult: { package: pkg } }) {
+  return (
+    <article css={searchResultStyles}>
+      <h3 css={searchResultHeadingStyles}>
+        <Link
+          css={searchResultNameStyles}
+          to={`/package/${encodeURIComponent(pkg.name)}`}
+        >
+          {pkg.name}
+        </Link>{" "}
+        <small css={searchResultVersionStyles}>{pkg.version}</small>
+      </h3>
+
+      {pkg.description ? (
+        <p css={searchResultDescriptionStyles}>{pkg.description}</p>
+      ) : null}
+    </article>
+  );
+}
+
+const searchResultStyles = css`
+  margin: ${rhythm(1)} 0;
+`;
+
+const searchResultHeadingStyles = css`
+  ${scale(0, 2)}
+  margin: 0;
+`;
+
+const searchResultNameStyles = css`
+  color: ${color(primaryColor, 7)};
+  text-decoration: underline transparent;
+
+  transition: text-decoration 0.15s ease-out;
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 1px dotted currentColor;
+  }
+`;
+
+const searchResultVersionStyles = css`
+  ${scale(0, -1)}
+  font-weight: normal;
+  color: ${color("gray", 7)};
+`;
+
+const searchResultDescriptionStyles = css`
+  margin: 0;
+`;
