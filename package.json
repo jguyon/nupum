@@ -17,6 +17,7 @@
     "react": "^16.8.6",
     "react-app-polyfill": "^1.0.0",
     "react-dom": "^16.8.6",
+    "react-feather": "^1.1.6",
     "tiny-invariant": "^1.0.4",
     "tiny-warning": "^1.0.2",
     "url-search-params-polyfill": "^6.0.0"

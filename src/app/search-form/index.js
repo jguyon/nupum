@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
+import SearchIcon from "react-feather/dist/icons/search";
 import { useNavigate, useMatch } from "../../router";
 import { rhythm, color, primaryColor } from "../theme";
 
@@ -37,8 +38,8 @@ export default function SearchForm({ inputRef, ...props }) {
           onFocus={onInputFocus}
         />
 
-        <button css={submitStyles} type="submit">
-          Search
+        <button css={submitStyles} type="submit" aria-label="Search">
+          <SearchIcon size={rhythm(1)} />
         </button>
       </form>
     </div>
@@ -85,6 +86,9 @@ const inputStyles = css`
 `;
 
 const submitStyles = css`
+  display: flex;
+  align-items: center;
+
   height: ${rhythm(1, 2)};
   padding: 0 ${rhythm(1)} 0 ${rhythm(1, -1)};
 
