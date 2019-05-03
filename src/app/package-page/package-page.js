@@ -1,60 +1,62 @@
 import React from "react";
+import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import invariant from "tiny-invariant";
-import { useStatusCode } from "../../router";
-import {
-  useResource,
-  RESOURCE_PENDING,
-  RESOURCE_SUCCESS,
-  RESOURCE_FAILURE,
-} from "../../resource-cache";
-import { packageInfo } from "../../resources";
+import { rhythm, scale, color } from "../theme";
+import Banner from "../banner";
+import Container from "../container";
 
-export default function PackagePage({ name }) {
-  const packageInfoResult = useResource(packageInfo, name);
-
-  switch (packageInfoResult.status) {
-    case RESOURCE_PENDING: {
-      return <p>Loading&hellip;</p>;
-    }
-
-    case RESOURCE_FAILURE: {
-      return <p>Error!</p>;
-    }
-
-    case RESOURCE_SUCCESS: {
-      if (packageInfoResult.data.found) {
-        const pkg = packageInfoResult.data.data.collected;
-        return <ShowPackage pkg={pkg} />;
-      } else {
-        return <PackageNotFound />;
-      }
-    }
-
-    default: {
-      invariant(false, `invalid status ${packageInfoResult.status}`);
-    }
-  }
-}
-
-PackagePage.propTypes = {
-  name: PropTypes.string.isRequired,
-};
-
-function PackageNotFound() {
-  useStatusCode(404);
-
-  return <p>Package not found!</p>;
-}
-
-function ShowPackage({ pkg }) {
+export default function PackagePage({
+  packageInfo: {
+    collected: { metadata },
+  },
+}) {
   return (
     <>
-      <h2>
-        {pkg.metadata.name} <small>{pkg.metadata.version}</small>
-      </h2>
+      <Banner>
+        <h2 css={headingStyles}>
+          {metadata.name} <small css={versionStyles}>{metadata.version}</small>
+        </h2>
 
-      {pkg.metadata.readme ? <pre>{pkg.metadata.readme}</pre> : null}
+        {metadata.description ? (
+          <p css={descriptionStyles}>{metadata.description}</p>
+        ) : null}
+      </Banner>
+
+      <Container>
+        {metadata.readme ? (
+          <pre css={readmeStyles}>{metadata.readme}</pre>
+        ) : (
+          <p css={noReadmeStyles}>This package has no readme.</p>
+        )}
+      </Container>
     </>
   );
 }
+
+PackagePage.propTypes = {
+  packageInfo: PropTypes.object.isRequired,
+};
+
+const headingStyles = css`
+  ${scale(0, 3)}
+  margin: 0;
+`;
+
+const versionStyles = css`
+  ${scale(0, -1)}
+  font-weight: normal;
+  color: ${color("gray", 7)};
+`;
+
+const descriptionStyles = css`
+  margin: 0;
+`;
+
+const noReadmeStyles = css`
+  margin: ${rhythm(1)} 0;
+`;
+
+const readmeStyles = css`
+  white-space: pre-wrap;
+  margin: ${rhythm(1)} 0;
+`;

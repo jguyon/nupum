@@ -1,41 +1,53 @@
 import React from "react";
-import invariant from "tiny-invariant";
+import PropTypes from "prop-types";
 import {
   createModule,
   useModule,
-  MODULE_PENDING,
   MODULE_SUCCESS,
   MODULE_FAILURE,
 } from "../../module-cache";
+import {
+  useResource,
+  RESOURCE_SUCCESS,
+  RESOURCE_FAILURE,
+} from "../../resource-cache";
 import { packageInfo } from "../../resources";
+import PageNotFound from "../page-not-found";
 
 const packagePage = createModule(
   () => import(/* webpackChunkName: "package-page" */ "./package-page"),
   "package-page",
 );
 
-export default function LazyPackagePage(props) {
+export default function LazyPackagePage({ name }) {
   const packagePageResult = useModule(packagePage);
+  const packageInfoResult = useResource(packageInfo, name);
 
-  switch (packagePageResult.status) {
-    case MODULE_PENDING: {
-      return <p>Loading&hellip;</p>;
-    }
+  if (
+    packagePageResult.status === MODULE_SUCCESS &&
+    packageInfoResult.status === RESOURCE_SUCCESS
+  ) {
+    const PackagePage = packagePageResult.module.default;
 
-    case MODULE_FAILURE: {
-      return <p>Error!</p>;
+    if (packageInfoResult.data.found) {
+      const packageInfo = packageInfoResult.data.data;
+      return <PackagePage packageInfo={packageInfo} />;
+    } else {
+      return <PageNotFound />;
     }
-
-    case MODULE_SUCCESS: {
-      const PackagePage = packagePageResult.module.default;
-      return <PackagePage {...props} />;
-    }
-
-    default: {
-      invariant(false, `invalid status ${packagePageResult.status}`);
-    }
+  } else if (
+    packagePageResult.status === MODULE_FAILURE ||
+    packageInfoResult.status === RESOURCE_FAILURE
+  ) {
+    return <p>Error!</p>;
+  } else {
+    return <p>Loading&hellip;</p>;
   }
 }
+
+LazyPackagePage.propTypes = {
+  name: PropTypes.string.isRequired,
+};
 
 export function preloadPackagePage({ moduleCache, resourceCache, name }) {
   return Promise.all([

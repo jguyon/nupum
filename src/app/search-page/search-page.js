@@ -3,16 +3,17 @@ import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import { Link } from "../../router";
 import { rhythm, scale, color, primaryColor } from "../theme";
+import Banner from "../banner";
 import Container from "../container";
 
 export default function SearchPage({ query, searchResults }) {
   return (
     <>
-      <h2 css={searchPageHeadingStyles}>
-        <Container>
+      <Banner>
+        <h2 css={searchPageHeadingStyles}>
           <strong>{searchResults.total}</strong> results for "{query}"
-        </Container>
-      </h2>
+        </h2>
+      </Banner>
 
       <Container>
         {searchResults.results.map(searchResult => (
@@ -33,14 +34,8 @@ SearchPage.propTypes = {
 
 const searchPageHeadingStyles = css`
   ${scale(0, 1)}
+  margin: 0;
   font-weight: normal;
-
-  background-color: ${color("gray", 1)};
-  border: solid ${color("gray", 3)};
-
-  border-width: 0 0 1px 0;
-  margin: 0 0 ${rhythm(1)} 0;
-  padding: ${rhythm(0, 2)} 0 calc(${rhythm(0, 2)} - 1px) 0;
 `;
 
 function SearchResult({ searchResult: { package: pkg } }) {
