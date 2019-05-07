@@ -11,6 +11,7 @@
     "@emotion/core": "^10.0.10",
     "history": "^4.9.0",
     "node-fetch": "^2.3.0",
+    "number-format.js": "^2.0.8",
     "open-color": "^1.6.3",
     "polished": "^3.2.0",
     "prop-types": "^15.7.2",
@@ -18,6 +19,8 @@
     "react-app-polyfill": "^1.0.0",
     "react-dom": "^16.8.6",
     "react-feather": "^1.1.6",
+    "react-gravatar": "^2.6.3",
+    "react-timeago": "^4.4.0",
     "tiny-invariant": "^1.0.4",
     "tiny-warning": "^1.0.2",
     "url-search-params-polyfill": "^6.0.0"

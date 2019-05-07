@@ -4,7 +4,7 @@ import colors from "open-color";
 
 export const baseFontFamily = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif`;
 
-const baseFontSize = 16;
+export const baseFontSize = 16;
 export const baseLineHeight = 1.4;
 export const compactLineHeight = 1.2;
 const rhythmRatio = 0.5;
