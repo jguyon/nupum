@@ -14,7 +14,7 @@ Container.propTypes = {
 };
 
 const containerStyles = css`
-  max-width: ${rhythm(40)};
+  max-width: ${rhythm(36)};
   padding: 0 ${rhythm(1)};
   margin: 0 auto;
 `;
