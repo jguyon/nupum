@@ -12,7 +12,7 @@ export default function Banner({ children, ...props }) {
 }
 
 const bannerStyles = css`
-  background-color: ${color("gray", 1)};
+  background-color: ${color("gray", 0)};
   border: solid ${color("gray", 3)};
 
   border-width: 0 0 1px 0;
