@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
-const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
 const nodeExternals = require("webpack-node-externals");
 
 process.env.NODE_ENV =
@@ -44,10 +43,7 @@ function createPlugins() {
   return [
     // give more context to module not found errors
     new ModuleNotFoundPlugin(__dirname),
-    // handle `npm install` of a missing module while in watch mode sensibly
-    isDev &&
-      new WatchMissingNodeModulesPlugin(path.join(__dirname, "node_modules")),
-  ].filter(Boolean);
+  ];
 }
 
 // adapted from https://github.com/smooth-code/loadable-components/blob/3767f28240ffd87676d6e965c649188aedd9d301/packages/webpack-plugin/src/index.js
@@ -147,6 +143,9 @@ module.exports = [
       libraryTarget: "commonjs2",
       path: path.join(__dirname, "build/server"),
       filename: "[name].js",
+    },
+    optimization: {
+      minimize: false,
     },
     resolve: {
       extensions,
