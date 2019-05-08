@@ -90,8 +90,8 @@ module.exports = [
     entry: path.join(__dirname, "src/client"),
     output: {
       path: path.join(__dirname, "build/client/static"),
-      filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
-      chunkFilename: isDev ? "[name].js" : "[name].[contenthash:8].js",
+      filename: isDev ? "[name].js" : "[name].[contenthash:16].js",
+      chunkFilename: isDev ? "[name].js" : "[name].[contenthash:16].js",
       publicPath: "/static/",
     },
     devServer: {
