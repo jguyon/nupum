@@ -4,7 +4,11 @@ const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
 const nodeExternals = require("webpack-node-externals");
 
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
+process.env.NODE_ENV =
+  process.env.NODE_ENV === "development" || process.env.NOW_REGION === "dev1"
+    ? "development"
+    : "production";
+
 const isDev = process.env.NODE_ENV !== "production";
 const mode = isDev ? "development" : "production";
 const stats = "minimal";
