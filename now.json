@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "nupum",
+  "alias": ["nupum"],
   "builds": [
     {
       "src": "index.js",
