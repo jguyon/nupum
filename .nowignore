@@ -1,0 +1,19 @@
+# yarn
+/node_modules
+yarn-debug.log*
+yarn-error.log*
+
+# build
+/build
+
+# husky
+.huskyrc.js
+
+# prettier
+.prettierignore
+.prettierrc.js
+
+# jest
+jest.config.js
+*.test.js
+/coverage
