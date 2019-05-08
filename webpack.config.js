@@ -133,6 +133,8 @@ module.exports = [
     externals: [
       // we don't want to bundle node_modules in the server
       nodeExternals(),
+      // the manifest won't be there at build time so we don't want to bundle it
+      path.join(__dirname, "build/assets.json"),
     ],
     mode,
     devtool,

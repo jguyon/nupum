@@ -2,7 +2,6 @@ import "./polyfill";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import invariant from "tiny-invariant";
-import fs from "fs";
 import { createStaticHistory } from "../router";
 import { createServerModuleCache } from "../module-cache";
 import { createServerResourceCache } from "../resource-cache";
@@ -52,7 +51,7 @@ export default async function handle(req, res) {
   }
 }
 
-const manifest = JSON.parse(fs.readFileSync(process.env.MANIFEST_PATH));
+const manifest = require(process.env.MANIFEST_PATH);
 
 function scriptsFor(entry, chunks) {
   const scripts = new Set();
