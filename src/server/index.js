@@ -41,7 +41,7 @@ export default async function handle(req, res) {
     res.write(HTML_PREFIX);
     res.end(html);
   } catch (error) {
-    console.error(error);
+    console.error(`error at ${req.url}:`, error);
 
     res.writeHead(500, {
       "content-type": "text/plain",
