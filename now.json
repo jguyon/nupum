@@ -12,14 +12,14 @@
     {
       "src": "package.json",
       "use": "@now/static-build",
-      "config": { "distDir": "build" }
+      "config": { "distDir": "build/client" }
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
       "headers": { "cache-control": "s-maxage=31536000,immutable" },
-      "dest": "/client/$1"
+      "dest": "/static/$1"
     },
     {
       "src": "/favicon.ico",

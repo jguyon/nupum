@@ -89,14 +89,13 @@ module.exports = [
     bail,
     entry: path.join(__dirname, "src/client"),
     output: {
-      path: path.join(__dirname, "build/client"),
+      path: path.join(__dirname, "build/client/static"),
       filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
       chunkFilename: isDev ? "[name].js" : "[name].[contenthash:8].js",
       publicPath: "/static/",
     },
     devServer: {
       port: process.env.PORT,
-      publicPath: "/client",
       contentBase: false,
       hotOnly: isDev,
     },
@@ -123,7 +122,7 @@ module.exports = [
       }),
       !isDev && new webpack.HashedModuleIdsPlugin(),
       // generate an asset manifest for server use
-      new AssetManifestPlugin("../assets.json"),
+      new AssetManifestPlugin("../../assets.json"),
     ].filter(Boolean),
   },
   {
