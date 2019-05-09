@@ -4,10 +4,10 @@ import invariant from "tiny-invariant";
 import Router, { preloadRoutes } from "../router";
 import { ModuleCacheProvider } from "../module-cache";
 import { ResourceCacheProvider } from "../resource-cache";
-import Root from "./root";
+import RootLayout from "./root-layout";
 import { LocationFocusProvider } from "./location-focus";
 import { SearchFormProvider } from "./search-form";
-import Layout from "./layout";
+import PageLayout from "./page-layout";
 import HomePage from "./home-page";
 import SearchPage, { preloadSearchPage } from "./search-page";
 import PackagePage, { preloadPackagePage } from "./package-page";
@@ -57,11 +57,11 @@ const routes = [
   {
     path: "/*",
     render: ({ location, action, children }) => (
-      <Root>
+      <RootLayout>
         <LocationFocusProvider location={location} action={action}>
           <SearchFormProvider>{children}</SearchFormProvider>
         </LocationFocusProvider>
-      </Root>
+      </RootLayout>
     ),
     routes: [
       {
@@ -70,7 +70,7 @@ const routes = [
       },
       {
         path: "/*",
-        render: ({ children }) => <Layout>{children}</Layout>,
+        render: ({ children }) => <PageLayout>{children}</PageLayout>,
         routes: [
           {
             path: "/search",

@@ -8,7 +8,7 @@ import Logo from "./logo";
 import SearchForm from "./search-form";
 import { useLocationFocus } from "./location-focus";
 
-export default function Layout({ children }) {
+export default function PageLayout({ children }) {
   const focusRef = useLocationFocus();
 
   return (
@@ -32,7 +32,7 @@ export default function Layout({ children }) {
   );
 }
 
-Layout.propTypes = {
+PageLayout.propTypes = {
   children: PropTypes.node,
 };
 

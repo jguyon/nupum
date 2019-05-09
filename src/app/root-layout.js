@@ -13,7 +13,7 @@ import {
 } from "./theme";
 import Container from "./container";
 
-export default function Root({ children }) {
+export default function RootLayout({ children }) {
   return (
     <>
       <Global styles={globalStyles} />
@@ -44,7 +44,7 @@ export default function Root({ children }) {
   );
 }
 
-Root.propTypes = {
+RootLayout.propTypes = {
   children: PropTypes.node,
 };
 
