@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { css, Global } from "@emotion/core";
-import { normalize, hideVisually } from "polished";
+import { hideVisually } from "polished";
 import HeartIcon from "react-feather/dist/icons/heart";
 import {
-  establishRhythm,
+  establish,
   rhythm,
   scale,
   color,
@@ -49,17 +49,7 @@ RootLayout.propTypes = {
 };
 
 const globalStyles = css`
-  ${normalize()}
-  ${establishRhythm()}
-
-  html {
-    box-sizing: border-box;
-  }
-  *,
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
+  ${establish()}
 
   html {
     overflow-y: scroll;

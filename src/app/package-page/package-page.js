@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import { rhythm, scale, color } from "../theme";
+import { rhythm, scale, color, monoFontFamily } from "../theme";
 import Banner from "../banner";
 import Container from "../container";
 
@@ -57,6 +57,7 @@ const noReadmeStyles = css`
 `;
 
 const readmeStyles = css`
+  font-family: ${monoFontFamily};
   white-space: pre-wrap;
   margin: ${rhythm(1)} 0;
 `;

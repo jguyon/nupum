@@ -14,30 +14,44 @@ const stats = "minimal";
 const devtool = isDev ? "cheap-module-source-map" : "source-map";
 const bail = !isDev;
 const extensions = [".js"];
+const publicPath = "/static/";
 
-const rules = [
-  // first, lint javascript files with eslint
-  {
-    test: /\.js$/,
-    enforce: "pre",
-    include: path.join(__dirname, "src"),
-    loader: require.resolve("eslint-loader"),
-    options: {
-      formatter: require.resolve("react-dev-utils/eslintFormatter"),
+const FILE_LOADER_REGEXP = /\.woff2?$/;
+
+function createRules(isServer) {
+  return [
+    // first, lint javascript files with eslint
+    {
+      test: /\.js$/,
+      enforce: "pre",
+      include: path.join(__dirname, "src"),
+      loader: require.resolve("eslint-loader"),
+      options: {
+        formatter: require.resolve("react-dev-utils/eslintFormatter"),
+      },
     },
-  },
-  // process javascript files with babel
-  {
-    test: /\.js$/,
-    include: path.join(__dirname, "src"),
-    loader: require.resolve("babel-loader"),
-    options: {
-      cacheDirectory: true,
-      cacheCompression: !isDev,
-      compact: !isDev,
+    // process javascript files with babel
+    {
+      test: /\.js$/,
+      include: path.join(__dirname, "src"),
+      loader: require.resolve("babel-loader"),
+      options: {
+        cacheDirectory: true,
+        cacheCompression: !isDev,
+        compact: !isDev,
+      },
     },
-  },
-];
+    // process static files
+    {
+      test: FILE_LOADER_REGEXP,
+      loader: require.resolve("file-loader"),
+      options: {
+        name: isDev ? "[name].[ext]" : "[name].[hash:16].[ext]",
+        emitFile: !isServer,
+      },
+    },
+  ];
+}
 
 function createPlugins() {
   return [
@@ -92,7 +106,7 @@ module.exports = [
       path: path.join(__dirname, "build/client/static"),
       filename: isDev ? "[name].js" : "[name].[contenthash:16].js",
       chunkFilename: isDev ? "[name].js" : "[name].[contenthash:16].js",
-      publicPath: "/static/",
+      publicPath,
     },
     devServer: {
       port: process.env.PORT,
@@ -109,7 +123,7 @@ module.exports = [
       extensions,
     },
     module: {
-      rules,
+      rules: createRules(false),
     },
     plugins: [
       ...createPlugins(),
@@ -131,7 +145,10 @@ module.exports = [
     stats,
     externals: [
       // we don't want to bundle node_modules in the server
-      nodeExternals(),
+      nodeExternals({
+        // we need to bundle static files to get their urls
+        whitelist: [FILE_LOADER_REGEXP],
+      }),
       // the manifest won't be there at build time so we don't want to bundle it
       path.join(__dirname, "build/assets.json"),
     ],
@@ -143,6 +160,7 @@ module.exports = [
       libraryTarget: "commonjs2",
       path: path.join(__dirname, "build/server"),
       filename: "[name].js",
+      publicPath,
     },
     optimization: {
       minimize: false,
@@ -151,7 +169,7 @@ module.exports = [
       extensions,
     },
     module: {
-      rules,
+      rules: createRules(true),
     },
     plugins: [
       ...createPlugins(),
