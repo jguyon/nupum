@@ -12,13 +12,13 @@ export default function HomePage() {
 
   return (
     <>
-      <main css={mainStyles}>
+      <main css={mainStyles} ref={focusRef} tabIndex="-1">
         <Container>
           <h1 css={headingStyles}>
             <Logo />
           </h1>
           <p css={descriptionStyles}>Search for npm packages, fast.</p>
-          <SearchForm css={formStyles} inputRef={focusRef} />
+          <SearchForm css={formStyles} />
         </Container>
       </main>
 
@@ -47,6 +47,8 @@ export default function HomePage() {
 }
 
 const mainStyles = css`
+  outline: none;
+
   text-align: center;
   border: solid ${color("gray", 3)};
 

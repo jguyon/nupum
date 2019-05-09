@@ -6,7 +6,7 @@ import SearchIcon from "react-feather/dist/icons/search";
 import { useNavigate, useMatch } from "../../router";
 import { rhythm, color, primaryColor } from "../theme";
 
-export default function SearchForm({ inputRef, ...props }) {
+export default function SearchForm(props) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
   const inputAutoFocus = !!useMatch("/");
@@ -29,7 +29,6 @@ export default function SearchForm({ inputRef, ...props }) {
       <form css={formStyles} onSubmit={onFormSubmit}>
         <input
           css={inputStyles}
-          ref={inputRef}
           autoFocus={inputAutoFocus}
           type="search"
           aria-label="Search query"

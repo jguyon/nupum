@@ -56,9 +56,9 @@ export function preloadApp({ history, moduleCache, resourceCache }) {
 const routes = [
   {
     path: "/*",
-    render: ({ location, children }) => (
+    render: ({ location, action, children }) => (
       <Root>
-        <LocationFocusProvider location={location}>
+        <LocationFocusProvider location={location} action={action}>
           <SearchFormProvider>{children}</SearchFormProvider>
         </LocationFocusProvider>
       </Root>

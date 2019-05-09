@@ -6,7 +6,6 @@ import React, {
   useLayoutEffect,
 } from "react";
 import PropTypes from "prop-types";
-import { locationsAreEqual } from "history";
 import invariant from "tiny-invariant";
 import warning from "tiny-warning";
 
@@ -15,14 +14,15 @@ const LocationFocusContext = createContext(null);
 const useClientLayoutEffect =
   process.env.TARGET === "client" ? useLayoutEffect : () => {};
 
-export function LocationFocusProvider({ location, children }) {
+export function LocationFocusProvider({ location, action, children }) {
   const focusRef = useRef(null);
   const [prevLocation, setPrevLocation] = useState(location);
 
   useClientLayoutEffect(() => {
     if (
       location !== prevLocation &&
-      !locationsAreEqual(location, prevLocation)
+      (location.pathname !== prevLocation.pathname ||
+        location.search !== prevLocation.search)
     ) {
       setPrevLocation(location);
       const node = focusRef.current;
@@ -30,6 +30,9 @@ export function LocationFocusProvider({ location, children }) {
       if (node) {
         if (!node.contains(document.activeElement)) {
           node.focus();
+        }
+        if (action === "PUSH") {
+          node.scrollIntoView(true);
         }
       } else {
         warning(
@@ -39,7 +42,7 @@ export function LocationFocusProvider({ location, children }) {
         );
       }
     }
-  }, [location, prevLocation]);
+  }, [location, prevLocation, action]);
 
   return (
     <LocationFocusContext.Provider value={focusRef}>
@@ -50,6 +53,7 @@ export function LocationFocusProvider({ location, children }) {
 
 LocationFocusProvider.propTypes = {
   location: PropTypes.object.isRequired,
+  action: PropTypes.string.isRequired,
   children: PropTypes.node,
 };
 
