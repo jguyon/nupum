@@ -38,7 +38,7 @@ export default function SearchForm(props) {
         />
 
         <button css={submitStyles} type="submit" aria-label="Search">
-          <SearchIcon size={rhythm(1)} />
+          <SearchIcon css={submitIconStyles} />
         </button>
       </form>
     </div>
@@ -106,6 +106,11 @@ const submitStyles = css`
     outline: none;
     background-color: ${color(primaryColor, 3)};
   }
+`;
+
+const submitIconStyles = css`
+  width: ${rhythm(1)};
+  height: ${rhythm(1)};
 `;
 
 const SearchFormContext = createContext(null);
