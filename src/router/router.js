@@ -191,7 +191,10 @@ function usePreloadingRouter(timeout, props, routerState) {
 
   const [currentState, setCurrentState] = useState(routerState);
 
-  if (timeout <= 0 && routerState !== currentState) {
+  if (
+    routerState !== currentState &&
+    (timeout <= 0 || routerState.action === "POP")
+  ) {
     setCurrentState(routerState);
   }
 

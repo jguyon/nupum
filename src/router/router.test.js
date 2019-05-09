@@ -439,6 +439,34 @@ describe("Router", () => {
     });
   });
 
+  test("matching route is rendered without preloading on POP action", () => {
+    const history = createMemoryHistory({
+      initialEntries: ["/match", "/"],
+      initialIndex: 1,
+    });
+    const routes = [
+      {
+        path: "/",
+        render: () => "root",
+      },
+      {
+        path: "/match",
+        preload: () => delay(500),
+        render: () => "match",
+      },
+    ];
+
+    const { container } = render(
+      <Router history={history} routes={routes} preloadTimeout={1000} />,
+    );
+    expect(container).toHaveTextContent("root");
+    act(() => {
+      history.goBack();
+    });
+
+    expect(container).toHaveTextContent("match");
+  });
+
   test("previous preloading is canceled when changing routes", async () => {
     const history = createMemoryHistory();
     const routes = [
