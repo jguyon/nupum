@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { css, Global } from "@emotion/core";
-import { normalize } from "polished";
+import { normalize, hideVisually } from "polished";
 import HeartIcon from "react-feather/dist/icons/heart";
 import {
   establishRhythm,
@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
 
       <Container tag="footer" css={footerStyles}>
         <p css={footerParagraphStyles}>
-          Made with <HeartIcon css={footerIconStyles} size="1em" /> by{" "}
+          Made with <Love /> by{" "}
           <a css={footerLinkStyles} href="https://github.com/jguyon">
             jguyon
           </a>
@@ -94,10 +94,6 @@ const footerParagraphStyles = css`
   margin: 0;
 `;
 
-const footerIconStyles = css`
-  color: ${color(primaryColor, 6)};
-`;
-
 const footerLinkStyles = css`
   color: ${color(primaryColor, 6)};
 
@@ -109,4 +105,21 @@ const footerLinkStyles = css`
   &:focus {
     outline: 1px dotted currentColor;
   }
+`;
+
+function Love() {
+  return (
+    <>
+      <HeartIcon css={loveIconStyles} size="1em" aria-hidden />
+      <span css={loveWordStyles}>love</span>
+    </>
+  );
+}
+
+const loveIconStyles = css`
+  color: ${color(primaryColor, 6)};
+`;
+
+const loveWordStyles = css`
+  ${hideVisually()}
 `;
