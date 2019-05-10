@@ -23,8 +23,8 @@ export const baseFontFamily = "nupum-base, sans-serif";
 export const monoFontFamily = "nupum-mono, monospace";
 
 export const baseFontSize = 16;
-export const baseLineHeight = 1.4;
-export const compactLineHeight = 1.2;
+export const baseLineHeight = 1.3;
+export const compactLineHeight = 1.1;
 const rhythmRatio = 0.5;
 const scaleRatio = 2;
 const scaleNotes = 5;
