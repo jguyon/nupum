@@ -168,7 +168,6 @@ const bannerMainColumnStyles = css`
 `;
 
 const bannerAsideColumnStyles = css`
-  max-width: ${rhythm(10)};
   margin: ${rhythm(0, 2)} 0 0 0;
 
   ${bannerRowBreakpoint} {
@@ -313,5 +312,6 @@ const noReadmeStyles = css`
 const readmeStyles = css`
   font-family: ${monoFontFamily};
   white-space: pre-wrap;
+  word-wrap: break-word;
   margin: ${rhythm(1)} 0;
 `;
