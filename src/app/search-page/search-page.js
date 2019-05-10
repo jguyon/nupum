@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import formatNumber from "number-format.js";
+import millify from "millify";
 import TagIcon from "react-feather/dist/icons/tag";
 import LinkIcon from "react-feather/dist/icons/link";
 import HomeIcon from "react-feather/dist/icons/home";
@@ -19,8 +19,8 @@ export default function SearchPage({ query, searchResults }) {
     <>
       <Banner>
         <h2 css={searchPageHeadingStyles}>
-          <strong>{formatNumber("#,##0.", searchResults.total)}</strong> results
-          for "{query}"
+          <strong>{millify(searchResults.total, { precision: 1 })}</strong>{" "}
+          results for "{query}"
         </h2>
       </Banner>
 

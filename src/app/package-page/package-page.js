@@ -2,6 +2,7 @@ import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import { stripUnit } from "polished";
+import millify from "millify";
 import TagIcon from "react-feather/dist/icons/tag";
 import LinkIcon from "react-feather/dist/icons/link";
 import HomeIcon from "react-feather/dist/icons/home";
@@ -22,7 +23,7 @@ import Container from "../container";
 
 export default function PackagePage({
   packageInfo: {
-    collected: { metadata },
+    collected: { metadata, npm, github },
   },
 }) {
   return (
@@ -59,14 +60,11 @@ export default function PackagePage({
 
             <p css={publicationStyles}>
               published <TimeAgo date={metadata.date} /> by{" "}
-              <span css={publicationAvatarStyles}>
-                <Gravatar
-                  size={publicationAvatarSize}
-                  email={metadata.publisher.email}
-                />
+              <span css={avatarStyles}>
+                <Gravatar size={avatarSize} email={metadata.publisher.email} />
               </span>{" "}
               <a
-                css={publicationLinkStyles}
+                css={userLinkStyles}
                 href={`https://www.npmjs.com/~${metadata.publisher.username}`}
               >
                 {metadata.publisher.username}
@@ -128,11 +126,96 @@ export default function PackagePage({
       </Banner>
 
       <Container>
-        {metadata.readme ? (
-          <pre css={readmeStyles}>{metadata.readme}</pre>
-        ) : (
-          <p css={noReadmeStyles}>This package has no readme.</p>
-        )}
+        <div css={contentRowStyles}>
+          <aside css={contentAsideColumnStyles}>
+            <article css={asideSectionStyles}>
+              <h3 css={asideHeadingStyles}>Usage</h3>
+              <code css={asideCodeStyles}>$ npm install {metadata.name}</code>
+              <code css={asideCodeStyles}>$ yarn add {metadata.name}</code>
+              <dl css={asideDescListStyles}>
+                <dt css={asideDescListTitleStyles}>Dependencies</dt>
+                <dd css={asideDescListDescStyles}>
+                  {metadata.dependencies
+                    ? Object.keys(metadata.dependencies).length
+                    : 0}
+                </dd>
+              </dl>
+            </article>
+
+            <article css={asideSectionStyles}>
+              <h3 css={asideHeadingStyles}>Popularity</h3>
+              <dl css={asideDescListStyles}>
+                {npm.downloads.length >= 3 ? (
+                  <>
+                    <dt css={asideDescListTitleStyles}>Downloads last month</dt>
+                    <dd css={asideDescListDescStyles}>
+                      {millify(npm.downloads[2].count, { precision: 1 })}
+                    </dd>
+                  </>
+                ) : null}
+                {github ? (
+                  <>
+                    <dt css={asideDescListTitleStyles}>GitHub stars</dt>
+                    <dd css={asideDescListDescStyles}>
+                      {millify(github.starsCount, { precision: 1 })}
+                    </dd>
+                  </>
+                ) : null}
+                <dt css={asideDescListTitleStyles}>Dependents</dt>
+                <dd css={asideDescListDescStyles}>
+                  {millify(npm.dependentsCount, { precision: 1 })}
+                </dd>
+              </dl>
+            </article>
+
+            {github ? (
+              <article css={asideSectionStyles}>
+                <h3 css={asideHeadingStyles}>Activity</h3>
+                <dl css={asideDescListStyles}>
+                  {github.commits.length >= 3 ? (
+                    <>
+                      <dt css={asideDescListTitleStyles}>
+                        Commits last 3 months
+                      </dt>
+                      <dd css={asideDescListDescStyles}>
+                        {millify(github.commits[2].count, { precision: 1 })}
+                      </dd>
+                    </>
+                  ) : null}
+                  <dt css={asideDescListTitleStyles}>Open issues</dt>
+                  <dd css={asideDescListDescStyles}>
+                    {millify(github.issues.openCount, { precision: 1 })}
+                  </dd>
+                </dl>
+              </article>
+            ) : null}
+
+            <article css={asideSectionStyles}>
+              <h3 css={asideHeadingStyles}>Maintainers</h3>
+              {metadata.maintainers.map(({ username, email }) => (
+                <div key={username} css={asideMaintainerStyles}>
+                  <span css={avatarStyles}>
+                    <Gravatar size={avatarSize} email={email} />
+                  </span>{" "}
+                  <a
+                    css={userLinkStyles}
+                    href={`https://www.npmjs.com/~${username}`}
+                  >
+                    {username}
+                  </a>
+                </div>
+              ))}
+            </article>
+          </aside>
+
+          <section css={contentMainColumnStyles}>
+            {metadata.readme ? (
+              <pre css={readmeStyles}>{metadata.readme}</pre>
+            ) : (
+              <p css={noReadmeStyles}>This package has no readme.</p>
+            )}
+          </section>
+        </div>
       </Container>
     </>
   );
@@ -180,7 +263,7 @@ const bannerAsideColumnStyles = css`
 const headingStyles = css`
   ${scale(0, 3)}
   color: ${color("gray", 8)};
-  margin: 0 0 ${rhythm(0, 2)} 0;
+  margin: 0 0 ${rhythm(0, 1)} 0;
 `;
 
 const versionStyles = css`
@@ -191,7 +274,7 @@ const versionStyles = css`
 
 const descriptionStyles = css`
   ${scale(0, 1)}
-  margin: 0 0 ${rhythm(0, 2)} 0;
+  margin: 0 0 ${rhythm(0, 1)} 0;
 `;
 
 const keywordsStyles = css`
@@ -237,7 +320,7 @@ const publicationStyles = css`
   color: ${color("gray", 6)};
 `;
 
-const publicationAvatarStyles = css`
+const avatarStyles = css`
   display: inline-block;
   vertical-align: middle;
 
@@ -250,11 +333,11 @@ const publicationAvatarStyles = css`
   border: 2px solid ${color("gray", 8)};
 `;
 
-const publicationAvatarSize = (() => {
+const avatarSize = (() => {
   return stripUnit(rhythm(1, 1)) * baseFontSize - 4;
 })();
 
-const publicationLinkStyles = css`
+const userLinkStyles = css`
   color: ${color("gray", 8)};
   text-decoration: underline transparent;
 
@@ -296,7 +379,7 @@ const linksListItemLinkStyles = css`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  color: ${color(primaryColor, 7)};
+  color: ${color(primaryColor, 8)};
   text-decoration: underline transparent;
 
   transition: text-decoration 0.15s ease-out;
@@ -305,13 +388,94 @@ const linksListItemLinkStyles = css`
   }
 `;
 
-const noReadmeStyles = css`
+const contentRowBreakpoint = "@media (min-width: 52em)";
+
+const contentRowStyles = css`
   margin: ${rhythm(1)} 0;
+
+  ${contentRowBreakpoint} {
+    display: flex;
+    align-items: flex-start;
+  }
+`;
+
+const contentMainColumnStyles = css`
+  border-top: 1px solid ${color("gray", 3)};
+  padding-top: calc(${rhythm(1)} - 1px);
+
+  ${contentRowBreakpoint} {
+    border-top: 0;
+    padding-top: 0;
+
+    order: 1;
+    flex-grow: 1;
+  }
+`;
+
+const contentAsideColumnStyles = css`
+  ${contentRowBreakpoint} {
+    width: ${rhythm(10, 2)};
+    margin-left: ${rhythm(0, 2)};
+    border-left: 1px solid ${color("gray", 3)};
+    padding-left: calc(${rhythm(0, 2)} - 1px);
+
+    order: 2;
+    flex-shrink: 0;
+  }
+`;
+
+const asideSectionStyles = css`
+  margin-bottom: ${rhythm(1)};
+`;
+
+const asideHeadingStyles = css`
+  ${scale(0, 2)}
+  color: ${color("gray", 8)};
+  margin: 0;
+`;
+
+const asideCodeStyles = css`
+  display: flex;
+  align-items: center;
+  height: ${rhythm(1, 1)};
+  padding: 0 ${rhythm(0, 1)};
+  margin: ${rhythm(0, 1)} 0;
+
+  font-family: ${monoFontFamily};
+  background-color: ${color("gray", 0)};
+  color: ${color("gray", 7)};
+  border: 1px solid ${color("gray", 5)};
+  border-radius: 3px;
+`;
+
+const asideDescListStyles = css`
+  margin: 0;
+`;
+
+const asideDescListTitleStyles = css`
+  float: left;
+`;
+
+const asideDescListDescStyles = css`
+  margin: 0;
+
+  text-align: right;
+  font-weight: bold;
+  color: ${color("gray", 8)};
+`;
+
+const asideMaintainerStyles = css`
+  ${scale(0, 0, 1)}
+  margin: ${rhythm(0, 1)} 0;
+`;
+
+const noReadmeStyles = css`
+  margin: 0;
 `;
 
 const readmeStyles = css`
   font-family: ${monoFontFamily};
   white-space: pre-wrap;
   word-wrap: break-word;
-  margin: ${rhythm(1)} 0;
+  margin: 0;
 `;
