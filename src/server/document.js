@@ -8,7 +8,7 @@ export default function Document({ html, scripts, data }) {
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="description" content="Search for npm packages" />
 
         <title>nupum</title>
