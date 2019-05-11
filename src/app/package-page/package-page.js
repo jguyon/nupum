@@ -130,8 +130,12 @@ export default function PackagePage({
           <aside css={contentAsideColumnStyles}>
             <article css={asideSectionStyles}>
               <h3 css={asideHeadingStyles}>Usage</h3>
-              <code css={asideCodeStyles}>$ npm install {metadata.name}</code>
-              <code css={asideCodeStyles}>$ yarn add {metadata.name}</code>
+              <div css={asideCodeContainerStyles}>
+                <code css={asideCodeStyles}>$ npm i {metadata.name}</code>
+              </div>
+              <div css={asideCodeContainerStyles}>
+                <code css={asideCodeStyles}>$ yarn add {metadata.name}</code>
+              </div>
               <dl css={asideDescListStyles}>
                 <dt css={asideDescListTitleStyles}>Dependencies</dt>
                 <dd css={asideDescListDescStyles}>
@@ -388,7 +392,7 @@ const linksListItemLinkStyles = css`
   }
 `;
 
-const contentRowBreakpoint = "@media (min-width: 52em)";
+const contentRowBreakpoint = "@media (min-width: 56em)";
 
 const contentRowStyles = css`
   margin: ${rhythm(1)} 0;
@@ -434,18 +438,25 @@ const asideHeadingStyles = css`
   margin: 0;
 `;
 
-const asideCodeStyles = css`
+const asideCodeContainerStyles = css`
   display: flex;
   align-items: center;
   height: ${rhythm(1, 1)};
   padding: 0 ${rhythm(0, 1)};
   margin: ${rhythm(0, 1)} 0;
 
-  font-family: ${monoFontFamily};
   background-color: ${color("gray", 0)};
   color: ${color("gray", 7)};
   border: 1px solid ${color("gray", 5)};
   border-radius: 3px;
+`;
+
+const asideCodeStyles = css`
+  font-family: ${monoFontFamily};
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const asideDescListStyles = css`
