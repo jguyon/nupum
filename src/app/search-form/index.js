@@ -5,14 +5,15 @@ import invariant from "tiny-invariant";
 import SearchIcon from "react-feather/dist/icons/search";
 import { useNavigate, useMatch } from "../../router";
 import { rhythm, color, primaryColor } from "../theme";
+import Input from "./input";
 
 export default function SearchForm(props) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
   const inputAutoFocus = !!useMatch("/");
 
-  function onInputChange(event) {
-    setQuery(event.target.value);
+  function onInputChangeValue(value) {
+    setQuery(value);
   }
 
   function onInputFocus(event) {
@@ -26,14 +27,20 @@ export default function SearchForm(props) {
 
   return (
     <div {...props} role="search">
-      <form css={formStyles} onSubmit={onFormSubmit}>
-        <input
+      <form
+        css={formStyles}
+        method="GET"
+        action="/search"
+        onSubmit={onFormSubmit}
+      >
+        <Input
           css={inputStyles}
           autoFocus={inputAutoFocus}
           type="search"
+          name="q"
           aria-label="Search query"
           value={query}
-          onChange={onInputChange}
+          onChangeValue={onInputChangeValue}
           onFocus={onInputFocus}
         />
 
