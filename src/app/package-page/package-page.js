@@ -429,6 +429,10 @@ const contentMainColumnStyles = css`
     border-top: 0;
     padding-top: 0;
 
+    // prefer overflows inside the main container rather than pushing the aside
+    // container to the right
+    min-width: 0;
+
     order: 1;
     flex-grow: 1;
   }
@@ -564,6 +568,8 @@ const readmeStyles = css`
 
     padding: calc(${rhythm(0, 1)} - 1px);
     margin: 0 0 ${rhythm(1)} 0;
+
+    overflow-y: auto;
   }
   pre, code {
     ${scale(0, -1, compactLineHeight)}
