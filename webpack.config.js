@@ -33,13 +33,36 @@ function createRules(isServer) {
     // process javascript files with babel
     {
       test: /\.js$/,
-      include: path.join(__dirname, "src"),
-      loader: require.resolve("babel-loader"),
-      options: {
-        cacheDirectory: true,
-        cacheCompression: !isDev,
-        compact: !isDev,
-      },
+      oneOf: [
+        // process source files
+        {
+          include: path.join(__dirname, "src"),
+          loader: require.resolve("babel-loader"),
+          options: {
+            cacheDirectory: true,
+            cacheCompression: !isDev,
+            compact: !isDev,
+          },
+        },
+        // process dependencies
+        {
+          exclude: /@babel(?:\/|\\{1,2})runtime/,
+          loader: require.resolve("babel-loader"),
+          options: {
+            babelrc: false,
+            configFile: false,
+            presets: [
+              [
+                require.resolve("babel-preset-react-app/dependencies"),
+                { helpers: true },
+              ],
+            ],
+            cacheDirectory: true,
+            cacheCompression: !isDev,
+            compact: false,
+          },
+        },
+      ],
     },
     // process static files
     {
