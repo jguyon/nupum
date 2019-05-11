@@ -87,6 +87,22 @@ const routes = [
             ),
           },
           {
+            path: "/package/:scope/:name",
+            preload: ({
+              moduleCache,
+              resourceCache,
+              params: { scope, name },
+            }) =>
+              preloadPackagePage({
+                moduleCache,
+                resourceCache,
+                name: `${scope}/${name}`,
+              }),
+            render: ({ params: { scope, name } }) => (
+              <PackagePage key={`${scope}/${name}`} name={`${scope}/${name}`} />
+            ),
+          },
+          {
             path: "/*",
             render: () => <PageNotFound />,
           },

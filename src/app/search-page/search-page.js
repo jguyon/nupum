@@ -52,10 +52,7 @@ function SearchResult({ searchResult: { package: pkg } }) {
     <article css={searchResultStyles}>
       <header>
         <h3 css={searchResultHeadingStyles}>
-          <Link
-            css={searchResultNameStyles}
-            to={`/package/${encodeURIComponent(pkg.name)}`}
-          >
+          <Link css={searchResultNameStyles} to={`/package/${pkg.name}`}>
             {pkg.name}
           </Link>{" "}
           <small css={searchResultVersionStyles}>{pkg.version}</small>
@@ -108,8 +105,8 @@ function SearchResult({ searchResult: { package: pkg } }) {
             size="1em"
           />{" "}
           <ul css={searchResultKeywordListStyles} aria-label="Keywords">
-            {pkg.keywords.map(keyword => (
-              <li key={keyword} css={searchResultKeywordStyles}>
+            {pkg.keywords.map((keyword, i) => (
+              <li key={i} css={searchResultKeywordStyles}>
                 <Link
                   css={searchResultKeywordLinkStyles}
                   to={`/search?q=${encodeURIComponent(keyword)}`}
@@ -122,21 +119,23 @@ function SearchResult({ searchResult: { package: pkg } }) {
         </div>
       ) : null}
 
-      <p css={searchResultPublicationStyles}>
-        published <TimeAgo date={pkg.date} /> by{" "}
-        <span css={searchResultPublicationAvatarStyles}>
-          <Gravatar
-            email={pkg.publisher.email}
-            size={searchResultPublicationAvatarSize}
-          />
-        </span>{" "}
-        <a
-          css={searchResultPublicationLinkStyles}
-          href={`https://www.npmjs.com/~${pkg.publisher.username}`}
-        >
-          {pkg.publisher.username}
-        </a>{" "}
-      </p>
+      {pkg.publisher ? (
+        <p css={searchResultPublicationStyles}>
+          published <TimeAgo date={pkg.date} /> by{" "}
+          <span css={searchResultPublicationAvatarStyles}>
+            <Gravatar
+              email={pkg.publisher.email}
+              size={searchResultPublicationAvatarSize}
+            />
+          </span>{" "}
+          <a
+            css={searchResultPublicationLinkStyles}
+            href={`https://www.npmjs.com/~${pkg.publisher.username}`}
+          >
+            {pkg.publisher.username}
+          </a>{" "}
+        </p>
+      ) : null}
     </article>
   );
 }
