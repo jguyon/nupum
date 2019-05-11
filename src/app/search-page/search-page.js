@@ -152,7 +152,7 @@ const searchResultHeadingStyles = css`
 `;
 
 const searchResultNameStyles = css`
-  color: ${color(primaryColor, 8)};
+  color: ${color(primaryColor, 7)};
   text-decoration: underline transparent;
 
   transition: text-decoration 0.15s ease-out;
