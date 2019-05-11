@@ -13,6 +13,8 @@ import {
 } from "../../resource-cache";
 import { packageInfo } from "../../resources";
 import PageNotFound from "../page-not-found";
+import LoadingPage from "../loading-page";
+import ErrorPage from "../error-page";
 
 const packagePage = createModule(
   () => import(/* webpackChunkName: "package-page" */ "./package-page"),
@@ -39,9 +41,9 @@ export default function LazyPackagePage({ name }) {
     packagePageResult.status === MODULE_FAILURE ||
     packageInfoResult.status === RESOURCE_FAILURE
   ) {
-    return <p>Error!</p>;
+    return <ErrorPage msg="Could not fetch the package information." />;
   } else {
-    return <p>Loading&hellip;</p>;
+    return <LoadingPage />;
   }
 }
 

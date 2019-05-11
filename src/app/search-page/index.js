@@ -12,6 +12,8 @@ import {
   RESOURCE_FAILURE,
 } from "../../resource-cache";
 import { packageSearch } from "../../resources";
+import LoadingPage from "../loading-page";
+import ErrorPage from "../error-page";
 
 const searchPage = createModule(
   () => import(/* webpackChunkName: "search-page" */ "./search-page"),
@@ -38,9 +40,9 @@ export default function LazySearchPage({ location }) {
     searchPageResult.status === MODULE_FAILURE ||
     packageSearchResult.status === RESOURCE_FAILURE
   ) {
-    return <p>Error!</p>;
+    return <ErrorPage msg="Could not fetch the search results." />;
   } else {
-    return <p>Loading&hellip;</p>;
+    return <LoadingPage />;
   }
 }
 
