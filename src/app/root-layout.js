@@ -53,6 +53,7 @@ const globalStyles = css`
 
   html {
     overflow-y: scroll;
+    scroll-behavior: smooth;
   }
 
   body {
