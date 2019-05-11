@@ -139,12 +139,24 @@ export default function PackagePage({
                 <code css={asideCodeStyles}>$ yarn add {metadata.name}</code>
               </div>
               <dl css={asideDescListStyles}>
+                <dt css={asideDescListTitleStyles}>License</dt>
+                <dd css={asideDescListDescStyles}>
+                  {metadata.license ? metadata.license : "N/A"}
+                </dd>
                 <dt css={asideDescListTitleStyles}>Dependencies</dt>
                 <dd css={asideDescListDescStyles}>
                   {metadata.dependencies
                     ? Object.keys(metadata.dependencies).length
                     : 0}
                 </dd>
+                {metadata.peerDependencies ? (
+                  <>
+                    <dt css={asideDescListTitleStyles}>Peer dependencies</dt>
+                    <dd css={asideDescListDescStyles}>
+                      {Object.keys(metadata.peerDependencies).length}
+                    </dd>
+                  </>
+                ) : null}
               </dl>
             </article>
 
@@ -503,6 +515,7 @@ const readmeStyles = css`
   h5,
   h6 {
     margin: 0 0 ${rhythm(1)} 0;
+    color: ${color("gray", 8)};
   }
   h1 {
     ${scale(1, 0, compactLineHeight)}
