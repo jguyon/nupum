@@ -54,7 +54,7 @@ function createRules(isServer) {
             presets: [
               [
                 require.resolve("babel-preset-react-app/dependencies"),
-                { helpers: true },
+                { helpers: true, absoluteRuntime: false },
               ],
             ],
             cacheDirectory: true,
