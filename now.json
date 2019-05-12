@@ -2,6 +2,7 @@
   "version": 2,
   "name": "nupum",
   "alias": ["nupum"],
+  "regions": ["cdg1"],
   "builds": [
     {
       "src": "index.js",
