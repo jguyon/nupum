@@ -9,3 +9,57 @@ exports[`input conserves its value when navigating 2`] = `
 Snapshot Diff:
 Compared values have no visual difference.
 `;
+
+exports[`submitting does not navigate to search page with empty input 1`] = `
+Snapshot Diff:
+- First value
++ Second value
+
+@@ -11,16 +11,16 @@
+        <input
+          aria-label="Search query"
+          class="css-1prae3g-inputStyles"
+          name="q"
+          type="search"
+-         value="react"
++         value="  "
+        />
+        <button
+-         aria-disabled="false"
++         aria-disabled="true"
+          aria-label="Search"
+-         class="css-1go27dl-submitStyles-SearchForm"
++         class="css-kv3xwt-submitStyles-submitDisabledStyles-SearchForm"
+          type="submit"
+        >
+          <svg
+            class="css-1ijt0qx-submitIconStyles"
+            fill="none"
+`;
+
+exports[`submitting navigates to search page with non-empty input 1`] = `
+Snapshot Diff:
+- First value
++ Second value
+
+@@ -11,16 +11,16 @@
+        <input
+          aria-label="Search query"
+          class="css-1prae3g-inputStyles"
+          name="q"
+          type="search"
+-         value=""
++         value="react"
+        />
+        <button
+-         aria-disabled="true"
++         aria-disabled="false"
+          aria-label="Search"
+-         class="css-kv3xwt-submitStyles-submitDisabledStyles-SearchForm"
++         class="css-1go27dl-submitStyles-SearchForm"
+          type="submit"
+        >
+          <svg
+            class="css-1ijt0qx-submitIconStyles"
+            fill="none"
+`;

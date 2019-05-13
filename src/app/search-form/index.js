@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
@@ -12,6 +12,14 @@ export default function SearchForm(props) {
   const navigate = useNavigate();
   const inputAutoFocus = !!useMatch("/");
 
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
+
+  // we want the form to look like it can be used while the js is downloading
+  const isSubmitDisabled = !isFirstRender && query.trim().length === 0;
+
   function onInputChangeValue(value) {
     setQuery(value);
   }
@@ -22,13 +30,16 @@ export default function SearchForm(props) {
 
   function onFormSubmit(event) {
     event.preventDefault();
-    navigate(`/search?q=${encodeURIComponent(query)}`);
+    if (!isSubmitDisabled) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
   }
 
   return (
     <div {...props} role="search">
       <form
         css={formStyles}
+        data-testid="search-form"
         method="GET"
         action="/search"
         onSubmit={onFormSubmit}
@@ -44,7 +55,12 @@ export default function SearchForm(props) {
           onFocus={onInputFocus}
         />
 
-        <button css={submitStyles} type="submit" aria-label="Search">
+        <button
+          css={[submitStyles, isSubmitDisabled && submitDisabledStyles]}
+          type="submit"
+          aria-label="Search"
+          aria-disabled={isSubmitDisabled}
+        >
           <SearchIcon css={submitIconStyles} />
         </button>
       </form>
@@ -108,6 +124,14 @@ const submitStyles = css`
   &:focus {
     outline: none;
     background-color: ${color(primaryColor, 3)};
+  }
+`;
+
+const submitDisabledStyles = css`
+  cursor: not-allowed;
+  background-color: ${color(primaryColor, 2)};
+  &:hover {
+    background-color: ${color(primaryColor, 2)};
   }
 `;
 

@@ -5,6 +5,7 @@ import SearchForm, { SearchFormProvider } from ".";
 
 const INPUT_LABEL = "Search query";
 const SUBMIT_LABEL = "Search";
+const FORM_TEST_ID = "search-form";
 
 test("input is initialized with empty value by default", () => {
   const { getByLabelText } = renderWithContext(
@@ -55,16 +56,55 @@ test("input conserves its value when navigating", () => {
   expect(fragmentBefore).toMatchDiffSnapshot(asFragment());
 });
 
-test("submitting navigates to search page", () => {
-  const { history, getByLabelText } = renderWithContext(
+test("submitting navigates to search page with non-empty input", () => {
+  const {
+    history,
+    getByLabelText,
+    getByTestId,
+    asFragment,
+  } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+  const fragmentBefore = asFragment();
+
+  fireEvent.change(getByLabelText(INPUT_LABEL), { target: { value: "react" } });
+
+  expect(getByLabelText(SUBMIT_LABEL)).toHaveAttribute(
+    "aria-disabled",
+    "false",
+  );
+  expect(fragmentBefore).toMatchDiffSnapshot(asFragment());
+
+  fireEvent.submit(getByTestId(FORM_TEST_ID));
+
+  expect(history.location.pathname).toBe("/search");
+  expect(history.location.search).toBe("?q=react");
+});
+
+test("submitting does not navigate to search page with empty input", () => {
+  const {
+    history,
+    getByLabelText,
+    getByTestId,
+    asFragment,
+  } = renderWithContext(
     <SearchFormProvider>
       <SearchForm />
     </SearchFormProvider>,
   );
 
   fireEvent.change(getByLabelText(INPUT_LABEL), { target: { value: "react" } });
-  fireEvent.click(getByLabelText(SUBMIT_LABEL));
+  const fragmentBefore = asFragment();
 
-  expect(history.location.pathname).toBe("/search");
-  expect(history.location.search).toBe("?q=react");
+  fireEvent.change(getByLabelText(INPUT_LABEL), { target: { value: "  " } });
+
+  expect(getByLabelText(SUBMIT_LABEL)).toHaveAttribute("aria-disabled", "true");
+  expect(fragmentBefore).toMatchDiffSnapshot(asFragment());
+
+  fireEvent.submit(getByTestId(FORM_TEST_ID));
+
+  expect(history.location.pathname).toBe("/");
+  expect(history.location.search).toBe("");
 });
