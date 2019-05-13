@@ -10,4 +10,7 @@ module.exports = {
   globals: {
     __DEV__: true,
   },
+  moduleNameMapper: {
+    "\\.woff2?$": "<rootDir>/__mocks__/file-mock.js",
+  },
 };

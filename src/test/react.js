@@ -1,7 +1,5 @@
 import React, { StrictMode } from "react";
 import { render as rtlRender, cleanup } from "react-testing-library";
-import "jest-dom/extend-expect";
-import serializer from "jest-emotion";
 import { createMemoryHistory } from "history";
 import Router from "../router";
 import { createTestModuleCache, ModuleCacheProvider } from "../module-cache";
@@ -9,8 +7,6 @@ import {
   createTestResourceCache,
   ResourceCacheProvider,
 } from "../resource-cache";
-
-expect.addSnapshotSerializer(serializer);
 
 afterEach(() => {
   cleanup();

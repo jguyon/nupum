@@ -52,10 +52,6 @@ export default function SearchForm(props) {
   );
 }
 
-SearchForm.propTypes = {
-  inputRef: PropTypes.object,
-};
-
 const formStyles = css`
   display: flex;
 `;

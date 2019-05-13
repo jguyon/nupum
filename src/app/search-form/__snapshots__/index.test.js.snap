@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`input conserves its value when navigating 1`] = `
+Snapshot Diff:
+Compared values have no visual difference.
+`;
+
+exports[`input conserves its value when navigating 2`] = `
+Snapshot Diff:
+Compared values have no visual difference.
+`;
