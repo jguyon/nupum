@@ -1,17 +1,17 @@
 import React from "react";
 import { css } from "@emotion/core";
-import { rhythm, scale, color, compactLineHeight } from "../theme";
-import { useLocationFocus } from "../location-focus";
-import Container from "../container";
-import Logo from "../logo";
-import SearchForm from "../search-form";
+import { rhythm, scale, color, compactLineHeight } from "./theme";
+import { useLocationFocus } from "./location-focus";
+import Container from "./container";
+import Logo from "./logo";
+import SearchForm from "./search-form";
 
 export default function HomePage() {
   const focusRef = useLocationFocus();
 
   return (
     <>
-      <main css={mainStyles} ref={focusRef} tabIndex="-1">
+      <main css={mainStyles} ref={focusRef} tabIndex={-1}>
         <Container>
           <h1 css={headingStyles}>
             <Logo />
