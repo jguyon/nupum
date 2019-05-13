@@ -14,11 +14,7 @@ import {
 import { packageSearch } from "../../resources";
 import LoadingPage from "../loading-page";
 import ErrorPage from "../error-page";
-
-const searchPage = createModule(
-  () => import(/* webpackChunkName: "search-page" */ "./search-page"),
-  "search-page",
-);
+import searchPage from "./search-page-module";
 
 export default function LazySearchPage({ location }) {
   const query = getQueryParam(location);

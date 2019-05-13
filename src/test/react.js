@@ -61,6 +61,7 @@ export function renderRoutesWithContext(
     ...rest,
     history,
     moduleCache,
+    resourceCache,
     rerender,
   };
 }

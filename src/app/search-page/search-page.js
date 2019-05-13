@@ -51,7 +51,7 @@ function SearchResult({ searchResult: { package: pkg } }) {
   return (
     <article css={searchResultStyles}>
       <header>
-        <h3 css={searchResultHeadingStyles}>
+        <h3 css={searchResultHeadingStyles} data-testid="search-result-heading">
           <Link css={searchResultNameStyles} to={`/package/${pkg.name}`}>
             {pkg.name}
           </Link>{" "}
