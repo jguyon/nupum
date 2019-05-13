@@ -4,6 +4,7 @@ import invariant from "tiny-invariant";
 import Router, { preloadRoutes } from "../router";
 import { ModuleCacheProvider } from "../module-cache";
 import { ResourceCacheProvider } from "../resource-cache";
+import { HydrationProvider } from "./use-hydration";
 import RootLayout from "./root-layout";
 import { LocationFocusProvider } from "./location-focus";
 import { SearchFormProvider } from "./search-form";
@@ -17,16 +18,18 @@ const PRELOAD_TIMEOUT = process.env.NODE_ENV === "test" ? 0 : 2000;
 
 export default function App({ history, moduleCache, resourceCache }) {
   return (
-    <ModuleCacheProvider cache={moduleCache}>
-      <ResourceCacheProvider cache={resourceCache}>
-        <Router
-          history={history}
-          routes={routes}
-          preloadTimeout={PRELOAD_TIMEOUT}
-          preloadProps={{ moduleCache, resourceCache }}
-        />
-      </ResourceCacheProvider>
-    </ModuleCacheProvider>
+    <HydrationProvider>
+      <ModuleCacheProvider cache={moduleCache}>
+        <ResourceCacheProvider cache={resourceCache}>
+          <Router
+            history={history}
+            routes={routes}
+            preloadTimeout={PRELOAD_TIMEOUT}
+            preloadProps={{ moduleCache, resourceCache }}
+          />
+        </ResourceCacheProvider>
+      </ModuleCacheProvider>
+    </HydrationProvider>
   );
 }
 

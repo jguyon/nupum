@@ -1,24 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import SearchIcon from "react-feather/dist/icons/search";
 import { useNavigate, useMatch } from "../../router";
 import { rhythm, color, primaryColor } from "../theme";
+import useHydration from "../use-hydration";
 import Input from "./input";
 
 export default function SearchForm(props) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
   const inputAutoFocus = !!useMatch("/");
-
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  useEffect(() => {
-    setIsFirstRender(false);
-  }, []);
+  const isHydrating = useHydration();
 
   // we want the form to look like it can be used while the js is downloading
-  const isSubmitDisabled = !isFirstRender && query.trim().length === 0;
+  const isSubmitDisabled = !isHydrating && query.trim().length === 0;
 
   function onInputChangeValue(value) {
     setQuery(value);

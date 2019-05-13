@@ -1,22 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
+import useHydration from "../use-hydration";
 
 // This is a work around for SSR.
 // Without this, if the user types in the input that has been server rendered
 // before the component has been mounted, the value of the input and the value
 // held in state will be out of sync.
 export default function Input({ value, onChangeValue, ...props }) {
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  const inputRef = useRef(null);
+  const inputRef = useRef();
 
-  useEffect(() => {
-    if (isFirstRender) {
-      if (inputRef.current.value !== value) {
-        onChangeValue(inputRef.current.value);
-      }
-      setIsFirstRender(false);
+  useHydration(() => {
+    if (inputRef.current.value !== value) {
+      onChangeValue(inputRef.current.value);
     }
-  }, [isFirstRender, value, onChangeValue]);
+  });
 
   return (
     <input
