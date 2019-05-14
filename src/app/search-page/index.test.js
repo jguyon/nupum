@@ -1,6 +1,10 @@
 import React from "react";
-import { createLocation } from "history";
-import { renderWithContext } from "../../test/react";
+import { createLocation, createMemoryHistory } from "history";
+import {
+  renderWithContext,
+  renderRoutesWithContext,
+  fireEvent,
+} from "../../test/react";
 import { fakePackageSearch } from "../../test/fake";
 import searchPage from "./search-page-module";
 import { packageSearch } from "../../resources";
@@ -73,4 +77,54 @@ test("error message is rendered when fetching resource fails", () => {
   );
 
   expect(() => getByText(ERROR_TEXT)).not.toThrow();
+});
+
+test("navigating to another page displays the page's search results", async () => {
+  const history = createMemoryHistory({ initialEntries: ["/search?q=react"] });
+  const {
+    moduleCache,
+    resourceCache,
+    getByLabelText,
+    queryAllByTestId,
+  } = renderRoutesWithContext(
+    [
+      {
+        path: "/search",
+        render: ({ location }) => <SearchPage location={location} />,
+      },
+    ],
+    { history },
+  );
+
+  await moduleCache.wait(searchPage);
+  resourceCache.succeed(
+    packageSearch,
+    { query: "react", from: 0, size: RESULTS_PER_PAGE },
+    {
+      ...fakePackageSearch({ size: RESULTS_PER_PAGE }),
+      total: RESULTS_PER_PAGE * 2,
+    },
+  );
+
+  fireEvent.click(getByLabelText("Next page"));
+
+  const searchResults = {
+    ...fakePackageSearch({ size: RESULTS_PER_PAGE }),
+    total: RESULTS_PER_PAGE * 2,
+  };
+  resourceCache.succeed(
+    packageSearch,
+    { query: "react", from: RESULTS_PER_PAGE, size: RESULTS_PER_PAGE },
+    searchResults,
+  );
+
+  expect(
+    queryAllByTestId(SEARCH_RESULT_HEADING_TEST_ID).map(
+      heading => heading.textContent,
+    ),
+  ).toEqual(
+    searchResults.results.map(
+      ({ package: { name, version } }) => `${name} ${version}`,
+    ),
+  );
 });
