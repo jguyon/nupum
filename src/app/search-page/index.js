@@ -1,11 +1,6 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import {
-  createModule,
-  useModule,
-  MODULE_SUCCESS,
-  MODULE_FAILURE,
-} from "../../module-cache";
+import { useModule, MODULE_SUCCESS, MODULE_FAILURE } from "../../module-cache";
 import {
   useResource,
   RESOURCE_SUCCESS,
