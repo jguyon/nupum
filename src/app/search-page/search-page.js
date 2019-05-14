@@ -11,18 +11,20 @@ export default function SearchPage({ query, page, maxPage, total, results }) {
       <SearchPageBanner totalResults={total} query={query} />
 
       <Container>
-        {results.map(({ package: pkg }) => (
-          <SearchPageResult
-            key={pkg.name}
-            name={pkg.name}
-            version={pkg.version}
-            links={pkg.links}
-            description={pkg.description}
-            keywords={pkg.keywords}
-            date={new Date(pkg.date)}
-            publisher={pkg.publisher}
-          />
-        ))}
+        <section aria-label="Search results">
+          {results.map(({ package: pkg }) => (
+            <SearchPageResult
+              key={pkg.name}
+              name={pkg.name}
+              version={pkg.version}
+              links={pkg.links}
+              description={pkg.description}
+              keywords={pkg.keywords}
+              date={new Date(pkg.date)}
+              publisher={pkg.publisher}
+            />
+          ))}
+        </section>
 
         <SearchPagePagination
           query={query}
