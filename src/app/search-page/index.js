@@ -11,12 +11,16 @@ import LoadingPage from "../loading-page";
 import ErrorPage from "../error-page";
 import searchPage from "./search-page-module";
 
+const RESULTS_PER_PAGE = 10;
+// The npms api limits the `from` param to 10,000
+const MAX_PAGE = Math.ceil(10000 / RESULTS_PER_PAGE);
+
 export default function LazySearchPage({ location }) {
-  const query = getQueryParam(location);
+  const { query, page } = parseParams(location);
   const searchPageResult = useModule(searchPage);
   const packageSearchResult = useResource(
     packageSearch,
-    useMemo(() => ({ query }), [query]),
+    useMemo(() => packageSearchOpts({ query, page }), [query, page]),
   );
 
   if (
@@ -24,9 +28,17 @@ export default function LazySearchPage({ location }) {
     packageSearchResult.status === RESOURCE_SUCCESS
   ) {
     const SearchPage = searchPageResult.module.default;
-    const searchResults = packageSearchResult.data;
+    const { total, results } = packageSearchResult.data;
 
-    return <SearchPage query={query} searchResults={searchResults} />;
+    return (
+      <SearchPage
+        query={query}
+        page={page}
+        maxPage={Math.min(MAX_PAGE, Math.ceil(total / RESULTS_PER_PAGE))}
+        total={total}
+        results={results}
+      />
+    );
   } else if (
     searchPageResult.status === MODULE_FAILURE ||
     packageSearchResult.status === RESOURCE_FAILURE
@@ -42,15 +54,30 @@ LazySearchPage.propTypes = {
 };
 
 export function preloadSearchPage({ location, moduleCache, resourceCache }) {
-  const query = getQueryParam(location);
-
   return Promise.all([
     moduleCache.preload(searchPage),
-    resourceCache.preload(packageSearch, { query }),
+    resourceCache.preload(
+      packageSearch,
+      packageSearchOpts(parseParams(location)),
+    ),
   ]);
 }
 
-function getQueryParam(location) {
+function parseParams(location) {
   const params = new URLSearchParams(location.search);
-  return params.get("q");
+  const query = params.get("q");
+  const page = Math.max(1, parseInt(params.get("p"), 10));
+
+  return {
+    query: query === null ? "" : query,
+    page: isNaN(page) ? 1 : page,
+  };
+}
+
+function packageSearchOpts({ query, page }) {
+  return {
+    query,
+    from: (page - 1) * RESULTS_PER_PAGE,
+    size: RESULTS_PER_PAGE,
+  };
 }

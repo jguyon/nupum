@@ -6,6 +6,7 @@ import searchPage from "./search-page-module";
 import { packageSearch } from "../../resources";
 import SearchPage from ".";
 
+const RESULTS_PER_PAGE = 10;
 const LOADING_TEXT = "Loading…";
 const ERROR_TEXT = "Could not fetch the search results.";
 const SEARCH_RESULT_HEADING_TEST_ID = "search-result-heading";
@@ -28,8 +29,12 @@ test("search results are rendered when fetching succeeds", async () => {
   expect(() => getByText(LOADING_TEXT)).not.toThrow();
 
   await moduleCache.wait(searchPage);
-  const searchResults = fakePackageSearch();
-  resourceCache.succeed(packageSearch, { query: "react" }, searchResults);
+  const searchResults = fakePackageSearch({ size: RESULTS_PER_PAGE });
+  resourceCache.succeed(
+    packageSearch,
+    { query: "react", from: 0, size: RESULTS_PER_PAGE },
+    searchResults,
+  );
 
   expect(
     queryAllByTestId(SEARCH_RESULT_HEADING_TEST_ID).map(
@@ -63,7 +68,7 @@ test("error message is rendered when fetching resource fails", () => {
 
   resourceCache.fail(
     packageSearch,
-    { query: "react" },
+    { query: "react", from: 0, size: RESULTS_PER_PAGE },
     new Error("fetching failed"),
   );
 

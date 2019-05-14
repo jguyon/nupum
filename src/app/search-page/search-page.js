@@ -3,14 +3,15 @@ import PropTypes from "prop-types";
 import Container from "../container";
 import SearchPageBanner from "./search-page-banner";
 import SearchPageResult from "./search-page-result";
+import SearchPagePagination from "./search-page-pagination";
 
-export default function SearchPage({ query, searchResults }) {
+export default function SearchPage({ query, page, maxPage, total, results }) {
   return (
     <>
-      <SearchPageBanner totalResults={searchResults.total} query={query} />
+      <SearchPageBanner totalResults={total} query={query} />
 
       <Container>
-        {searchResults.results.map(({ package: pkg }) => (
+        {results.map(({ package: pkg }) => (
           <SearchPageResult
             key={pkg.name}
             name={pkg.name}
@@ -22,6 +23,13 @@ export default function SearchPage({ query, searchResults }) {
             publisher={pkg.publisher}
           />
         ))}
+
+        <SearchPagePagination
+          query={query}
+          currentPage={page}
+          maxPage={maxPage}
+          totalResults={total}
+        />
       </Container>
     </>
   );
@@ -29,5 +37,8 @@ export default function SearchPage({ query, searchResults }) {
 
 SearchPage.propTypes = {
   query: PropTypes.string.isRequired,
-  searchResults: PropTypes.object.isRequired,
+  page: PropTypes.number.isRequired,
+  maxPage: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  results: PropTypes.array.isRequired,
 };
