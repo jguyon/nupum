@@ -1,11 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  createModule,
-  useModule,
-  MODULE_SUCCESS,
-  MODULE_FAILURE,
-} from "../../module-cache";
+import { useModule, MODULE_SUCCESS, MODULE_FAILURE } from "../../module-cache";
 import {
   useResource,
   RESOURCE_SUCCESS,
@@ -15,11 +10,7 @@ import { packageInfo } from "../../resources";
 import PageNotFound from "../page-not-found";
 import LoadingPage from "../loading-page";
 import ErrorPage from "../error-page";
-
-const packagePage = createModule(
-  () => import(/* webpackChunkName: "package-page" */ "./package-page"),
-  "package-page",
-);
+import packagePage from "./package-page-module";
 
 export default function LazyPackagePage({ name }) {
   const packagePageResult = useModule(packagePage);

@@ -33,7 +33,7 @@ export default function PackagePage({
       <Banner>
         <div css={bannerRowStyles}>
           <div css={bannerMainColumnStyles}>
-            <h2 css={headingStyles}>
+            <h2 css={headingStyles} data-testid="package-heading">
               {metadata.name}{" "}
               <small css={versionStyles}>{metadata.version}</small>
             </h2>
