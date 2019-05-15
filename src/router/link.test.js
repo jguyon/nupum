@@ -102,45 +102,48 @@ test("hovering link preloads route", () => {
     },
   ]);
 
-  fireEvent.mouseMove(getByText("go to path"));
+  fireEvent.mouseEnter(getByText("go to path"));
 
   expect(preload).toHaveBeenCalledTimes(1);
 });
 
-test("hovering link preloads only once", () => {
+test("hovering link after url change preloads route", () => {
   const preload = jest.fn(() => Promise.resolve());
   const { getByText } = renderRoutesWithContext([
     {
       path: "/",
-      render: () => <Link to="/path">go to path</Link>,
+      render: () => <Link to="/one">go to one</Link>,
     },
     {
-      path: "/path",
+      path: "/one",
+      preload: () => Promise.resolve(),
+      render: () => <Link to="/two">go to two</Link>,
+    },
+    {
+      path: "/two",
       preload,
-      render: () => "path",
+      render: () => "two",
     },
   ]);
-  const link = getByText("go to path");
 
-  fireEvent.mouseMove(link);
+  fireEvent.mouseEnter(getByText("go to one"));
+  fireEvent.click(getByText("go to one"));
+  fireEvent.mouseEnter(getByText("go to two"));
+
   expect(preload).toHaveBeenCalledTimes(1);
-  preload.mockClear();
-  fireEvent.mouseMove(link);
-
-  expect(preload).not.toHaveBeenCalled();
 });
 
-test("hovering link calls onMouseMove handler", () => {
-  const onMouseMove = jest.fn(() => {});
+test("hovering link calls onMouseEnter handler", () => {
+  const onMouseEnter = jest.fn(() => {});
   const { getByText } = renderWithContext(
-    <Link to="/path" onMouseMove={onMouseMove}>
+    <Link to="/path" onMouseEnter={onMouseEnter}>
       go to path
     </Link>,
   );
 
-  fireEvent.mouseMove(getByText("go to path"));
+  fireEvent.mouseEnter(getByText("go to path"));
 
-  expect(onMouseMove).toHaveBeenCalledTimes(1);
+  expect(onMouseEnter).toHaveBeenCalledTimes(1);
 });
 
 test("hovering link does not preload when event default is prevented", () => {
@@ -151,7 +154,7 @@ test("hovering link does not preload when event default is prevented", () => {
       render: () => (
         <Link
           to="/path"
-          onMouseMove={event => {
+          onMouseEnter={event => {
             event.preventDefault();
           }}
         >
@@ -166,7 +169,7 @@ test("hovering link does not preload when event default is prevented", () => {
     },
   ]);
 
-  fireEvent.mouseMove(getByText("go to path"));
+  fireEvent.mouseEnter(getByText("go to path"));
 
   expect(preload).not.toHaveBeenCalled();
 });

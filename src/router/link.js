@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import warning from "tiny-warning";
 import { useNavigate, usePreload } from "./router";
@@ -8,7 +8,7 @@ export default function Link({
   replace,
   state,
   onClick,
-  onMouseMove,
+  onMouseEnter,
   children,
   ...props
 }) {
@@ -16,7 +16,6 @@ export default function Link({
 
   const navigate = useNavigate();
   const preload = usePreload();
-  const [hasPreloaded, setHasPreloaded] = useState(false);
 
   function onLinkClick(event) {
     if (onClick) {
@@ -28,18 +27,22 @@ export default function Link({
     }
   }
 
-  function onLinkMouseMove(event) {
-    if (onMouseMove) {
-      onMouseMove(event);
+  function onLinkMouseEnter(event) {
+    if (onMouseEnter) {
+      onMouseEnter(event);
     }
-    if (!event.defaultPrevented && !hasPreloaded) {
-      setHasPreloaded(true);
+    if (!event.defaultPrevented) {
       preload(to, { state });
     }
   }
 
   return (
-    <a {...props} href={to} onClick={onLinkClick} onMouseMove={onLinkMouseMove}>
+    <a
+      {...props}
+      href={to}
+      onClick={onLinkClick}
+      onMouseEnter={onLinkMouseEnter}
+    >
       {children}
     </a>
   );
@@ -50,6 +53,6 @@ Link.propTypes = {
   replace: PropTypes.bool,
   state: PropTypes.any,
   onClick: PropTypes.func,
-  onMouseMove: PropTypes.func,
+  onMouseEnter: PropTypes.func,
   children: PropTypes.node,
 };
