@@ -7,6 +7,7 @@ export default function Link({
   to,
   replace,
   state,
+  preloadOnHover,
   onClick,
   onMouseEnter,
   children,
@@ -31,7 +32,7 @@ export default function Link({
     if (onMouseEnter) {
       onMouseEnter(event);
     }
-    if (!event.defaultPrevented) {
+    if (preloadOnHover && !event.defaultPrevented) {
       preload(to, { state });
     }
   }
@@ -52,6 +53,7 @@ Link.propTypes = {
   to: PropTypes.string.isRequired,
   replace: PropTypes.bool,
   state: PropTypes.any,
+  preloadOnHover: PropTypes.bool,
   onClick: PropTypes.func,
   onMouseEnter: PropTypes.func,
   children: PropTypes.node,

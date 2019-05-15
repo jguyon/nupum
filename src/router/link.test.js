@@ -1,4 +1,5 @@
 import React from "react";
+import { createLocation } from "history";
 import {
   renderWithContext,
   renderRoutesWithContext,
@@ -88,8 +89,37 @@ test("clicking link does not navigate when event default is prevented", () => {
   expect(history.location.pathname).toBe("/");
 });
 
-test("hovering link preloads route", () => {
+test("hovering link preloads route when preloadOnHover prop is true", () => {
   const preload = jest.fn(() => Promise.resolve());
+  const { getByText } = renderRoutesWithContext([
+    {
+      path: "/",
+      render: () => (
+        <Link to="/path" preloadOnHover>
+          go to path
+        </Link>
+      ),
+    },
+    {
+      path: "/path",
+      preload,
+      render: () => "path",
+    },
+  ]);
+
+  fireEvent.mouseEnter(getByText("go to path"));
+
+  expect(preload).toHaveBeenCalledTimes(1);
+  expect(preload).toHaveBeenCalledWith({
+    action: "PRELOAD",
+    location: createLocation("/path"),
+    params: {},
+  });
+});
+
+test("hovering link does not preload route when preloadOnHover prop is not true", () => {
+  const preload = jest.fn(() => Promise.resolve());
+
   const { getByText } = renderRoutesWithContext([
     {
       path: "/",
@@ -104,20 +134,28 @@ test("hovering link preloads route", () => {
 
   fireEvent.mouseEnter(getByText("go to path"));
 
-  expect(preload).toHaveBeenCalledTimes(1);
+  expect(preload).not.toHaveBeenCalled();
 });
 
-test("hovering link after url change preloads route", () => {
+test("hovering link after url change preloads route when preloadOnHover prop is true", () => {
   const preload = jest.fn(() => Promise.resolve());
   const { getByText } = renderRoutesWithContext([
     {
       path: "/",
-      render: () => <Link to="/one">go to one</Link>,
+      render: () => (
+        <Link to="/one" preloadOnHover>
+          go to one
+        </Link>
+      ),
     },
     {
       path: "/one",
       preload: () => Promise.resolve(),
-      render: () => <Link to="/two">go to two</Link>,
+      render: () => (
+        <Link to="/two" preloadOnHover>
+          go to two
+        </Link>
+      ),
     },
     {
       path: "/two",
@@ -131,6 +169,11 @@ test("hovering link after url change preloads route", () => {
   fireEvent.mouseEnter(getByText("go to two"));
 
   expect(preload).toHaveBeenCalledTimes(1);
+  expect(preload).toHaveBeenCalledWith({
+    action: "PRELOAD",
+    location: createLocation("/two"),
+    params: {},
+  });
 });
 
 test("hovering link calls onMouseEnter handler", () => {
@@ -154,6 +197,7 @@ test("hovering link does not preload when event default is prevented", () => {
       render: () => (
         <Link
           to="/path"
+          preloadOnHover
           onMouseEnter={event => {
             event.preventDefault();
           }}
