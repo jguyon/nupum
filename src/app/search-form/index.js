@@ -3,7 +3,7 @@ import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
 import SearchIcon from "react-feather/dist/icons/search";
-import { useNavigate, useMatch } from "../../router";
+import { useNavigate, usePreload, useMatch } from "../../router";
 import { rhythm, color, primaryColor } from "../theme";
 import useHydration from "../use-hydration";
 import Input from "./input";
@@ -11,6 +11,7 @@ import Input from "./input";
 export default function SearchForm(props) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
+  const preload = usePreload();
   const inputAutoFocus = !!useMatch("/");
   const isHydrating = useHydration();
 
@@ -29,6 +30,12 @@ export default function SearchForm(props) {
     event.preventDefault();
     if (!isSubmitDisabled) {
       navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
+  }
+
+  function onSubmitMouseEnter() {
+    if (!isSubmitDisabled) {
+      preload(`/search?q=${encodeURIComponent(query)}`);
     }
   }
 
@@ -57,6 +64,7 @@ export default function SearchForm(props) {
           type="submit"
           aria-label="Search"
           aria-disabled={isSubmitDisabled}
+          onMouseEnter={onSubmitMouseEnter}
         >
           <SearchIcon css={submitIconStyles} />
         </button>

@@ -1,6 +1,11 @@
 import React from "react";
-import { createMemoryHistory } from "history";
-import { renderWithContext, fireEvent, act } from "../../test/react";
+import { createMemoryHistory, createLocation } from "history";
+import {
+  renderWithContext,
+  renderRoutesWithContext,
+  fireEvent,
+  act,
+} from "../../test/react";
 import SearchForm, { SearchFormProvider } from ".";
 
 const INPUT_LABEL = "Search query";
@@ -107,4 +112,57 @@ test("submitting does not navigate to search page with empty input", () => {
 
   expect(history.location.pathname).toBe("/");
   expect(history.location.search).toBe("");
+});
+
+test("hovering submit button preloads search page with non-empty input", () => {
+  const preload = jest.fn(() => Promise.resolve());
+  const { getByLabelText } = renderRoutesWithContext([
+    {
+      path: "/",
+      render: () => (
+        <SearchFormProvider>
+          <SearchForm />
+        </SearchFormProvider>
+      ),
+    },
+    {
+      path: "/search",
+      preload,
+      render: () => null,
+    },
+  ]);
+
+  fireEvent.change(getByLabelText(INPUT_LABEL), { target: { value: "react" } });
+  fireEvent.mouseEnter(getByLabelText(SUBMIT_LABEL));
+
+  expect(preload).toHaveBeenCalledTimes(1);
+  expect(preload).toHaveBeenCalledWith({
+    action: "PRELOAD",
+    location: createLocation("/search?q=react"),
+    params: {},
+  });
+});
+
+test("hovering submit button does not preload search page with empty input", () => {
+  const preload = jest.fn(() => Promise.resolve());
+  const { getByLabelText } = renderRoutesWithContext([
+    {
+      path: "/",
+      render: () => (
+        <SearchFormProvider>
+          <SearchForm />
+        </SearchFormProvider>
+      ),
+    },
+    {
+      path: "/search",
+      preload,
+      render: () => null,
+    },
+  ]);
+
+  fireEvent.change(getByLabelText(INPUT_LABEL), { target: { value: "   " } });
+  fireEvent.mouseEnter(getByLabelText(SUBMIT_LABEL));
+
+  expect(preload).not.toHaveBeenCalled();
 });
