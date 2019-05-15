@@ -79,7 +79,7 @@ const containerStyles = css`
 function Heading({ name, version }) {
   return (
     <h3 css={headingStyles} data-testid="search-result-heading">
-      <Link css={headingNameStyles} to={`/package/${name}`}>
+      <Link css={headingNameStyles} to={`/package/${name}`} preloadOnHover>
         {name}
       </Link>{" "}
       <small css={headingVersionStyles}>{version}</small>

@@ -80,6 +80,7 @@ function PageItem({ query, page, label, current, children }) {
       <Link
         css={listItemLinkStyles}
         to={`/search?q=${encodeURIComponent(query)}&p=${page}`}
+        preloadOnHover
         aria-label={label}
         aria-current={current ? "page" : null}
       >
