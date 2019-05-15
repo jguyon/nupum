@@ -4,6 +4,7 @@ import {
   renderWithContext,
   renderRoutesWithContext,
   fireEvent,
+  act,
 } from "../../test/react";
 import { fakePackageSearch } from "../../test/fake";
 import searchPage from "./search-page-module";
@@ -14,11 +15,6 @@ const RESULTS_PER_PAGE = 10;
 const LOADING_TEXT = "Loading…";
 const ERROR_TEXT = "Could not fetch the search results.";
 const SEARCH_RESULT_HEADING_TEST_ID = "search-result-heading";
-
-// stub console.error until `act(...)` warnings can be fixed
-// https://github.com/facebook/react/issues/14769
-const consoleError = jest.spyOn(console, "error");
-consoleError.mockImplementation(() => {});
 
 test("search results are rendered when fetching succeeds", async () => {
   const {
@@ -32,13 +28,15 @@ test("search results are rendered when fetching succeeds", async () => {
 
   expect(() => getByText(LOADING_TEXT)).not.toThrow();
 
-  await moduleCache.wait(searchPage);
   const searchResults = fakePackageSearch({ size: RESULTS_PER_PAGE });
-  resourceCache.succeed(
-    packageSearch,
-    { query: "react", from: 0, size: RESULTS_PER_PAGE },
-    searchResults,
-  );
+  await act(async () => {
+    await moduleCache.wait(searchPage);
+    resourceCache.succeed(
+      packageSearch,
+      { query: "react", from: 0, size: RESULTS_PER_PAGE },
+      searchResults,
+    );
+  });
 
   expect(
     queryAllByTestId(SEARCH_RESULT_HEADING_TEST_ID).map(
@@ -58,7 +56,9 @@ test("error message is rendered when fetching module fails", () => {
 
   expect(() => getByText(LOADING_TEXT)).not.toThrow();
 
-  moduleCache.fail(searchPage, new Error("fetching failed"));
+  act(() => {
+    moduleCache.fail(searchPage, new Error("fetching failed"));
+  });
 
   expect(() => getByText(ERROR_TEXT)).not.toThrow();
 });
@@ -70,11 +70,13 @@ test("error message is rendered when fetching resource fails", () => {
 
   expect(() => getByText(LOADING_TEXT)).not.toThrow();
 
-  resourceCache.fail(
-    packageSearch,
-    { query: "react", from: 0, size: RESULTS_PER_PAGE },
-    new Error("fetching failed"),
-  );
+  act(() => {
+    resourceCache.fail(
+      packageSearch,
+      { query: "react", from: 0, size: RESULTS_PER_PAGE },
+      new Error("fetching failed"),
+    );
+  });
 
   expect(() => getByText(ERROR_TEXT)).not.toThrow();
 });
@@ -96,15 +98,17 @@ test("navigating to another page displays the page's search results", async () =
     { history },
   );
 
-  await moduleCache.wait(searchPage);
-  resourceCache.succeed(
-    packageSearch,
-    { query: "react", from: 0, size: RESULTS_PER_PAGE },
-    {
-      ...fakePackageSearch({ size: RESULTS_PER_PAGE }),
-      total: RESULTS_PER_PAGE * 2,
-    },
-  );
+  await act(async () => {
+    await moduleCache.wait(searchPage);
+    resourceCache.succeed(
+      packageSearch,
+      { query: "react", from: 0, size: RESULTS_PER_PAGE },
+      {
+        ...fakePackageSearch({ size: RESULTS_PER_PAGE }),
+        total: RESULTS_PER_PAGE * 2,
+      },
+    );
+  });
 
   fireEvent.click(getByLabelText("Next page"));
 
@@ -112,11 +116,13 @@ test("navigating to another page displays the page's search results", async () =
     ...fakePackageSearch({ size: RESULTS_PER_PAGE }),
     total: RESULTS_PER_PAGE * 2,
   };
-  resourceCache.succeed(
-    packageSearch,
-    { query: "react", from: RESULTS_PER_PAGE, size: RESULTS_PER_PAGE },
-    searchResults,
-  );
+  act(() => {
+    resourceCache.succeed(
+      packageSearch,
+      { query: "react", from: RESULTS_PER_PAGE, size: RESULTS_PER_PAGE },
+      searchResults,
+    );
+  });
 
   expect(
     queryAllByTestId(SEARCH_RESULT_HEADING_TEST_ID).map(

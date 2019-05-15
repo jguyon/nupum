@@ -24,11 +24,6 @@ afterEach(() => {
   dateNow.mockReset();
 });
 
-// stub console.error until `act(...)` warnings can be fixed
-// https://github.com/facebook/react/issues/14769
-const consoleError = jest.spyOn(console, "error");
-consoleError.mockImplementation(() => {});
-
 function AsyncResource({ resource, input }) {
   const result = useResource(resource, input);
 

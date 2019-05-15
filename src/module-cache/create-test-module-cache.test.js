@@ -6,11 +6,6 @@ import createModule from "./create-module";
 import useModule, { ModuleCacheProvider } from "./use-module";
 import createTestModuleCache from "./create-test-module-cache";
 
-// stub console.error until `act(...)` warnings can be fixed
-// https://github.com/facebook/react/issues/14769
-const consoleError = jest.spyOn(console, "error");
-consoleError.mockImplementation(() => {});
-
 function AsyncModule({ module }) {
   const result = useModule(module);
 
@@ -75,7 +70,9 @@ test("successful result is rendered when waiting on requested module succeeds", 
     </ModuleCacheProvider>,
   );
 
-  await expect(cache.wait(module)).resolves.toBe(undefined);
+  await act(async () => {
+    await expect(cache.wait(module)).resolves.toBe(undefined);
+  });
 
   expect(container).toHaveTextContent("success: module data");
   expect(fetch).toHaveBeenCalledTimes(1);
@@ -92,7 +89,9 @@ test("successful result is rendered when waiting on requested module has previou
     </ModuleCacheProvider>,
   );
 
-  await expect(cache.wait(module)).resolves.toBe(undefined);
+  await act(async () => {
+    await expect(cache.wait(module)).resolves.toBe(undefined);
+  });
 
   rerender(
     <ModuleCacheProvider cache={cache}>
@@ -115,7 +114,9 @@ test("result is not rerendered when waiting on requested module fails", async ()
     </ModuleCacheProvider>,
   );
 
-  await expect(cache.wait(module)).rejects.toBe("module error");
+  await act(async () => {
+    await expect(cache.wait(module)).rejects.toBe("module error");
+  });
 
   expect(container).toHaveTextContent("pending");
   expect(fetch).toHaveBeenCalledTimes(1);
@@ -137,7 +138,9 @@ test("successful results are rendered when waiting on all requested modules succ
     </ModuleCacheProvider>,
   );
 
-  await expect(cache.waitAll()).resolves.toBe(undefined);
+  await act(async () => {
+    await expect(cache.waitAll()).resolves.toBe(undefined);
+  });
 
   expect(container).toHaveTextContent(
     "success: module data one | " +
@@ -162,7 +165,9 @@ test("successful results are rendered when waiting on all requested modules has 
     </ModuleCacheProvider>,
   );
 
-  await expect(cache.waitAll()).resolves.toBe(undefined);
+  await act(async () => {
+    await expect(cache.waitAll()).resolves.toBe(undefined);
+  });
 
   rerender(
     <ModuleCacheProvider key="two" cache={cache}>
@@ -197,7 +202,9 @@ test("failed results are not rerendered when waiting on all requested modules fa
     </ModuleCacheProvider>,
   );
 
-  await expect(cache.waitAll()).rejects.toBe("module error two");
+  await act(async () => {
+    await expect(cache.waitAll()).rejects.toBe("module error two");
+  });
 
   expect(container).toHaveTextContent(
     "success: module data one | pending | success: module data three",
@@ -267,7 +274,9 @@ test("result is rerendered when new module is requested", async () => {
     </ModuleCacheProvider>,
   );
 
-  await cache.wait(moduleOne);
+  await act(async () => {
+    await cache.wait(moduleOne);
+  });
   expect(container).toHaveTextContent("success: module data one");
 
   rerender(
@@ -277,7 +286,9 @@ test("result is rerendered when new module is requested", async () => {
   );
 
   expect(container).toHaveTextContent("pending");
-  await cache.wait(moduleTwo);
+  await act(async () => {
+    await cache.wait(moduleTwo);
+  });
   expect(container).toHaveTextContent("success: module data two");
 });
 
@@ -292,7 +303,9 @@ test("result is rerendered when new cache is provided", async () => {
     </ModuleCacheProvider>,
   );
 
-  await cacheOne.wait(module);
+  await act(async () => {
+    await cacheOne.wait(module);
+  });
   expect(container).toHaveTextContent("success: module data");
 
   rerender(
@@ -302,7 +315,9 @@ test("result is rerendered when new cache is provided", async () => {
   );
 
   expect(container).toHaveTextContent("pending");
-  await cacheTwo.wait(module);
+  await act(async () => {
+    await cacheTwo.wait(module);
+  });
   expect(container).toHaveTextContent("success: module data");
 });
 
@@ -325,10 +340,14 @@ test("previous fetching is canceled when refetching", async () => {
     </ModuleCacheProvider>,
   );
 
-  await cache.wait(moduleOne);
+  await act(async () => {
+    await cache.wait(moduleOne);
+  });
   expect(container).toHaveTextContent("pending");
 
-  await cache.wait(moduleTwo);
+  await act(async () => {
+    await cache.wait(moduleTwo);
+  });
   expect(container).toHaveTextContent("success: module data two");
 });
 
@@ -358,9 +377,7 @@ test("failed result is rendered when requested module has been failed during pre
   const cache = createTestModuleCache();
 
   const promise = cache.preload(module);
-  act(() => {
-    cache.fail(module, "module error");
-  });
+  cache.fail(module, "module error");
   const result = await promise;
 
   const { container } = render(

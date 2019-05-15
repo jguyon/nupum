@@ -13,16 +13,16 @@ import Router, {
 
 jest.useFakeTimers();
 
-// stub console.error until `act(...)` warnings can be fixed
-// https://github.com/facebook/react/issues/14769
-const consoleError = jest.spyOn(console, "error");
-consoleError.mockImplementation(() => {});
-
 function delay(ms) {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
 }
+
+const consoleError = jest.spyOn(console, "error");
+afterEach(() => {
+  consoleError.mockReset();
+});
 
 describe("Router", () => {
   test("matching route is rendered", () => {
@@ -384,6 +384,7 @@ describe("Router", () => {
   });
 
   test("matching route is rendered when preload rejects before timeout", async () => {
+    consoleError.mockImplementation(() => {});
     const history = createMemoryHistory();
     const routes = [
       {
@@ -409,6 +410,8 @@ describe("Router", () => {
     await wait(() => {
       expect(container).toHaveTextContent("match");
     });
+    expect(consoleError).toHaveBeenCalledTimes(1);
+    expect(consoleError).toHaveBeenCalledWith("preload error:", "failure");
   });
 
   test("matching route is rendered when preload resolves after timeout", async () => {
