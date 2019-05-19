@@ -1,16 +1,15 @@
 import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import { stripUnit } from "polished";
 import TimeAgo from "react-timeago";
-import Gravatar from "react-gravatar";
 import TagIcon from "react-feather/dist/icons/tag";
 import LinkIcon from "react-feather/dist/icons/link";
 import HomeIcon from "react-feather/dist/icons/home";
 import GitIcon from "react-feather/dist/icons/git-branch";
 import { Link } from "../../router";
-import { rhythm, scale, color, baseFontSize, primaryColor } from "../theme";
+import { rhythm, scale, color, primaryColor } from "../theme";
 import Banner from "../banner";
+import PackagePageUser from "./package-page-user";
 
 export default function PackagePageBanner({
   name,
@@ -193,15 +192,7 @@ function Publication({ date, email, username }) {
   return (
     <p css={publicationStyles}>
       published <TimeAgo date={date} /> by{" "}
-      <span css={publicationAvatarStyles}>
-        <Gravatar email={email} size={publicationAvatarSize} />
-      </span>{" "}
-      <a
-        css={publicationLinkStyles}
-        href={`https://www.npmjs.com/~${username}`}
-      >
-        {username}
-      </a>
+      <PackagePageUser email={email} username={username} />
     </p>
   );
 }
@@ -210,37 +201,6 @@ const publicationStyles = css`
   ${scale(0, 0, 1)}
   margin: 0;
   color: ${color("gray", 6)};
-`;
-
-const publicationAvatarStyles = css`
-  display: inline-block;
-  vertical-align: middle;
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  width: ${rhythm(1, 1)};
-  height: ${rhythm(1, 1)};
-
-  border: 2px solid ${color("gray", 8)};
-`;
-
-const publicationAvatarSize = (() => {
-  return stripUnit(rhythm(1, 1)) * baseFontSize - 4;
-})();
-
-const publicationLinkStyles = css`
-  color: ${color("gray", 8)};
-  text-decoration: underline transparent;
-
-  transition: text-decoration 0.15s ease-out;
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus {
-    outline: 1px dotted currentColor;
-  }
 `;
 
 function LinkList({ children }) {

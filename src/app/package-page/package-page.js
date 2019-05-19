@@ -1,21 +1,22 @@
 import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import { stripUnit } from "polished";
-import millify from "millify";
-import Gravatar from "react-gravatar";
 import Markdown from "react-markdown";
 import {
   rhythm,
   scale,
   color,
-  baseFontSize,
   monoFontFamily,
   primaryColor,
   compactLineHeight,
 } from "../theme";
-import Container from "../container";
 import PackagePageBanner from "./package-page-banner";
+import {
+  PackagePageContentRow,
+  PackagePageContentMain,
+  PackagePageContentAside,
+} from "./package-page-content";
+import PackagePageSideInfo from "./package-page-side-info";
 
 export default function PackagePage({
   packageInfo: { metadata, npm, github },
@@ -32,118 +33,48 @@ export default function PackagePage({
         links={metadata.links}
       />
 
-      <Container>
-        <div css={contentRowStyles}>
-          <aside css={contentAsideColumnStyles}>
-            <article css={asideSectionStyles}>
-              <h3 css={asideHeadingStyles}>Usage</h3>
-              <div css={asideCodeContainerStyles}>
-                <code css={asideCodeStyles}>$ npm i {metadata.name}</code>
-              </div>
-              <div css={asideCodeContainerStyles}>
-                <code css={asideCodeStyles}>$ yarn add {metadata.name}</code>
-              </div>
-              <dl css={asideDescListStyles}>
-                <dt css={asideDescListTitleStyles}>License</dt>
-                <dd css={asideDescListDescStyles}>
-                  {metadata.license ? metadata.license : "N/A"}
-                </dd>
-                <dt css={asideDescListTitleStyles}>Dependencies</dt>
-                <dd css={asideDescListDescStyles}>
-                  {metadata.dependencies
-                    ? Object.keys(metadata.dependencies).length
-                    : 0}
-                </dd>
-                {metadata.peerDependencies ? (
-                  <>
-                    <dt css={asideDescListTitleStyles}>Peer dependencies</dt>
-                    <dd css={asideDescListDescStyles}>
-                      {Object.keys(metadata.peerDependencies).length}
-                    </dd>
-                  </>
-                ) : null}
-              </dl>
-            </article>
+      <PackagePageContentRow>
+        <PackagePageContentAside>
+          <PackagePageSideInfo
+            name={metadata.name}
+            license={metadata.license}
+            dependenciesCount={
+              metadata.dependencies
+                ? Object.keys(metadata.dependencies).length
+                : 0
+            }
+            peerDependenciesCount={
+              metadata.peerDependencies
+                ? Object.keys(metadata.peerDependencies).length
+                : 0
+            }
+            npmDownloadsLastMonthCount={
+              npm.downloads.length > 2 ? npm.downloads[2].count : null
+            }
+            npmDependentsCount={npm.dependentsCount}
+            githubStarsCount={github ? github.starsCount : 0}
+            githubCommitsLast3MonthsCount={
+              github && github.commits.length > 2
+                ? github.commits[2].count
+                : null
+            }
+            githubOpenIssuesCount={github ? github.issues.openCount : null}
+            maintainers={metadata.maintainers}
+          />
+        </PackagePageContentAside>
 
-            <article css={asideSectionStyles}>
-              <h3 css={asideHeadingStyles}>Popularity</h3>
-              <dl css={asideDescListStyles}>
-                {npm.downloads.length >= 3 ? (
-                  <>
-                    <dt css={asideDescListTitleStyles}>Downloads last month</dt>
-                    <dd css={asideDescListDescStyles}>
-                      {millify(npm.downloads[2].count, { precision: 1 })}
-                    </dd>
-                  </>
-                ) : null}
-                {github ? (
-                  <>
-                    <dt css={asideDescListTitleStyles}>GitHub stars</dt>
-                    <dd css={asideDescListDescStyles}>
-                      {millify(github.starsCount, { precision: 1 })}
-                    </dd>
-                  </>
-                ) : null}
-                <dt css={asideDescListTitleStyles}>Dependents</dt>
-                <dd css={asideDescListDescStyles}>
-                  {millify(npm.dependentsCount, { precision: 1 })}
-                </dd>
-              </dl>
-            </article>
-
-            {github ? (
-              <article css={asideSectionStyles}>
-                <h3 css={asideHeadingStyles}>Activity</h3>
-                <dl css={asideDescListStyles}>
-                  {github.commits.length >= 3 ? (
-                    <>
-                      <dt css={asideDescListTitleStyles}>
-                        Commits last 3 months
-                      </dt>
-                      <dd css={asideDescListDescStyles}>
-                        {millify(github.commits[2].count, { precision: 1 })}
-                      </dd>
-                    </>
-                  ) : null}
-                  <dt css={asideDescListTitleStyles}>Open issues</dt>
-                  <dd css={asideDescListDescStyles}>
-                    {millify(github.issues.openCount, { precision: 1 })}
-                  </dd>
-                </dl>
-              </article>
-            ) : null}
-
-            <article css={asideSectionStyles}>
-              <h3 css={asideHeadingStyles}>Maintainers</h3>
-              {metadata.maintainers.map(({ username, email }) => (
-                <div key={username} css={asideMaintainerStyles}>
-                  <span css={avatarStyles}>
-                    <Gravatar size={avatarSize} email={email} />
-                  </span>{" "}
-                  <a
-                    css={userLinkStyles}
-                    href={`https://www.npmjs.com/~${username}`}
-                  >
-                    {username}
-                  </a>
-                </div>
-              ))}
-            </article>
-          </aside>
-
-          <section css={contentMainColumnStyles}>
-            {metadata.readme ? (
-              <Markdown
-                css={readmeStyles}
-                escapeHtml={false}
-                source={metadata.readme}
-              />
-            ) : (
-              <p css={noReadmeStyles}>This package has no readme.</p>
-            )}
-          </section>
-        </div>
-      </Container>
+        <PackagePageContentMain>
+          {metadata.readme ? (
+            <Markdown
+              css={readmeStyles}
+              escapeHtml={false}
+              source={metadata.readme}
+            />
+          ) : (
+            <p css={noReadmeStyles}>This package has no readme.</p>
+          )}
+        </PackagePageContentMain>
+      </PackagePageContentRow>
     </>
   );
 }
@@ -151,130 +82,6 @@ export default function PackagePage({
 PackagePage.propTypes = {
   packageInfo: PropTypes.object.isRequired,
 };
-
-const avatarStyles = css`
-  display: inline-block;
-  vertical-align: middle;
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  width: ${rhythm(1, 1)};
-  height: ${rhythm(1, 1)};
-
-  border: 2px solid ${color("gray", 8)};
-`;
-
-const avatarSize = (() => {
-  return stripUnit(rhythm(1, 1)) * baseFontSize - 4;
-})();
-
-const userLinkStyles = css`
-  color: ${color("gray", 8)};
-  text-decoration: underline transparent;
-
-  transition: text-decoration 0.15s ease-out;
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus {
-    outline: 1px dotted currentColor;
-  }
-`;
-
-const contentRowBreakpoint = "@media (min-width: 56em)";
-
-const contentRowStyles = css`
-  margin: ${rhythm(1)} 0;
-
-  ${contentRowBreakpoint} {
-    display: flex;
-    align-items: flex-start;
-  }
-`;
-
-const contentMainColumnStyles = css`
-  border-top: 1px solid ${color("gray", 3)};
-  padding-top: calc(${rhythm(1)} - 1px);
-
-  ${contentRowBreakpoint} {
-    border-top: 0;
-    padding-top: 0;
-
-    // prefer overflows inside the main container rather than pushing the aside
-    // container to the right
-    min-width: 0;
-
-    order: 1;
-    flex-grow: 1;
-  }
-`;
-
-const contentAsideColumnStyles = css`
-  ${contentRowBreakpoint} {
-    width: ${rhythm(10, 2)};
-    margin-left: ${rhythm(0, 2)};
-    border-left: 1px solid ${color("gray", 3)};
-    padding-left: calc(${rhythm(0, 2)} - 1px);
-
-    order: 2;
-    flex-shrink: 0;
-  }
-`;
-
-const asideSectionStyles = css`
-  margin-bottom: ${rhythm(1)};
-`;
-
-const asideHeadingStyles = css`
-  ${scale(0, 2)}
-  color: ${color("gray", 8)};
-  margin: 0;
-`;
-
-const asideCodeContainerStyles = css`
-  display: flex;
-  align-items: center;
-  height: ${rhythm(1, 1)};
-  padding: 0 ${rhythm(0, 1)};
-  margin: ${rhythm(0, 1)} 0;
-
-  background-color: ${color("gray", 0)};
-  color: ${color("gray", 7)};
-  border: 1px solid ${color("gray", 5)};
-  border-radius: 3px;
-`;
-
-const asideCodeStyles = css`
-  ${scale(0, -1, compactLineHeight)}
-  font-family: ${monoFontFamily};
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const asideDescListStyles = css`
-  margin: 0;
-`;
-
-const asideDescListTitleStyles = css`
-  float: left;
-`;
-
-const asideDescListDescStyles = css`
-  margin: 0;
-
-  text-align: right;
-  font-weight: bold;
-  color: ${color("gray", 8)};
-`;
-
-const asideMaintainerStyles = css`
-  ${scale(0, 0, 1)}
-  margin: ${rhythm(0, 1)} 0;
-`;
 
 const noReadmeStyles = css`
   margin: 0 0 ${rhythm(1)} 0;
