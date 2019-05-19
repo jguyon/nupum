@@ -23,7 +23,7 @@ export default function LazyPackagePage({ name }) {
     const PackagePage = packagePageResult.module.default;
 
     if (packageInfoResult.data.found) {
-      const packageInfo = packageInfoResult.data.data;
+      const packageInfo = packageInfoResult.data.data.collected;
       return <PackagePage packageInfo={packageInfo} />;
     } else {
       return <PageNotFound />;
