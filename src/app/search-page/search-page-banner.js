@@ -8,10 +8,10 @@ import Banner from "../banner";
 export default function SearchPageBanner({ totalResults, query }) {
   return (
     <Banner>
-      <h2 css={headingStyles}>
+      <h1 css={headingStyles}>
         <strong>{millify(totalResults, { precision: 1 })}</strong> results for "
         {query}"
-      </h2>
+      </h1>
     </Banner>
   );
 }

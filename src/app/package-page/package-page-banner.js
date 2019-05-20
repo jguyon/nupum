@@ -104,9 +104,9 @@ const asideColumnStyles = css`
 
 function Heading({ name, version }) {
   return (
-    <h2 css={headingStyles} data-testid="package-heading">
+    <h1 css={headingStyles} data-testid="package-heading">
       {name} <small css={versionStyles}>{version}</small>
-    </h2>
+    </h1>
   );
 }
 

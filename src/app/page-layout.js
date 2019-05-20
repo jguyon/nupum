@@ -15,11 +15,9 @@ export default function PageLayout({ children }) {
     <>
       <header css={headerStyles}>
         <Container>
-          <h1 css={headingStyles}>
-            <Link css={headingLinkStyles} to="/">
-              <Logo />
-            </Link>
-          </h1>
+          <Link css={homeLinkStyles} to="/">
+            <Logo />
+          </Link>
 
           <SearchForm css={formStyles} />
         </Container>
@@ -45,12 +43,9 @@ const headerStyles = css`
   padding: ${rhythm(1, -1)} 0 calc(${rhythm(1, -1)} - 1px) 0;
 `;
 
-const headingStyles = css`
+const homeLinkStyles = css`
   ${scale(1, 0, compactLineHeight)}
   margin: 0;
-`;
-
-const headingLinkStyles = css`
   text-decoration: none;
 
   &:focus {
