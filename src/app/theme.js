@@ -37,6 +37,11 @@ export function establish() {
     ${normalize()}
     ${establishRhythm()}
 
+    main {
+      // needed by ie11
+      display: block;
+    }
+
     html {
       box-sizing: border-box;
     }
