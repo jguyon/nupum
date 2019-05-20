@@ -1,6 +1,6 @@
-import "./polyfill";
 import React, { StrictMode } from "react";
 import { hydrate } from "react-dom";
+import "./polyfill";
 import { createBrowserHistory } from "history";
 import { createClientModuleCache } from "../module-cache";
 import { createClientResourceCache } from "../resource-cache";
