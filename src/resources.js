@@ -1,4 +1,5 @@
 import invariant from "tiny-invariant";
+import pAny from "p-any";
 import { createResource } from "./resource-cache";
 
 const NPMS_API = "https://api.npms.io/v2";
@@ -63,21 +64,28 @@ export const packageInfo = createResource(async name => {
 });
 
 async function fetchGithubReadme(repository) {
-  let matches;
-  if ((matches = repository.match(/^https:\/\/github.com\/([^/]+)\/([^/]+)/))) {
-    const org = matches[1];
-    const repo = matches[2];
-
-    const response = await fetch(
-      `https://raw.githubusercontent.com/${org}/${repo}/master/README.md`,
-    );
-
-    if (response.status === 200) {
-      return await response.text();
-    } else {
-      return undefined;
-    }
-  } else {
+  try {
+    return await pAny([
+      fetchGithubFile(repository, "README.md"),
+      fetchGithubFile(repository, "readme.md"),
+      fetchGithubFile(repository, "Readme.md"),
+    ]);
+  } catch (error) {
     return undefined;
   }
+}
+
+async function fetchGithubFile(repository, filename) {
+  const matches = repository.match(/^https:\/\/github.com\/([^/]+)\/([^/]+)/);
+  invariant(matches, "expected repository to be a github url");
+
+  const org = matches[1];
+  const repo = matches[2];
+
+  const response = await fetch(
+    `https://raw.githubusercontent.com/${org}/${repo}/master/${filename}`,
+  );
+  invariant(response.status === 200, "expected status to be 200");
+
+  return await response.text();
 }
