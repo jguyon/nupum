@@ -42,7 +42,11 @@ const avatarSize = (() => {
 
 const linkStyles = css`
   color: ${color("gray", 8)};
-  text-decoration: underline transparent;
+
+  text-decoration: none;
+  @supports (text-decoration: underline transparent) {
+    text-decoration: underline transparent;
+  }
 
   transition: text-decoration 0.15s ease-out;
   &:hover {

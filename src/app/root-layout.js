@@ -90,7 +90,10 @@ const footerLinkStyles = css`
 
   transition: text-decoration 0.15s ease-out;
   &:hover {
-    text-decoration: underline transparent;
+    text-decoration: none;
+    @supports (text-decoration: underline transparent) {
+      text-decoration: underline transparent;
+    }
   }
 
   &:focus {

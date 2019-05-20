@@ -176,7 +176,11 @@ const keywordListItemStyles = css`
 
 const keywordListItemLinkStyles = css`
   color: inherit;
-  text-decoration: underline transparent;
+
+  text-decoration: none;
+  @supports (text-decoration: underline transparent) {
+    text-decoration: underline transparent;
+  }
 
   transition: text-decoration 0.15s ease-out;
   &:hover {
@@ -251,7 +255,11 @@ const linkListItemLinkStyles = css`
   text-overflow: ellipsis;
 
   color: ${color(primaryColor, 7)};
-  text-decoration: underline transparent;
+
+  text-decoration: none;
+  @supports (text-decoration: underline transparent) {
+    text-decoration: underline transparent;
+  }
 
   transition: text-decoration 0.15s ease-out;
   &:hover {
