@@ -15,15 +15,19 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -11,16 +11,16 @@
-        <input
-          aria-label="Search query"
-          class="css-1prae3g-inputStyles"
-          name="q"
-          type="search"
--         value="react"
-+         value="  "
-        />
+@@ -14,20 +14,20 @@
+          <input
+            aria-label="Search query"
+            class="css-5wnmzh-inputStyles"
+            name="q"
+            type="search"
+-           value="react"
++           value="  "
+          />
+          <ul
+            class="css-sfu70c-menuStyles-menuCollapsedStyles-SearchForm"
+          />
+        </div>
         <button
 -         aria-disabled="false"
 +         aria-disabled="true"
@@ -42,15 +46,19 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -11,16 +11,16 @@
-        <input
-          aria-label="Search query"
-          class="css-1prae3g-inputStyles"
-          name="q"
-          type="search"
--         value=""
-+         value="react"
-        />
+@@ -14,20 +14,20 @@
+          <input
+            aria-label="Search query"
+            class="css-5wnmzh-inputStyles"
+            name="q"
+            type="search"
+-           value=""
++           value="react"
+          />
+          <ul
+            class="css-sfu70c-menuStyles-menuCollapsedStyles-SearchForm"
+          />
+        </div>
         <button
 -         aria-disabled="true"
 +         aria-disabled="false"

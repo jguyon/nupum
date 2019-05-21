@@ -27,6 +27,29 @@ export const packageSearch = createResource(
   ({ query, from = 0, size = 25 }) => JSON.stringify([query, from, size]),
 );
 
+export const packageSuggestions = createResource(
+  async ({ query, size = 25 }) => {
+    invariant(typeof query === "string", "expected query to be a string");
+    invariant(typeof size === "number", "expected size to be a number");
+
+    const params = new URLSearchParams({
+      q: query,
+      size,
+    });
+    const response = await fetch(
+      `${NPMS_API}/search/suggestions?${params.toString()}`,
+    );
+
+    invariant(
+      response.status === 200,
+      `expected response status to be 200 but got ${response.status}`,
+    );
+
+    return await response.json();
+  },
+  ({ query, size = 25 }) => JSON.stringify([query, size]),
+);
+
 export const packageInfo = createResource(async name => {
   invariant(typeof name === "string", "expected name to be a string");
 
