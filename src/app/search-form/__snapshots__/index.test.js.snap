@@ -15,17 +15,20 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -14,20 +14,20 @@
-          <input
+@@ -19,23 +19,23 @@
             aria-label="Search query"
             class="css-5wnmzh-inputStyles"
             name="q"
+            role="combobox"
             type="search"
 -           value="react"
 +           value="  "
           />
           <ul
+            aria-label="Package suggestions"
             class="css-sfu70c-menuStyles-menuCollapsedStyles-SearchForm"
+            id="search-suggestion-list"
+            role="listbox"
           />
         </div>
         <button
@@ -46,17 +49,20 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -14,20 +14,20 @@
-          <input
+@@ -19,23 +19,23 @@
             aria-label="Search query"
             class="css-5wnmzh-inputStyles"
             name="q"
+            role="combobox"
             type="search"
 -           value=""
 +           value="react"
           />
           <ul
+            aria-label="Package suggestions"
             class="css-sfu70c-menuStyles-menuCollapsedStyles-SearchForm"
+            id="search-suggestion-list"
+            role="listbox"
           />
         </div>
         <button

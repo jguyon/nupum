@@ -25,6 +25,18 @@ export default function useSearchSuggestions(query, selectSuggestion) {
         event.preventDefault();
         dispatch({ type: ACTION_INPUT_PRESS_DOWN });
         break;
+      case "ArrowLeft":
+        dispatch({ type: ACTION_INPUT_PRESS_LEFT });
+        break;
+      case "ArrowRight":
+        dispatch({ type: ACTION_INPUT_PRESS_RIGHT });
+        break;
+      case "Home":
+        dispatch({ type: ACTION_INPUT_PRESS_HOME });
+        break;
+      case "End":
+        dispatch({ type: ACTION_INPUT_PRESS_END });
+        break;
       case "Enter":
         if (menuExpanded && currentIndex !== null) {
           event.preventDefault();
@@ -113,6 +125,10 @@ const ACTION_UPDATE_SUGGESTIONS = Symbol("ACTION_UPDATE_SUGGESTIONS");
 const ACTION_INPUT_BLUR = Symbol("ACTION_INPUT_BLUR");
 const ACTION_INPUT_PRESS_UP = Symbol("ACTION_INPUT_PRESS_UP");
 const ACTION_INPUT_PRESS_DOWN = Symbol("ACTION_INPUT_PRESS_DOWN");
+const ACTION_INPUT_PRESS_LEFT = Symbol("ACTION_INPUT_PRESS_LEFT");
+const ACTION_INPUT_PRESS_RIGHT = Symbol("ACTION_INPUT_PRESS_RIGHT");
+const ACTION_INPUT_PRESS_HOME = Symbol("ACTION_INPUT_PRESS_HOME");
+const ACTION_INPUT_PRESS_END = Symbol("ACTION_INPUT_PRESS_END");
 const ACTION_INPUT_PRESS_ENTER = Symbol("ACTION_INPUT_PRESS_ENTER");
 const ACTION_INPUT_PRESS_ESCAPE = Symbol("ACTION_INPUT_PRESS_ESCAPE");
 const ACTION_ITEM_CLICK = Symbol("ACTION_ITEM_CLICK");
@@ -233,6 +249,16 @@ function reducer(state, action) {
           menuExpanded: suggestions.length > 0,
         };
       }
+    }
+
+    case ACTION_INPUT_PRESS_LEFT:
+    case ACTION_INPUT_PRESS_RIGHT:
+    case ACTION_INPUT_PRESS_HOME:
+    case ACTION_INPUT_PRESS_END: {
+      return {
+        ...state,
+        currentIndex: null,
+      };
     }
 
     case ACTION_ITEM_HOVER: {

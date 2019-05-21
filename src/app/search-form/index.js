@@ -15,6 +15,9 @@ import useHydration from "../use-hydration";
 import useSearchSuggestions from "./use-search-suggestions";
 import Input from "./input";
 
+const SUGGESTION_LIST_ID = "search-suggestion-list";
+const SUGGESTION_LIST_ITEM_ID_PREFIX = "search-suggestion-list-item";
+
 export default function SearchForm(props) {
   const [query, setQuery] = useSearchFormContext();
   const navigate = useNavigate();
@@ -73,7 +76,17 @@ export default function SearchForm(props) {
             autoFocus={inputAutoFocus}
             type="search"
             name="q"
+            role="combobox"
             aria-label="Search query"
+            aria-autocomplete="list"
+            aria-expanded={menuExpanded}
+            aria-haspopup={true}
+            aria-controls={SUGGESTION_LIST_ID}
+            aria-activedescendant={
+              currentIndex === null
+                ? undefined
+                : `${SUGGESTION_LIST_ITEM_ID_PREFIX}-${currentIndex}`
+            }
             value={query}
             onChangeValue={onInputChangeValue}
             onFocus={onInputFocus}
@@ -81,7 +94,12 @@ export default function SearchForm(props) {
             onKeyDown={onInputKeyDown}
           />
 
-          <ul css={[menuStyles, menuExpanded || menuCollapsedStyles]}>
+          <ul
+            css={[menuStyles, menuExpanded || menuCollapsedStyles]}
+            role="listbox"
+            aria-label="Package suggestions"
+            id={SUGGESTION_LIST_ID}
+          >
             {suggestions.map(
               ({ package: { name, description }, highlight }, index) => (
                 <li
@@ -90,6 +108,9 @@ export default function SearchForm(props) {
                     menuItemStyles,
                     index === currentIndex && menuItemSelectedStyles,
                   ]}
+                  role="option"
+                  aria-selected={index === currentIndex}
+                  id={`${SUGGESTION_LIST_ITEM_ID_PREFIX}-${index}`}
                   onClick={() => onItemClick(index)}
                   onMouseMove={() => onItemMouseMove(index)}
                   onMouseDown={onItemMouseDown}
