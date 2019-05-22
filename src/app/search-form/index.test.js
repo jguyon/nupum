@@ -364,14 +364,13 @@ test("changing input value updates suggestions when menu is expanded", () => {
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
   fireEvent.change(input, { target: { value: "react router" } });
 
   const reactRouterSuggestions = fakePackageSuggestions({
-    query: "react router",
     size: SUGGESTIONS_SIZE,
   });
   act(() => {
@@ -403,7 +402,6 @@ test("menu keeps previous suggestions while next suggestions are fetching", () =
   fireEvent.change(input, { target: { value: "react" } });
 
   const reactSuggestions = fakePackageSuggestions({
-    query: "react",
     size: SUGGESTIONS_SIZE,
   });
   act(() => {
@@ -437,7 +435,6 @@ test("menu keeps previous suggestions when fetching next suggestions fails", () 
   fireEvent.change(input, { target: { value: "react" } });
 
   const reactSuggestions = fakePackageSuggestions({
-    query: "react",
     size: SUGGESTIONS_SIZE,
   });
   act(() => {
@@ -482,7 +479,7 @@ test("pressing down arrow key selects first suggestion when menu is expanded wit
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -510,7 +507,7 @@ test("pressing up arrow key selects last suggestion when menu is expanded with n
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -539,7 +536,7 @@ test("pressing down arrow key selects next suggestion when a suggestion is selec
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -568,7 +565,7 @@ test("pressing up arrow key selects previous suggestion when a suggestion is sel
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -598,7 +595,7 @@ test("pressing down arrow key unselects suggestion when last suggestion is selec
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -628,7 +625,7 @@ test("pressing up arrow key unselects suggestion when first suggestion is select
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -657,7 +654,7 @@ test("hovering a suggestion selects it", () => {
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -691,7 +688,7 @@ for (const [key, name] of [
       resourceCache.succeed(
         packageSuggestions,
         { query: "react", size: SUGGESTIONS_SIZE },
-        fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+        fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
       );
     });
 
@@ -721,7 +718,7 @@ test("pressing escape key collapses menu", () => {
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 
@@ -749,7 +746,7 @@ test("leaving input collapses menu", () => {
     resourceCache.succeed(
       packageSuggestions,
       { query: "react", size: SUGGESTIONS_SIZE },
-      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
     );
   });
 

@@ -1,7 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React from "react";
 import { css } from "@emotion/core";
-import PropTypes from "prop-types";
-import invariant from "tiny-invariant";
 import SearchIcon from "react-feather/dist/icons/search";
 import { useNavigate, usePreload, useMatch } from "../../router";
 import {
@@ -12,41 +10,23 @@ import {
   compactLineHeight,
 } from "../theme";
 import useHydration from "../use-hydration";
+import SearchFormProvider, { useSearchFormQuery } from "./search-form-provider";
 import useSearchSuggestions from "./use-search-suggestions";
 import Input from "./input";
 
 const SUGGESTION_LIST_ID = "search-suggestion-list";
 const SUGGESTION_LIST_ITEM_ID_PREFIX = "search-suggestion-list-item";
 
+export { SearchFormProvider };
+
 export default function SearchForm(props) {
-  const [query, setQuery] = useSearchFormContext();
+  const [query, setQuery] = useSearchFormQuery();
   const navigate = useNavigate();
   const preload = usePreload();
-  const inputAutoFocus = !!useMatch("/");
   const isHydrating = useHydration();
-  const {
-    menuExpanded,
-    currentIndex,
-    suggestions,
-    onInputBlur,
-    onInputKeyDown,
-    onItemClick,
-    onItemMouseMove,
-    onItemMouseDown,
-  } = useSearchSuggestions(query, ({ package: { name } }) =>
-    navigate(`/package/${name}`),
-  );
 
   // we want the form to look like it can be used while the js is downloading
   const isSubmitDisabled = !isHydrating && query.trim().length === 0;
-
-  function onInputChangeValue(value) {
-    setQuery(value);
-  }
-
-  function onInputFocus(event) {
-    event.target.select();
-  }
 
   function onFormSubmit(event) {
     event.preventDefault();
@@ -70,63 +50,7 @@ export default function SearchForm(props) {
         action="/search"
         onSubmit={onFormSubmit}
       >
-        <div css={inputContainerStyles}>
-          <Input
-            css={inputStyles}
-            autoFocus={inputAutoFocus}
-            type="search"
-            name="q"
-            role="combobox"
-            aria-label="Search query"
-            aria-autocomplete="list"
-            aria-expanded={menuExpanded}
-            aria-haspopup={true}
-            aria-controls={SUGGESTION_LIST_ID}
-            aria-activedescendant={
-              currentIndex === null
-                ? undefined
-                : `${SUGGESTION_LIST_ITEM_ID_PREFIX}-${currentIndex}`
-            }
-            value={query}
-            onChangeValue={onInputChangeValue}
-            onFocus={onInputFocus}
-            onBlur={onInputBlur}
-            onKeyDown={onInputKeyDown}
-          />
-
-          <ul
-            css={[menuStyles, menuExpanded || menuCollapsedStyles]}
-            role="listbox"
-            aria-label="Package suggestions"
-            id={SUGGESTION_LIST_ID}
-          >
-            {suggestions.map(
-              ({ package: { name, description }, highlight }, index) => (
-                <li
-                  key={name}
-                  css={[
-                    menuItemStyles,
-                    index === currentIndex && menuItemSelectedStyles,
-                  ]}
-                  role="option"
-                  aria-selected={index === currentIndex}
-                  id={`${SUGGESTION_LIST_ITEM_ID_PREFIX}-${index}`}
-                  onClick={() => onItemClick(index)}
-                  onMouseMove={() => onItemMouseMove(index)}
-                  onMouseDown={onItemMouseDown}
-                >
-                  <h3
-                    css={menuItemHeadingStyles}
-                    dangerouslySetInnerHTML={{ __html: highlight }}
-                  />
-                  {description && (
-                    <p css={menuItemDescriptionStyles}>{description}</p>
-                  )}
-                </li>
-              ),
-            )}
-          </ul>
-        </div>
+        <SearchInputWithSuggestions query={query} setQuery={setQuery} />
 
         <button
           css={[submitStyles, isSubmitDisabled && submitDisabledStyles]}
@@ -139,6 +63,128 @@ export default function SearchForm(props) {
         </button>
       </form>
     </div>
+  );
+}
+
+function SearchInputWithSuggestions({ query, setQuery }) {
+  const navigate = useNavigate();
+  const {
+    menuExpanded,
+    currentIndex,
+    suggestions,
+    onInputBlur,
+    onInputKeyDown,
+    onItemClick,
+    onItemMouseMove,
+    onItemMouseDown,
+  } = useSearchSuggestions(query, ({ package: { name } }) =>
+    navigate(`/package/${name}`),
+  );
+
+  return (
+    <div css={inputContainerStyles}>
+      <SearchInput
+        menuExpanded={menuExpanded}
+        currentIndex={currentIndex}
+        value={query}
+        onChangeValue={setQuery}
+        onBlur={onInputBlur}
+        onKeyDown={onInputKeyDown}
+      />
+
+      <SearchSuggestions
+        menuExpanded={menuExpanded}
+        currentIndex={currentIndex}
+        suggestions={suggestions}
+        onItemClick={onItemClick}
+        onItemMouseMove={onItemMouseMove}
+        onItemMouseDown={onItemMouseDown}
+      />
+    </div>
+  );
+}
+
+function SearchInput({
+  menuExpanded,
+  currentIndex,
+  value,
+  onChangeValue,
+  onBlur,
+  onKeyDown,
+}) {
+  const inputAutoFocus = !!useMatch("/");
+
+  function onFocus(event) {
+    event.target.select();
+  }
+
+  return (
+    <Input
+      css={inputStyles}
+      autoFocus={inputAutoFocus}
+      type="search"
+      name="q"
+      role="combobox"
+      aria-label="Search query"
+      aria-autocomplete="list"
+      aria-expanded={menuExpanded}
+      aria-haspopup={true}
+      aria-controls={SUGGESTION_LIST_ID}
+      aria-activedescendant={
+        currentIndex === null
+          ? undefined
+          : `${SUGGESTION_LIST_ITEM_ID_PREFIX}-${currentIndex}`
+      }
+      value={value}
+      onChangeValue={onChangeValue}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
+    />
+  );
+}
+
+function SearchSuggestions({
+  menuExpanded,
+  currentIndex,
+  suggestions,
+  onItemClick,
+  onItemMouseMove,
+  onItemMouseDown,
+}) {
+  return (
+    <ul
+      css={[menuStyles, menuExpanded || menuCollapsedStyles]}
+      role="listbox"
+      aria-label="Package suggestions"
+      id={SUGGESTION_LIST_ID}
+    >
+      {suggestions.map(
+        ({ package: { name, description }, highlight }, index) => (
+          <li
+            key={name}
+            css={[
+              menuItemStyles,
+              index === currentIndex && menuItemSelectedStyles,
+            ]}
+            role="option"
+            aria-selected={index === currentIndex}
+            id={`${SUGGESTION_LIST_ITEM_ID_PREFIX}-${index}`}
+            onClick={() => onItemClick(index)}
+            onMouseMove={() => onItemMouseMove(index)}
+            onMouseDown={onItemMouseDown}
+          >
+            <h3
+              css={menuItemHeadingStyles}
+              dangerouslySetInnerHTML={{ __html: highlight }}
+            />
+            {description && (
+              <p css={menuItemDescriptionStyles}>{description}</p>
+            )}
+          </li>
+        ),
+      )}
+    </ul>
   );
 }
 
@@ -265,40 +311,3 @@ const submitIconStyles = css`
   width: ${rhythm(1)};
   height: ${rhythm(1)};
 `;
-
-const SearchFormContext = createContext(null);
-
-function useSearchFormContext() {
-  const context = useContext(SearchFormContext);
-  invariant(
-    context,
-    "expected <SearchForm/> to be wrapped in a <SearchFormProvider/>",
-  );
-
-  return context;
-}
-
-export function SearchFormProvider({ children }) {
-  const [query, setQuery] = useState(useSearchQuery() || "");
-
-  return (
-    <SearchFormContext.Provider value={[query, setQuery]}>
-      {children}
-    </SearchFormContext.Provider>
-  );
-}
-
-SearchFormProvider.propTypes = {
-  children: PropTypes.node,
-};
-
-function useSearchQuery() {
-  const match = useMatch("/search");
-
-  if (match) {
-    const params = new URLSearchParams(match.location.search);
-    return params.get("q");
-  } else {
-    return null;
-  }
-}

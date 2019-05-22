@@ -5965,7 +5965,7 @@ Snapshot Diff:
           />
           <ul
             aria-label="Package suggestions"
-            class="css-sfu70c-menuStyles-menuCollapsedStyles-SearchForm"
+            class="css-qa2mum-menuStyles-menuCollapsedStyles-SearchSuggestions"
             id="search-suggestion-list"
             role="listbox"
           />
@@ -5999,7 +5999,7 @@ Snapshot Diff:
           />
           <ul
             aria-label="Package suggestions"
-            class="css-sfu70c-menuStyles-menuCollapsedStyles-SearchForm"
+            class="css-qa2mum-menuStyles-menuCollapsedStyles-SearchSuggestions"
             id="search-suggestion-list"
             role="listbox"
           />
