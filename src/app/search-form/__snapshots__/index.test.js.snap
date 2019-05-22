@@ -499,6 +499,263 @@ exports[`changing input value updates suggestions when menu is expanded 2`] = `
 </ul>
 `;
 
+exports[`changing input value when a suggestion is selected unselects it 1`] = `
+.emotion-0 {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem 0 1.5rem;
+  border: 1px solid #adb5bd;
+  border-right-width: 0;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+.emotion-0:focus {
+  outline: none;
+}
+
+.emotion-0::-ms-clear,
+.emotion-0::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.emotion-0::-webkit-search-decoration,
+.emotion-0::-webkit-search-cancel-button,
+.emotion-0::-webkit-search-results-button,
+.emotion-0::-webkit-search-results-decoration {
+  display: none;
+}
+
+<input
+  aria-autocomplete="list"
+  aria-controls="search-suggestion-list"
+  aria-expanded="true"
+  aria-haspopup="true"
+  aria-label="Search query"
+  class="emotion-0"
+  name="q"
+  role="combobox"
+  type="search"
+  value="react"
+/>
+`;
+
+exports[`changing input value when a suggestion is selected unselects it 2`] = `
+.emotion-2 {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  -webkit-transition: background-color 0.15s ease-out;
+  transition: background-color 0.15s ease-out;
+}
+
+.emotion-0 {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  margin: 0;
+  color: #343a40;
+}
+
+.emotion-1 {
+  font-size: 0.757858283255199rem;
+  line-height: 1rem;
+  margin: 0;
+  color: #868e96;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.emotion-29 {
+  background-color: #ffffff;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  overflow: hidden;
+  position: absolute;
+  top: calc(3rem - 1px);
+  left: calc(1rem - 1px);
+  right: calc(0.5rem - 1px);
+  list-style-type: none;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+<ul
+  aria-label="Package suggestions"
+  class="emotion-29"
+  id="search-suggestion-list"
+  role="listbox"
+>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-0"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      quibusdam-hic
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Voluptatem inventore ut quisquam fugiat itaque non alias.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-1"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      distinctio
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Voluptas sunt sunt adipisci occaecati quae sapiente voluptas nulla iure.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-2"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      fuga-consequatur-exercitationem-harum-odit
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Alias illum aliquid eos corporis consequatur.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-3"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      quia
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Illum voluptatibus iste sint.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-4"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      nemo
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Quisquam expedita nemo similique perspiciatis explicabo molestias consequatur quidem.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-5"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      iste-qui
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Cumque impedit ea omnis.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-6"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      in-enim-et-odio
+    </h3>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-7"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      praesentium
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Suscipit quasi expedita voluptatem eum nulla soluta voluptatem.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-8"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      aut
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Non facere rerum autem dolor temporibus fugit sunt.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-9"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      ut-iste-ipsa-quia-necessitatibus
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Blanditiis asperiores et optio qui.
+    </p>
+  </li>
+</ul>
+`;
+
 exports[`clicking on a suggestion navigates to package page 1`] = `
 .emotion-0 {
   width: 100%;
@@ -6015,4 +6272,255 @@ Snapshot Diff:
           <svg
             class="css-1ijt0qx-submitIconStyles"
             fill="none"
+`;
+
+exports[`suggestion selected before next suggestions are fetched is kept selected once they are fetched 1`] = `
+.emotion-0 {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem 0 1.5rem;
+  border: 1px solid #adb5bd;
+  border-right-width: 0;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+.emotion-0:focus {
+  outline: none;
+}
+
+.emotion-0::-ms-clear,
+.emotion-0::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.emotion-0::-webkit-search-decoration,
+.emotion-0::-webkit-search-cancel-button,
+.emotion-0::-webkit-search-results-button,
+.emotion-0::-webkit-search-results-decoration {
+  display: none;
+}
+
+<input
+  aria-activedescendant="search-suggestion-list-item-2"
+  aria-autocomplete="list"
+  aria-controls="search-suggestion-list"
+  aria-expanded="true"
+  aria-haspopup="true"
+  aria-label="Search query"
+  class="emotion-0"
+  name="q"
+  role="combobox"
+  type="search"
+  value="react router"
+/>
+`;
+
+exports[`suggestion selected before next suggestions are fetched is kept selected once they are fetched 2`] = `
+.emotion-2 {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  -webkit-transition: background-color 0.15s ease-out;
+  transition: background-color 0.15s ease-out;
+}
+
+.emotion-0 {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  margin: 0;
+  color: #343a40;
+}
+
+.emotion-1 {
+  font-size: 0.757858283255199rem;
+  line-height: 1rem;
+  margin: 0;
+  color: #868e96;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.emotion-26 {
+  background-color: #ffffff;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  overflow: hidden;
+  position: absolute;
+  top: calc(3rem - 1px);
+  left: calc(1rem - 1px);
+  right: calc(0.5rem - 1px);
+  list-style-type: none;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.emotion-7 {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  -webkit-transition: background-color 0.15s ease-out;
+  transition: background-color 0.15s ease-out;
+  background-color: #f1f3f5;
+}
+
+<ul
+  aria-label="Package suggestions"
+  class="emotion-26"
+  id="search-suggestion-list"
+  role="listbox"
+>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-0"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      hic-esse-est-culpa-laborum
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Vel reprehenderit ut eum voluptas similique quo veritatis.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-1"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      qui-repellendus-voluptates
+    </h3>
+  </li>
+  <li
+    aria-selected="true"
+    class="emotion-7"
+    id="search-suggestion-list-item-2"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      eaque-sunt
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Sed quis molestiae atque.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-3"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      enim
+    </h3>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-4"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      voluptas-beatae-ab-cupiditate-sit
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Qui non porro iste sed sunt voluptatum minima.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-5"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      et-molestiae
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Voluptates ea ipsam debitis officia reprehenderit nobis.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-6"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      dolorem-sit
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Deserunt recusandae aut error sint optio temporibus et voluptatem.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-7"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      enim-occaecati-tempora-deserunt-est
+    </h3>
+    <p
+      class="emotion-1"
+    >
+      Laudantium ut deleniti id sint.
+    </p>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-8"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      voluptas
+    </h3>
+  </li>
+  <li
+    aria-selected="false"
+    class="emotion-2"
+    id="search-suggestion-list-item-9"
+    role="option"
+  >
+    <h3
+      class="emotion-0"
+    >
+      saepe-voluptates-illum-fuga
+    </h3>
+  </li>
+</ul>
 `;

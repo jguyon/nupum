@@ -666,6 +666,71 @@ test("hovering a suggestion selects it", () => {
   expect(menu).toMatchSnapshot();
 });
 
+test("changing input value when a suggestion is selected unselects it", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.change(input, "react router");
+
+  expect(input).not.toHaveAttribute("aria-activedescendant");
+  expect(input).toMatchSnapshot();
+  expect(menu.children[0]).toHaveAttribute("aria-selected", "false");
+  expect(menu).toMatchSnapshot();
+});
+
+test("suggestion selected before next suggestions are fetched is kept selected once they are fetched", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.change(input, { target: { value: "react router" } });
+  fireEvent.mouseMove(menu.children[2]);
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react router", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-activedescendant", menu.children[2].id);
+  expect(input).toMatchSnapshot();
+  expect(menu.children[2]).toHaveAttribute("aria-selected", "true");
+  expect(menu).toMatchSnapshot();
+});
+
 for (const [key, name] of [
   ["ArrowLeft", "left arrow"],
   ["ArrowRight", "right arrow"],
