@@ -6,9 +6,13 @@ import {
   fireEvent,
   act,
 } from "../../test/react";
+import { packageSuggestions } from "../../resources";
+import { fakePackageSuggestions } from "../../test/fake";
 import SearchForm, { SearchFormProvider } from ".";
 
+const SUGGESTIONS_SIZE = 10;
 const INPUT_LABEL = "Search query";
+const SUGGESTIONS_LABEL = "Package suggestions";
 const SUBMIT_LABEL = "Search";
 const FORM_TEST_ID = "search-form";
 
@@ -20,6 +24,7 @@ test("input is initialized with empty value by default", () => {
   );
 
   expect(getByLabelText(INPUT_LABEL)).toHaveAttribute("value", "");
+  expect();
 });
 
 test("input is initialized with correct value when on search page", () => {
@@ -165,4 +170,658 @@ test("hovering submit button does not preload search page with empty input", () 
   fireEvent.mouseEnter(getByLabelText(SUBMIT_LABEL));
 
   expect(preload).not.toHaveBeenCalled();
+});
+
+test("menu is initialized as collapsed", () => {
+  const history = createMemoryHistory({ initialEntries: ["/search?q=react"] });
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+    { history },
+  );
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
+});
+
+test("changing input value expands menu when it is not expanded", () => {
+  const history = createMemoryHistory({ initialEntries: ["/search?q=react"] });
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+    { history },
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react router" } });
+
+  const reactRouterSuggestions = fakePackageSuggestions({
+    size: SUGGESTIONS_SIZE,
+  });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react router", size: SUGGESTIONS_SIZE },
+      reactRouterSuggestions,
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-expanded", "true");
+  expect(input).toMatchSnapshot();
+  expect(menu).not.toHaveStyle("display: none");
+  reactRouterSuggestions.forEach(({ package: { name } }, i) => {
+    expect(menu.children[i]).toHaveTextContent(name);
+  });
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing down arrow key expands menu when it is not expanded", () => {
+  const history = createMemoryHistory({ initialEntries: ["/search?q=react"] });
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+    { history },
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+
+  const reactSuggestions = fakePackageSuggestions({ size: SUGGESTIONS_SIZE });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-expanded", "true");
+  expect(input).toMatchSnapshot();
+  expect(menu).not.toHaveStyle("display: none");
+  reactSuggestions.forEach(({ package: { name } }, i) => {
+    expect(menu.children[i]).toHaveTextContent(name);
+  });
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing up arrow key expands menu when it is not expanded", () => {
+  const history = createMemoryHistory({ initialEntries: ["/search?q=react"] });
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+    { history },
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+
+  const reactSuggestions = fakePackageSuggestions({ size: SUGGESTIONS_SIZE });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-expanded", "true");
+  expect(input).toMatchSnapshot();
+  expect(menu).not.toHaveStyle("display: none");
+  reactSuggestions.forEach(({ package: { name } }, i) => {
+    expect(menu.children[i]).toHaveTextContent(name);
+  });
+  expect(menu).toMatchSnapshot();
+});
+
+test("menu does not expand when input is empty", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "  " } });
+
+  expect(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "  ", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
+    );
+  }).toThrowErrorMatchingSnapshot();
+
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
+});
+
+test("menu does not expand when there are no suggestions", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      [],
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
+});
+
+test("changing input value updates suggestions when menu is expanded", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.change(input, { target: { value: "react router" } });
+
+  const reactRouterSuggestions = fakePackageSuggestions({
+    query: "react router",
+    size: SUGGESTIONS_SIZE,
+  });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react router", size: SUGGESTIONS_SIZE },
+      reactRouterSuggestions,
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-expanded", "true");
+  expect(input).toMatchSnapshot();
+  reactRouterSuggestions.forEach(({ package: { name } }, i) => {
+    expect(menu.children[i]).toHaveTextContent(name);
+  });
+  expect(menu).toMatchSnapshot();
+});
+
+test("menu keeps previous suggestions while next suggestions are fetching", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  const reactSuggestions = fakePackageSuggestions({
+    query: "react",
+    size: SUGGESTIONS_SIZE,
+  });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  fireEvent.change(input, { target: { value: "react router" } });
+
+  expect(input).toHaveAttribute("aria-expanded", "true");
+  expect(input).toMatchSnapshot();
+  reactSuggestions.forEach(({ package: { name } }, i) => {
+    expect(menu.children[i]).toHaveTextContent(name);
+  });
+  expect(menu).toMatchSnapshot();
+});
+
+test("menu keeps previous suggestions when fetching next suggestions fails", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  const reactSuggestions = fakePackageSuggestions({
+    query: "react",
+    size: SUGGESTIONS_SIZE,
+  });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  fireEvent.change(input, { target: { value: "react router" } });
+
+  act(() => {
+    resourceCache.fail(
+      packageSuggestions,
+      { query: "react router", size: SUGGESTIONS_SIZE },
+      new Error("error fetching suggestions"),
+    );
+  });
+
+  expect(input).toHaveAttribute("aria-expanded", "true");
+  expect(input).toMatchSnapshot();
+  reactSuggestions.forEach(({ package: { name } }, i) => {
+    expect(menu.children[i]).toHaveTextContent(name);
+  });
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing down arrow key selects first suggestion when menu is expanded with no selected suggestion", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+
+  expect(input).toHaveAttribute("aria-activedescendant", menu.children[0].id);
+  expect(input).toMatchSnapshot();
+  expect(menu.children[0]).toHaveAttribute("aria-selected", "true");
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing up arrow key selects last suggestion when menu is expanded with no selected suggestion", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+
+  const i = SUGGESTIONS_SIZE - 1;
+  expect(input).toHaveAttribute("aria-activedescendant", menu.children[i].id);
+  expect(input).toMatchSnapshot();
+  expect(menu.children[i]).toHaveAttribute("aria-selected", "true");
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing down arrow key selects next suggestion when a suggestion is selected", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+
+  expect(input).toHaveAttribute("aria-activedescendant", menu.children[1].id);
+  expect(input).toMatchSnapshot();
+  expect(menu.children[1]).toHaveAttribute("aria-selected", "true");
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing up arrow key selects previous suggestion when a suggestion is selected", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+
+  const i = SUGGESTIONS_SIZE - 2;
+  expect(input).toHaveAttribute("aria-activedescendant", menu.children[i].id);
+  expect(input).toMatchSnapshot();
+  expect(menu.children[i]).toHaveAttribute("aria-selected", "true");
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing down arrow key unselects suggestion when last suggestion is selected", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+
+  const i = SUGGESTIONS_SIZE - 1;
+  expect(input).not.toHaveAttribute("aria-activedescendant");
+  expect(input).toMatchSnapshot();
+  expect(menu.children[i]).toHaveAttribute("aria-selected", "false");
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing up arrow key unselects suggestion when first suggestion is selected", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+
+  expect(input).not.toHaveAttribute("aria-activedescendant");
+  expect(input).toMatchSnapshot();
+  expect(menu.children[0]).toHaveAttribute("aria-selected", "false");
+  expect(menu).toMatchSnapshot();
+});
+
+test("hovering a suggestion selects it", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.mouseMove(menu.children[1]);
+
+  expect(input).toHaveAttribute("aria-activedescendant", menu.children[1].id);
+  expect(input).toMatchSnapshot();
+  expect(menu.children[1]).toHaveAttribute("aria-selected", "true");
+  expect(menu).toMatchSnapshot();
+});
+
+for (const [key, name] of [
+  ["ArrowLeft", "left arrow"],
+  ["ArrowRight", "right arrow"],
+  ["Home", "home"],
+  ["End", "end"],
+]) {
+  test(`pressing ${name} key when a suggestion is selected unselects it`, () => {
+    const { resourceCache, getByLabelText } = renderWithContext(
+      <SearchFormProvider>
+        <SearchForm />
+      </SearchFormProvider>,
+    );
+
+    const input = getByLabelText(INPUT_LABEL);
+    const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+    fireEvent.change(input, { target: { value: "react" } });
+
+    act(() => {
+      resourceCache.succeed(
+        packageSuggestions,
+        { query: "react", size: SUGGESTIONS_SIZE },
+        fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+      );
+    });
+
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.keyDown(input, { key });
+
+    expect(input).not.toHaveAttribute("aria-activedescendant");
+    expect(input).toMatchSnapshot();
+    expect(menu.children[0]).toHaveAttribute("aria-selected", "false");
+    expect(menu).toMatchSnapshot();
+  });
+}
+
+test("pressing escape key collapses menu", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "Escape" });
+
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
+});
+
+test("leaving input collapses menu", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ query: "react", size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.blur(input);
+
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
+});
+
+test("pressing enter key when a suggestion is selected navigates to package page", () => {
+  const { history, resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  const reactSuggestions = fakePackageSuggestions({ size: SUGGESTIONS_SIZE });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+  fireEvent.keyDown(input, { key: "Enter" });
+
+  expect(history.location.pathname).toBe(
+    `/package/${reactSuggestions[0].package.name}`,
+  );
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
+});
+
+test("clicking on a suggestion navigates to package page", () => {
+  const { history, resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+  const menu = getByLabelText(SUGGESTIONS_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  const reactSuggestions = fakePackageSuggestions({ size: SUGGESTIONS_SIZE });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  fireEvent.click(menu.children[1]);
+
+  expect(history.location.pathname).toBe(
+    `/package/${reactSuggestions[1].package.name}`,
+  );
+  expect(input).toHaveAttribute("aria-expanded", "false");
+  expect(input).toMatchSnapshot();
+  expect(menu).toHaveStyle("display: none");
+  expect(menu).toMatchSnapshot();
 });

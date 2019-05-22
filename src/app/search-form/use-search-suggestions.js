@@ -214,7 +214,7 @@ function reducer(state, action) {
       } else {
         return {
           ...state,
-          menuExpanded: suggestions.length > 0,
+          menuExpanded: true,
         };
       }
     }
@@ -246,7 +246,7 @@ function reducer(state, action) {
       } else {
         return {
           ...state,
-          menuExpanded: suggestions.length > 0,
+          menuExpanded: true,
         };
       }
     }

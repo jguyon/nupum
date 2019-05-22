@@ -5,11 +5,62 @@ beforeEach(() => {
 });
 
 export function fakePackageSearch({ size = 25 } = {}) {
-  const publisher = fakeUser();
-
   return {
     total: faker.random.number({ min: size }),
-    results: Array.from({ length: size }).map(() => ({
+    results: Array.from({ length: size }).map(() => {
+      const publisher = fakeUser();
+
+      return {
+        searchScore: faker.random.number({ precision: 0.01 }),
+        score: {
+          final: fakeScore(),
+          detail: {
+            quality: fakeScore(),
+            popularity: fakeScore(),
+            maintenance: fakeScore(),
+          },
+        },
+        package: {
+          name: fakeSlug(),
+          scope: "unscoped",
+          version: faker.system.semver(),
+          description: faker.random.boolean()
+            ? faker.lorem.sentence()
+            : undefined,
+          keywords: faker.random.boolean()
+            ? Array.from({ length: faker.random.number(9) }).map(() =>
+                faker.lorem.word(),
+              )
+            : undefined,
+          date: faker.date.past().toJSON(),
+          links: {
+            npm: faker.internet.url(),
+            homepage: faker.random.boolean() ? faker.internet.url() : undefined,
+            repository: faker.random.boolean()
+              ? faker.internet.url()
+              : undefined,
+            bugs: faker.random.boolean() ? faker.internet.url() : undefined,
+          },
+          publisher,
+          maintainers: [
+            publisher,
+            ...Array.from({ length: faker.random.number(10) }).map(() =>
+              fakeUser(),
+            ),
+          ],
+        },
+      };
+    }),
+  };
+}
+
+export function fakePackageSuggestions({ size = 25 } = {}) {
+  return Array.from({ length: size }).map(() => {
+    const name = fakeSlug();
+    const publisher = fakeUser();
+
+    return {
+      highlight: name,
       searchScore: faker.random.number({ precision: 0.01 }),
       score: {
         final: fakeScore(),
@@ -20,7 +71,7 @@ export function fakePackageSearch({ size = 25 } = {}) {
         },
       },
       package: {
-        name: fakeSlug(),
+        name,
         scope: "unscoped",
         version: faker.system.semver(),
         description: faker.random.boolean()
@@ -39,12 +90,15 @@ export function fakePackageSearch({ size = 25 } = {}) {
           bugs: faker.random.boolean() ? faker.internet.url() : undefined,
         },
         publisher,
-        maintainers: Array.from({ length: faker.random.number(10) }).map(() =>
-          fakeUser(),
-        ),
+        maintainers: [
+          publisher,
+          ...Array.from({ length: faker.random.number(9) }).map(() =>
+            fakeUser(),
+          ),
+        ],
       },
-    })),
-  };
+    };
+  });
 }
 
 export function fakePackageInfo() {
