@@ -1,15 +1,32 @@
-import { useState, useReducer, useMemo } from "react";
+import { useState, useReducer, useMemo, useEffect } from "react";
 import invariant from "tiny-invariant";
 import { useResource, RESOURCE_SUCCESS } from "../../resource-cache";
 import { packageSuggestions } from "../../resources";
 
 const SUGGESTIONS_SIZE = 10;
 
-export default function useSearchSuggestions(query, selectSuggestion) {
+export default function useSearchSuggestions({ query, onSelect, onGoTo }) {
+  invariant(typeof query === "string", "expected query to be a string");
+  invariant(
+    typeof onSelect === "function",
+    "expected onSelect to be a function",
+  );
+  invariant(typeof onGoTo === "function", "expected onGoTo to be a function");
+
   const [
     { menuExpanded, currentIndex, suggestions },
     dispatch,
   ] = useAutoCompleteState(useSuggestions(query));
+
+  useEffect(
+    () => {
+      if (currentIndex !== null) {
+        onSelect(suggestions[currentIndex]);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentIndex, suggestions],
+  );
 
   function onInputBlur() {
     dispatch({ type: ACTION_INPUT_BLUR });
@@ -41,7 +58,7 @@ export default function useSearchSuggestions(query, selectSuggestion) {
         if (menuExpanded && currentIndex !== null) {
           event.preventDefault();
           dispatch({ type: ACTION_INPUT_PRESS_ENTER });
-          selectSuggestion(suggestions[currentIndex]);
+          onGoTo(suggestions[currentIndex]);
         }
         break;
       case "Escape":
@@ -57,7 +74,7 @@ export default function useSearchSuggestions(query, selectSuggestion) {
   function onItemClick(index) {
     if (index >= 0 && index < suggestions.length) {
       dispatch({ type: ACTION_ITEM_CLICK });
-      selectSuggestion(suggestions[index]);
+      onGoTo(suggestions[index]);
     }
   }
 

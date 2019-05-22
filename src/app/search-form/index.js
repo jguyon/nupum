@@ -68,6 +68,7 @@ export default function SearchForm(props) {
 
 function SearchInputWithSuggestions({ query, setQuery }) {
   const navigate = useNavigate();
+  const preload = usePreload();
   const {
     menuExpanded,
     currentIndex,
@@ -77,9 +78,11 @@ function SearchInputWithSuggestions({ query, setQuery }) {
     onItemClick,
     onItemMouseMove,
     onItemMouseDown,
-  } = useSearchSuggestions(query, ({ package: { name } }) =>
-    navigate(`/package/${name}`),
-  );
+  } = useSearchSuggestions({
+    query,
+    onSelect: ({ package: { name } }) => preload(`/package/${name}`),
+    onGoTo: ({ package: { name } }) => navigate(`/package/${name}`),
+  });
 
   return (
     <div css={inputContainerStyles}>

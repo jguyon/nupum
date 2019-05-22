@@ -887,3 +887,46 @@ test("clicking on a suggestion navigates to package page", () => {
   expect(menu).toHaveStyle("display: none");
   expect(menu).toMatchSnapshot();
 });
+
+test("selecting a suggestion preloads the package page", () => {
+  const preload = jest.fn(() => Promise.resolve());
+  const { resourceCache, getByLabelText } = renderRoutesWithContext([
+    {
+      path: "/",
+      render: () => (
+        <SearchFormProvider>
+          <SearchForm />
+        </SearchFormProvider>
+      ),
+    },
+    {
+      path: "/package/:name",
+      preload,
+      render: () => "package",
+    },
+  ]);
+
+  const input = getByLabelText(INPUT_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  const reactSuggestions = fakePackageSuggestions({ size: SUGGESTIONS_SIZE });
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      reactSuggestions,
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+
+  expect(preload).toHaveBeenCalledTimes(1);
+  expect(preload).toHaveBeenCalledWith({
+    action: "PRELOAD",
+    location: createLocation(`/package/${reactSuggestions[0].package.name}`),
+    params: {
+      name: reactSuggestions[0].package.name,
+    },
+  });
+});
