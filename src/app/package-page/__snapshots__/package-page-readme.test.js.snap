@@ -1,0 +1,1120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`code is shown without highlighting while language is fetching 1`] = `
+.emotion-0 p {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 h1,
+.emotion-0 h2,
+.emotion-0 h3,
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  margin: 0 0 1.5rem 0;
+  color: #343a40;
+}
+
+.emotion-0 h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.emotion-0 h2 {
+  font-size: 1.515716566510398rem;
+  line-height: 2rem;
+}
+
+.emotion-0 h3 {
+  font-size: 1.3195079107728942rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 blockquote {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 calc(1.5rem - 2px);
+  border-left: solid #dee2e6;
+}
+
+.emotion-0 ul,
+.emotion-0 ol {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 2.5rem;
+}
+
+.emotion-0 dl {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 dd {
+  margin-left: 1.5rem;
+}
+
+.emotion-0 hr {
+  border: 0;
+  background-color: #dee2e6;
+  height: 1px;
+  margin: 0 0 calc(1.5rem - 1px) 0;
+}
+
+.emotion-0 table {
+  margin: 0 0 1.5rem 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.emotion-0 td,
+.emotion-0 th {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.5rem 0.5rem calc(0.5rem - 1px) 0.5rem;
+}
+
+.emotion-0 td:first-of-type,
+.emotion-0 th:first-of-type {
+  padding-left: 0;
+}
+
+.emotion-0 td:last-of-type,
+.emotion-0 th:last-of-type {
+  padding-right: 0;
+}
+
+.emotion-0 img {
+  max-width: 100%;
+}
+
+.emotion-0 a {
+  color: #d6336c;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-transition: text-decoration 0.15s ease-out;
+  transition: text-decoration 0.15s ease-out;
+}
+
+@supports (-webkit-text-decoration:underline transparent) or (text-decoration:underline transparent) {
+  .emotion-0 a {
+    -webkit-text-decoration: underline transparent;
+    text-decoration: underline transparent;
+  }
+}
+
+.emotion-0 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.emotion-0 a:focus {
+  outline: 1px dotted currentColor;
+}
+
+.emotion-0 pre {
+  background-color: #f8f9fa;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  padding: calc(0.5rem - 1px);
+  margin: 0 0 1.5rem 0;
+  overflow-y: auto;
+}
+
+.emotion-0 pre,
+.emotion-0 code {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  font-family: nupum-mono,monospace;
+  color: #495057;
+}
+
+.emotion-0 code .token.comment,
+.emotion-0 code .token.prolog,
+.emotion-0 code .token.doctype,
+.emotion-0 code .token.cdata {
+  color: #868e96;
+}
+
+.emotion-0 code .token.property,
+.emotion-0 code .token.tag,
+.emotion-0 code .token.boolean,
+.emotion-0 code .token.number,
+.emotion-0 code .token.constant,
+.emotion-0 code .token.symbol,
+.emotion-0 code .token.deleted {
+  color: #9c36b5;
+}
+
+.emotion-0 code .token.selector,
+.emotion-0 code .token.attr-name,
+.emotion-0 code .token.string,
+.emotion-0 code .token.char,
+.emotion-0 code .token.regex,
+.emotion-0 code .token.builtin,
+.emotion-0 code .token.inserted {
+  color: #099268;
+}
+
+.emotion-0 code .token.operator,
+.emotion-0 code .token.entity,
+.emotion-0 code .token.url,
+.emotion-0 code .language-css .token.string,
+.emotion-0 code .style .token.string {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.atrule,
+.emotion-0 code .token.attr-value,
+.emotion-0 code .token.keyword {
+  color: #c2255c;
+}
+
+.emotion-0 code .token.function,
+.emotion-0 code .token.class-name {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.important {
+  color: #e03131;
+}
+
+.emotion-0 code .token.important,
+.emotion-0 code .token.bold {
+  font-weight: bold;
+}
+
+.emotion-0 code .token.italic {
+  font-style: italic;
+}
+
+.emotion-0 code .token.entity {
+  cursor: help;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    <pre>
+      <code
+        class="language-js"
+      >
+        const add = (a, b) =&gt; a + b;
+      </code>
+    </pre>
+  </div>
+</div>
+`;
+
+exports[`code is shown without syntax highlighting when fetching language fails 1`] = `
+.emotion-0 p {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 h1,
+.emotion-0 h2,
+.emotion-0 h3,
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  margin: 0 0 1.5rem 0;
+  color: #343a40;
+}
+
+.emotion-0 h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.emotion-0 h2 {
+  font-size: 1.515716566510398rem;
+  line-height: 2rem;
+}
+
+.emotion-0 h3 {
+  font-size: 1.3195079107728942rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 blockquote {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 calc(1.5rem - 2px);
+  border-left: solid #dee2e6;
+}
+
+.emotion-0 ul,
+.emotion-0 ol {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 2.5rem;
+}
+
+.emotion-0 dl {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 dd {
+  margin-left: 1.5rem;
+}
+
+.emotion-0 hr {
+  border: 0;
+  background-color: #dee2e6;
+  height: 1px;
+  margin: 0 0 calc(1.5rem - 1px) 0;
+}
+
+.emotion-0 table {
+  margin: 0 0 1.5rem 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.emotion-0 td,
+.emotion-0 th {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.5rem 0.5rem calc(0.5rem - 1px) 0.5rem;
+}
+
+.emotion-0 td:first-of-type,
+.emotion-0 th:first-of-type {
+  padding-left: 0;
+}
+
+.emotion-0 td:last-of-type,
+.emotion-0 th:last-of-type {
+  padding-right: 0;
+}
+
+.emotion-0 img {
+  max-width: 100%;
+}
+
+.emotion-0 a {
+  color: #d6336c;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-transition: text-decoration 0.15s ease-out;
+  transition: text-decoration 0.15s ease-out;
+}
+
+@supports (-webkit-text-decoration:underline transparent) or (text-decoration:underline transparent) {
+  .emotion-0 a {
+    -webkit-text-decoration: underline transparent;
+    text-decoration: underline transparent;
+  }
+}
+
+.emotion-0 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.emotion-0 a:focus {
+  outline: 1px dotted currentColor;
+}
+
+.emotion-0 pre {
+  background-color: #f8f9fa;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  padding: calc(0.5rem - 1px);
+  margin: 0 0 1.5rem 0;
+  overflow-y: auto;
+}
+
+.emotion-0 pre,
+.emotion-0 code {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  font-family: nupum-mono,monospace;
+  color: #495057;
+}
+
+.emotion-0 code .token.comment,
+.emotion-0 code .token.prolog,
+.emotion-0 code .token.doctype,
+.emotion-0 code .token.cdata {
+  color: #868e96;
+}
+
+.emotion-0 code .token.property,
+.emotion-0 code .token.tag,
+.emotion-0 code .token.boolean,
+.emotion-0 code .token.number,
+.emotion-0 code .token.constant,
+.emotion-0 code .token.symbol,
+.emotion-0 code .token.deleted {
+  color: #9c36b5;
+}
+
+.emotion-0 code .token.selector,
+.emotion-0 code .token.attr-name,
+.emotion-0 code .token.string,
+.emotion-0 code .token.char,
+.emotion-0 code .token.regex,
+.emotion-0 code .token.builtin,
+.emotion-0 code .token.inserted {
+  color: #099268;
+}
+
+.emotion-0 code .token.operator,
+.emotion-0 code .token.entity,
+.emotion-0 code .token.url,
+.emotion-0 code .language-css .token.string,
+.emotion-0 code .style .token.string {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.atrule,
+.emotion-0 code .token.attr-value,
+.emotion-0 code .token.keyword {
+  color: #c2255c;
+}
+
+.emotion-0 code .token.function,
+.emotion-0 code .token.class-name {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.important {
+  color: #e03131;
+}
+
+.emotion-0 code .token.important,
+.emotion-0 code .token.bold {
+  font-weight: bold;
+}
+
+.emotion-0 code .token.italic {
+  font-style: italic;
+}
+
+.emotion-0 code .token.entity {
+  cursor: help;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    <pre>
+      <code
+        class="language-js"
+      >
+        const add = (a, b) =&gt; a + b;
+      </code>
+    </pre>
+  </div>
+</div>
+`;
+
+exports[`code is shown without syntax highlighting when no language is specified 1`] = `
+.emotion-0 p {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 h1,
+.emotion-0 h2,
+.emotion-0 h3,
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  margin: 0 0 1.5rem 0;
+  color: #343a40;
+}
+
+.emotion-0 h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.emotion-0 h2 {
+  font-size: 1.515716566510398rem;
+  line-height: 2rem;
+}
+
+.emotion-0 h3 {
+  font-size: 1.3195079107728942rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 blockquote {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 calc(1.5rem - 2px);
+  border-left: solid #dee2e6;
+}
+
+.emotion-0 ul,
+.emotion-0 ol {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 2.5rem;
+}
+
+.emotion-0 dl {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 dd {
+  margin-left: 1.5rem;
+}
+
+.emotion-0 hr {
+  border: 0;
+  background-color: #dee2e6;
+  height: 1px;
+  margin: 0 0 calc(1.5rem - 1px) 0;
+}
+
+.emotion-0 table {
+  margin: 0 0 1.5rem 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.emotion-0 td,
+.emotion-0 th {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.5rem 0.5rem calc(0.5rem - 1px) 0.5rem;
+}
+
+.emotion-0 td:first-of-type,
+.emotion-0 th:first-of-type {
+  padding-left: 0;
+}
+
+.emotion-0 td:last-of-type,
+.emotion-0 th:last-of-type {
+  padding-right: 0;
+}
+
+.emotion-0 img {
+  max-width: 100%;
+}
+
+.emotion-0 a {
+  color: #d6336c;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-transition: text-decoration 0.15s ease-out;
+  transition: text-decoration 0.15s ease-out;
+}
+
+@supports (-webkit-text-decoration:underline transparent) or (text-decoration:underline transparent) {
+  .emotion-0 a {
+    -webkit-text-decoration: underline transparent;
+    text-decoration: underline transparent;
+  }
+}
+
+.emotion-0 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.emotion-0 a:focus {
+  outline: 1px dotted currentColor;
+}
+
+.emotion-0 pre {
+  background-color: #f8f9fa;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  padding: calc(0.5rem - 1px);
+  margin: 0 0 1.5rem 0;
+  overflow-y: auto;
+}
+
+.emotion-0 pre,
+.emotion-0 code {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  font-family: nupum-mono,monospace;
+  color: #495057;
+}
+
+.emotion-0 code .token.comment,
+.emotion-0 code .token.prolog,
+.emotion-0 code .token.doctype,
+.emotion-0 code .token.cdata {
+  color: #868e96;
+}
+
+.emotion-0 code .token.property,
+.emotion-0 code .token.tag,
+.emotion-0 code .token.boolean,
+.emotion-0 code .token.number,
+.emotion-0 code .token.constant,
+.emotion-0 code .token.symbol,
+.emotion-0 code .token.deleted {
+  color: #9c36b5;
+}
+
+.emotion-0 code .token.selector,
+.emotion-0 code .token.attr-name,
+.emotion-0 code .token.string,
+.emotion-0 code .token.char,
+.emotion-0 code .token.regex,
+.emotion-0 code .token.builtin,
+.emotion-0 code .token.inserted {
+  color: #099268;
+}
+
+.emotion-0 code .token.operator,
+.emotion-0 code .token.entity,
+.emotion-0 code .token.url,
+.emotion-0 code .language-css .token.string,
+.emotion-0 code .style .token.string {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.atrule,
+.emotion-0 code .token.attr-value,
+.emotion-0 code .token.keyword {
+  color: #c2255c;
+}
+
+.emotion-0 code .token.function,
+.emotion-0 code .token.class-name {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.important {
+  color: #e03131;
+}
+
+.emotion-0 code .token.important,
+.emotion-0 code .token.bold {
+  font-weight: bold;
+}
+
+.emotion-0 code .token.italic {
+  font-style: italic;
+}
+
+.emotion-0 code .token.entity {
+  cursor: help;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    <pre>
+      <code>
+        const add = (a, b) =&gt; a + b;
+      </code>
+    </pre>
+  </div>
+</div>
+`;
+
+exports[`code is syntax highlighted when fetching language succeeds 1`] = `
+.emotion-0 p {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 h1,
+.emotion-0 h2,
+.emotion-0 h3,
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  margin: 0 0 1.5rem 0;
+  color: #343a40;
+}
+
+.emotion-0 h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.emotion-0 h2 {
+  font-size: 1.515716566510398rem;
+  line-height: 2rem;
+}
+
+.emotion-0 h3 {
+  font-size: 1.3195079107728942rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 blockquote {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 calc(1.5rem - 2px);
+  border-left: solid #dee2e6;
+}
+
+.emotion-0 ul,
+.emotion-0 ol {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 2.5rem;
+}
+
+.emotion-0 dl {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 dd {
+  margin-left: 1.5rem;
+}
+
+.emotion-0 hr {
+  border: 0;
+  background-color: #dee2e6;
+  height: 1px;
+  margin: 0 0 calc(1.5rem - 1px) 0;
+}
+
+.emotion-0 table {
+  margin: 0 0 1.5rem 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.emotion-0 td,
+.emotion-0 th {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.5rem 0.5rem calc(0.5rem - 1px) 0.5rem;
+}
+
+.emotion-0 td:first-of-type,
+.emotion-0 th:first-of-type {
+  padding-left: 0;
+}
+
+.emotion-0 td:last-of-type,
+.emotion-0 th:last-of-type {
+  padding-right: 0;
+}
+
+.emotion-0 img {
+  max-width: 100%;
+}
+
+.emotion-0 a {
+  color: #d6336c;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-transition: text-decoration 0.15s ease-out;
+  transition: text-decoration 0.15s ease-out;
+}
+
+@supports (-webkit-text-decoration:underline transparent) or (text-decoration:underline transparent) {
+  .emotion-0 a {
+    -webkit-text-decoration: underline transparent;
+    text-decoration: underline transparent;
+  }
+}
+
+.emotion-0 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.emotion-0 a:focus {
+  outline: 1px dotted currentColor;
+}
+
+.emotion-0 pre {
+  background-color: #f8f9fa;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  padding: calc(0.5rem - 1px);
+  margin: 0 0 1.5rem 0;
+  overflow-y: auto;
+}
+
+.emotion-0 pre,
+.emotion-0 code {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  font-family: nupum-mono,monospace;
+  color: #495057;
+}
+
+.emotion-0 code .token.comment,
+.emotion-0 code .token.prolog,
+.emotion-0 code .token.doctype,
+.emotion-0 code .token.cdata {
+  color: #868e96;
+}
+
+.emotion-0 code .token.property,
+.emotion-0 code .token.tag,
+.emotion-0 code .token.boolean,
+.emotion-0 code .token.number,
+.emotion-0 code .token.constant,
+.emotion-0 code .token.symbol,
+.emotion-0 code .token.deleted {
+  color: #9c36b5;
+}
+
+.emotion-0 code .token.selector,
+.emotion-0 code .token.attr-name,
+.emotion-0 code .token.string,
+.emotion-0 code .token.char,
+.emotion-0 code .token.regex,
+.emotion-0 code .token.builtin,
+.emotion-0 code .token.inserted {
+  color: #099268;
+}
+
+.emotion-0 code .token.operator,
+.emotion-0 code .token.entity,
+.emotion-0 code .token.url,
+.emotion-0 code .language-css .token.string,
+.emotion-0 code .style .token.string {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.atrule,
+.emotion-0 code .token.attr-value,
+.emotion-0 code .token.keyword {
+  color: #c2255c;
+}
+
+.emotion-0 code .token.function,
+.emotion-0 code .token.class-name {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.important {
+  color: #e03131;
+}
+
+.emotion-0 code .token.important,
+.emotion-0 code .token.bold {
+  font-weight: bold;
+}
+
+.emotion-0 code .token.italic {
+  font-style: italic;
+}
+
+.emotion-0 code .token.entity {
+  cursor: help;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    <pre
+      class="refractor"
+    >
+      <code
+        class="language-javascript"
+      >
+        <span
+          class="token keyword"
+        >
+          const
+        </span>
+         
+        <span
+          class="token function-variable function"
+        >
+          add
+        </span>
+         
+        <span
+          class="token operator"
+        >
+          =
+        </span>
+         
+        <span
+          class="token punctuation"
+        >
+          (
+        </span>
+        <span
+          class="token parameter"
+        >
+          a
+          <span
+            class="token punctuation"
+          >
+            ,
+          </span>
+           b
+        </span>
+        <span
+          class="token punctuation"
+        >
+          )
+        </span>
+         
+        <span
+          class="token operator"
+        >
+          =&gt;
+        </span>
+         a 
+        <span
+          class="token operator"
+        >
+          +
+        </span>
+         b
+        <span
+          class="token punctuation"
+        >
+          ;
+        </span>
+      </code>
+    </pre>
+  </div>
+</div>
+`;
+
+exports[`markdown is rendered 1`] = `
+.emotion-0 p {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 h1,
+.emotion-0 h2,
+.emotion-0 h3,
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  margin: 0 0 1.5rem 0;
+  color: #343a40;
+}
+
+.emotion-0 h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.emotion-0 h2 {
+  font-size: 1.515716566510398rem;
+  line-height: 2rem;
+}
+
+.emotion-0 h3 {
+  font-size: 1.3195079107728942rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 h4,
+.emotion-0 h5,
+.emotion-0 h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.emotion-0 blockquote {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 calc(1.5rem - 2px);
+  border-left: solid #dee2e6;
+}
+
+.emotion-0 ul,
+.emotion-0 ol {
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 2.5rem;
+}
+
+.emotion-0 dl {
+  margin: 0 0 1.5rem 0;
+}
+
+.emotion-0 dd {
+  margin-left: 1.5rem;
+}
+
+.emotion-0 hr {
+  border: 0;
+  background-color: #dee2e6;
+  height: 1px;
+  margin: 0 0 calc(1.5rem - 1px) 0;
+}
+
+.emotion-0 table {
+  margin: 0 0 1.5rem 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.emotion-0 td,
+.emotion-0 th {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.5rem 0.5rem calc(0.5rem - 1px) 0.5rem;
+}
+
+.emotion-0 td:first-of-type,
+.emotion-0 th:first-of-type {
+  padding-left: 0;
+}
+
+.emotion-0 td:last-of-type,
+.emotion-0 th:last-of-type {
+  padding-right: 0;
+}
+
+.emotion-0 img {
+  max-width: 100%;
+}
+
+.emotion-0 a {
+  color: #d6336c;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-transition: text-decoration 0.15s ease-out;
+  transition: text-decoration 0.15s ease-out;
+}
+
+@supports (-webkit-text-decoration:underline transparent) or (text-decoration:underline transparent) {
+  .emotion-0 a {
+    -webkit-text-decoration: underline transparent;
+    text-decoration: underline transparent;
+  }
+}
+
+.emotion-0 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.emotion-0 a:focus {
+  outline: 1px dotted currentColor;
+}
+
+.emotion-0 pre {
+  background-color: #f8f9fa;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  padding: calc(0.5rem - 1px);
+  margin: 0 0 1.5rem 0;
+  overflow-y: auto;
+}
+
+.emotion-0 pre,
+.emotion-0 code {
+  font-size: 0.8705505632961241rem;
+  line-height: 1rem;
+  font-family: nupum-mono,monospace;
+  color: #495057;
+}
+
+.emotion-0 code .token.comment,
+.emotion-0 code .token.prolog,
+.emotion-0 code .token.doctype,
+.emotion-0 code .token.cdata {
+  color: #868e96;
+}
+
+.emotion-0 code .token.property,
+.emotion-0 code .token.tag,
+.emotion-0 code .token.boolean,
+.emotion-0 code .token.number,
+.emotion-0 code .token.constant,
+.emotion-0 code .token.symbol,
+.emotion-0 code .token.deleted {
+  color: #9c36b5;
+}
+
+.emotion-0 code .token.selector,
+.emotion-0 code .token.attr-name,
+.emotion-0 code .token.string,
+.emotion-0 code .token.char,
+.emotion-0 code .token.regex,
+.emotion-0 code .token.builtin,
+.emotion-0 code .token.inserted {
+  color: #099268;
+}
+
+.emotion-0 code .token.operator,
+.emotion-0 code .token.entity,
+.emotion-0 code .token.url,
+.emotion-0 code .language-css .token.string,
+.emotion-0 code .style .token.string {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.atrule,
+.emotion-0 code .token.attr-value,
+.emotion-0 code .token.keyword {
+  color: #c2255c;
+}
+
+.emotion-0 code .token.function,
+.emotion-0 code .token.class-name {
+  color: #0c8599;
+}
+
+.emotion-0 code .token.important {
+  color: #e03131;
+}
+
+.emotion-0 code .token.important,
+.emotion-0 code .token.bold {
+  font-weight: bold;
+}
+
+.emotion-0 code .token.italic {
+  font-style: italic;
+}
+
+.emotion-0 code .token.entity {
+  cursor: help;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    <h1>
+      Hello, world!
+    </h1>
+    <p>
+      This is some markdown.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`message is rendered when there are no contents 1`] = `
+.emotion-0 {
+  margin: 0 0 1.5rem 0;
+}
+
+<div>
+  <p
+    class="emotion-0"
+  >
+    This package has no readme.
+  </p>
+</div>
+`;
