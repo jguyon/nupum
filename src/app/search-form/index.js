@@ -139,6 +139,9 @@ function SearchInput({
           ? undefined
           : `${SUGGESTION_LIST_ITEM_ID_PREFIX}-${currentIndex}`
       }
+      autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
       value={value}
       onChangeValue={onChangeValue}
       onFocus={onFocus}
