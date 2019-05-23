@@ -4115,7 +4115,50 @@ exports[`pressing enter key when a suggestion is selected navigates to package p
 </ul>
 `;
 
-exports[`pressing escape key collapses menu 1`] = `
+exports[`pressing escape key clears text when menu is collapsed 1`] = `
+.emotion-0 {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem 0 1.5rem;
+  border: 1px solid #adb5bd;
+  border-right-width: 0;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+.emotion-0:focus {
+  outline: none;
+}
+
+.emotion-0::-ms-clear,
+.emotion-0::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.emotion-0::-webkit-search-decoration,
+.emotion-0::-webkit-search-cancel-button,
+.emotion-0::-webkit-search-results-button,
+.emotion-0::-webkit-search-results-decoration {
+  display: none;
+}
+
+<input
+  aria-autocomplete="list"
+  aria-controls="search-suggestion-list"
+  aria-expanded="false"
+  aria-haspopup="true"
+  aria-label="Search query"
+  class="emotion-0"
+  name="q"
+  role="combobox"
+  type="search"
+  value=""
+/>
+`;
+
+exports[`pressing escape key collapses menu when menu is expanded 1`] = `
 .emotion-0 {
   width: 100%;
   height: 2.5rem;
@@ -4158,7 +4201,7 @@ exports[`pressing escape key collapses menu 1`] = `
 />
 `;
 
-exports[`pressing escape key collapses menu 2`] = `
+exports[`pressing escape key collapses menu when menu is expanded 2`] = `
 .emotion-29 {
   background-color: #ffffff;
   border: 1px solid #adb5bd;

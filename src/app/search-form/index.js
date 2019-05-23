@@ -80,6 +80,7 @@ function SearchInputWithSuggestions({ query, setQuery }) {
     onItemMouseDown,
   } = useSearchSuggestions({
     query,
+    setQuery,
     onSelect: ({ package: { name } }) => preload(`/package/${name}`),
     onGoTo: ({ package: { name } }) => navigate(`/package/${name}`),
   });

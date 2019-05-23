@@ -767,7 +767,7 @@ for (const [key, name] of [
   });
 }
 
-test("pressing escape key collapses menu", () => {
+test("pressing escape key collapses menu when menu is expanded", () => {
   const { resourceCache, getByLabelText } = renderWithContext(
     <SearchFormProvider>
       <SearchForm />
@@ -793,6 +793,32 @@ test("pressing escape key collapses menu", () => {
   expect(input).toMatchSnapshot();
   expect(menu).toHaveStyle("display: none");
   expect(menu).toMatchSnapshot();
+});
+
+test("pressing escape key clears text when menu is collapsed", () => {
+  const { resourceCache, getByLabelText } = renderWithContext(
+    <SearchFormProvider>
+      <SearchForm />
+    </SearchFormProvider>,
+  );
+
+  const input = getByLabelText(INPUT_LABEL);
+
+  fireEvent.change(input, { target: { value: "react" } });
+
+  act(() => {
+    resourceCache.succeed(
+      packageSuggestions,
+      { query: "react", size: SUGGESTIONS_SIZE },
+      fakePackageSuggestions({ size: SUGGESTIONS_SIZE }),
+    );
+  });
+
+  fireEvent.keyDown(input, { key: "Escape" });
+  fireEvent.keyDown(input, { key: "Escape" });
+
+  expect(input).toHaveAttribute("value", "");
+  expect(input).toMatchSnapshot();
 });
 
 test("leaving input collapses menu", () => {

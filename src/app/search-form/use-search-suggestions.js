@@ -5,8 +5,17 @@ import { packageSuggestions } from "../../resources";
 
 const SUGGESTIONS_SIZE = 10;
 
-export default function useSearchSuggestions({ query, onSelect, onGoTo }) {
+export default function useSearchSuggestions({
+  query,
+  setQuery,
+  onSelect,
+  onGoTo,
+}) {
   invariant(typeof query === "string", "expected query to be a string");
+  invariant(
+    typeof setQuery === "function",
+    "expected setQuery to be a function",
+  );
   invariant(
     typeof onSelect === "function",
     "expected onSelect to be a function",
@@ -35,12 +44,12 @@ export default function useSearchSuggestions({ query, onSelect, onGoTo }) {
   function onInputKeyDown(event) {
     switch (event.key) {
       case "ArrowUp":
-        event.preventDefault();
         dispatch({ type: ACTION_INPUT_PRESS_UP });
+        event.preventDefault();
         break;
       case "ArrowDown":
-        event.preventDefault();
         dispatch({ type: ACTION_INPUT_PRESS_DOWN });
+        event.preventDefault();
         break;
       case "ArrowLeft":
         dispatch({ type: ACTION_INPUT_PRESS_LEFT });
@@ -55,16 +64,17 @@ export default function useSearchSuggestions({ query, onSelect, onGoTo }) {
         dispatch({ type: ACTION_INPUT_PRESS_END });
         break;
       case "Enter":
+        dispatch({ type: ACTION_INPUT_PRESS_ENTER });
         if (menuExpanded && currentIndex !== null) {
           event.preventDefault();
-          dispatch({ type: ACTION_INPUT_PRESS_ENTER });
           onGoTo(suggestions[currentIndex]);
         }
         break;
       case "Escape":
-        if (menuExpanded && suggestions.length > 0) {
-          event.preventDefault();
-          dispatch({ type: ACTION_INPUT_PRESS_ESCAPE });
+        dispatch({ type: ACTION_INPUT_PRESS_ESCAPE });
+        event.preventDefault();
+        if (!menuExpanded) {
+          setQuery("");
         }
         break;
       default:
@@ -93,7 +103,7 @@ export default function useSearchSuggestions({ query, onSelect, onGoTo }) {
   }
 
   return {
-    menuExpanded: menuExpanded && suggestions.length > 0,
+    menuExpanded,
     currentIndex,
     suggestions,
     onInputBlur,
@@ -152,23 +162,33 @@ const ACTION_ITEM_CLICK = Symbol("ACTION_ITEM_CLICK");
 const ACTION_ITEM_HOVER = Symbol("ACTION_ITEM_HOVER");
 
 function useAutoCompleteState(props) {
-  const [state, dispatch] = useReducer(reducer, props, initializer);
+  const [
+    { query, menuExpanded, currentIndex, suggestions },
+    dispatch,
+  ] = useReducer(reducer, props, initializer);
 
-  if (props.query !== state.query) {
+  if (props.query !== query) {
     dispatch({
       type: ACTION_UPDATE_QUERY,
       query: props.query,
     });
   }
 
-  if (props.suggestions !== state.suggestions) {
+  if (props.suggestions !== suggestions) {
     dispatch({
       type: ACTION_UPDATE_SUGGESTIONS,
       suggestions: props.suggestions,
     });
   }
 
-  return [state, dispatch];
+  return [
+    {
+      menuExpanded: menuExpanded && suggestions.length > 0,
+      currentIndex,
+      suggestions,
+    },
+    dispatch,
+  ];
 }
 
 function initializer({ query, suggestions }) {
@@ -296,11 +316,17 @@ function reducer(state, action) {
     case ACTION_INPUT_PRESS_ENTER:
     case ACTION_INPUT_PRESS_ESCAPE:
     case ACTION_ITEM_CLICK: {
-      return {
-        ...state,
-        menuExpanded: false,
-        currentIndex: null,
-      };
+      const { menuExpanded } = state;
+
+      if (menuExpanded) {
+        return {
+          ...state,
+          menuExpanded: false,
+          currentIndex: null,
+        };
+      } else {
+        return state;
+      }
     }
 
     default: {
