@@ -1,19 +1,29 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { Helmet } from "react-helmet-async";
 import { css, keyframes } from "@emotion/core";
 import { hideVisually } from "polished";
 import LoaderIcon from "react-feather/dist/icons/loader";
 import { rhythm, color } from "./theme";
 
-export default function LoadingPage() {
+export default function LoadingPage({ name }) {
   return (
     <>
+      <Helmet>
+        <title>Loading {name} | nupum</title>
+      </Helmet>
+
       <div css={loadingStyles}>
         <LoaderIcon css={loadingIconStyles} aria-hidden />
-        <p css={hideVisually}>Loading&hellip;</p>
+        <p css={hideVisually}>Loading {name}&hellip;</p>
       </div>
     </>
   );
 }
+
+LoadingPage.propTypes = {
+  name: PropTypes.string.isRequired,
+};
 
 const loadingStyles = css`
   text-align: center;

@@ -1,17 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { css } from "@emotion/core";
+import { Helmet } from "react-helmet-async";
 import AlertIcon from "react-feather/dist/icons/alert-circle";
 import { rhythm, scale, color } from "./theme";
 import Container from "./container";
 
 export default function ErrorPage({ msg }) {
   return (
-    <Container>
-      <p css={errorStyles}>
-        <AlertIcon css={errorIconStyles} size="1em" aria-hidden /> {msg}
-      </p>
-    </Container>
+    <>
+      <Helmet>
+        <title>{msg} | nupum</title>
+      </Helmet>
+
+      <Container>
+        <p css={errorStyles}>
+          <AlertIcon css={errorIconStyles} size="1em" aria-hidden /> {msg}
+        </p>
+      </Container>
+    </>
   );
 }
 

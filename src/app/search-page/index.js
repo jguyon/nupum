@@ -45,7 +45,7 @@ export default function LazySearchPage({ location }) {
   ) {
     return <ErrorPage msg="Could not fetch the search results." />;
   } else {
-    return <LoadingPage />;
+    return <LoadingPage name={`search results for "${query}"`} />;
   }
 }
 

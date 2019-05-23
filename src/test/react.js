@@ -1,6 +1,7 @@
 import React, { StrictMode } from "react";
 import { render as rtlRender, cleanup } from "react-testing-library";
 import { createMemoryHistory } from "history";
+import { HelmetProvider } from "react-helmet-async";
 import Router from "../router";
 import { createTestModuleCache, ModuleCacheProvider } from "../module-cache";
 import {
@@ -71,11 +72,13 @@ function wrapRoutesWithContext(
   { history, moduleCache, resourceCache },
 ) {
   return (
-    <ModuleCacheProvider cache={moduleCache}>
-      <ResourceCacheProvider cache={resourceCache}>
-        <Router history={history} routes={routes} />
-      </ResourceCacheProvider>
-    </ModuleCacheProvider>
+    <HelmetProvider>
+      <ModuleCacheProvider cache={moduleCache}>
+        <ResourceCacheProvider cache={resourceCache}>
+          <Router history={history} routes={routes} />
+        </ResourceCacheProvider>
+      </ModuleCacheProvider>
+    </HelmetProvider>
   );
 }
 

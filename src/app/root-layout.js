@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { css, Global } from "@emotion/core";
 import { hideVisually } from "polished";
+import { Helmet } from "react-helmet-async";
 import HeartIcon from "react-feather/dist/icons/heart";
 import {
   establish,
@@ -16,6 +17,14 @@ import Container from "./container";
 export default function RootLayout({ children }) {
   return (
     <>
+      <Helmet>
+        <html lang="en" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="theme-color" content={color("white")} />
+        <meta name="description" content="Search for npm packages, fast." />
+      </Helmet>
+
       <Global styles={globalStyles} />
 
       {children}

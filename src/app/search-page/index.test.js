@@ -12,9 +12,12 @@ import { packageSearch } from "../../resources";
 import SearchPage from ".";
 
 const RESULTS_PER_PAGE = 10;
-const LOADING_TEXT = "Loading…";
 const ERROR_TEXT = "Could not fetch the search results.";
 const SEARCH_RESULT_HEADING_TEST_ID = "search-result-heading";
+
+function loadingText(searchQuery) {
+  return `Loading search results for "${searchQuery}"…`;
+}
 
 test("search results are rendered when fetching succeeds", async () => {
   const {
@@ -26,7 +29,7 @@ test("search results are rendered when fetching succeeds", async () => {
     <SearchPage location={createLocation("/search?q=react")} />,
   );
 
-  expect(() => getByText(LOADING_TEXT)).not.toThrow();
+  expect(() => getByText(loadingText("react"))).not.toThrow();
 
   const searchResults = fakePackageSearch({ size: RESULTS_PER_PAGE });
   await act(async () => {
@@ -54,7 +57,7 @@ test("error message is rendered when fetching module fails", () => {
     <SearchPage location={createLocation("/search?q=react")} />,
   );
 
-  expect(() => getByText(LOADING_TEXT)).not.toThrow();
+  expect(() => getByText(loadingText("react"))).not.toThrow();
 
   act(() => {
     moduleCache.fail(searchPage, new Error("fetching failed"));
@@ -68,7 +71,7 @@ test("error message is rendered when fetching resource fails", () => {
     <SearchPage location={createLocation("/search?q=react")} />,
   );
 
-  expect(() => getByText(LOADING_TEXT)).not.toThrow();
+  expect(() => getByText(loadingText("react"))).not.toThrow();
 
   act(() => {
     resourceCache.fail(

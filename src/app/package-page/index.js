@@ -34,7 +34,7 @@ export default function LazyPackagePage({ name }) {
   ) {
     return <ErrorPage msg="Could not fetch the package information." />;
   } else {
-    return <LoadingPage />;
+    return <LoadingPage name={`${name} package`} />;
   }
 }
 

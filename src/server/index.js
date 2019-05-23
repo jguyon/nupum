@@ -22,15 +22,22 @@ export default async function handle(req, res) {
 
     const scripts = scriptsFor("main", moduleCache.chunks());
     const data = resourceCache.serialize();
+    const helmetContext = {};
     const appHtml = renderToString(
       <App
         history={history}
         moduleCache={moduleCache}
         resourceCache={resourceCache}
+        helmetContext={helmetContext}
       />,
     );
     const html = renderToStaticMarkup(
-      <Document html={appHtml} scripts={scripts} data={data} />,
+      <Document
+        html={appHtml}
+        scripts={scripts}
+        data={data}
+        helmet={helmetContext.helmet}
+      />,
     );
 
     res.writeHead(history.statusCode || 200, {

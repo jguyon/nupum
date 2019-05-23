@@ -1,25 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function Document({ html, scripts, data }) {
+export default function Document({ html, scripts, data, helmet }) {
   return (
-    <html lang="en">
+    <html {...helmet.htmlAttributes.toComponent()}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta name="theme-color" content="#ffffff" />
-        <meta name="description" content="Search for npm packages" />
 
-        <title>nupum</title>
+        {helmet.title.toComponent()}
+        {helmet.meta.toComponent()}
+        {helmet.link.toComponent()}
 
         {scripts.map(uri => (
           <script key={uri} src={uri} defer />
         ))}
       </head>
 
-      <body>
+      <body {...helmet.bodyAttributes.toComponent()}>
         <div id="root" dangerouslySetInnerHTML={{ __html: html }} />
+
         <div hidden id="data">
           {JSON.stringify(data)}
         </div>
@@ -32,4 +31,5 @@ Document.propTypes = {
   html: PropTypes.string.isRequired,
   scripts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   data: PropTypes.object.isRequired,
+  helmet: PropTypes.object.isRequired,
 };

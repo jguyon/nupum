@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Helmet } from "react-helmet-async";
 import Container from "../container";
 import SearchPageBanner from "./search-page-banner";
 import SearchPageResult from "./search-page-result";
@@ -8,6 +9,10 @@ import SearchPagePagination from "./search-page-pagination";
 export default function SearchPage({ query, page, maxPage, total, results }) {
   return (
     <>
+      <Helmet>
+        <title>"{query}" search | nupum</title>
+      </Helmet>
+
       <SearchPageBanner totalResults={total} query={query} />
 
       <Container>

@@ -1,5 +1,6 @@
 import React from "react";
 import { css } from "@emotion/core";
+import { Helmet } from "react-helmet-async";
 import { rhythm, scale, color, compactLineHeight } from "./theme";
 import { useLocationFocus } from "./location-focus";
 import Container from "./container";
@@ -11,6 +12,10 @@ export default function HomePage() {
 
   return (
     <>
+      <Helmet>
+        <title>nupum | Search for npm packages, fast.</title>
+      </Helmet>
+
       <main css={mainStyles} ref={focusRef} tabIndex={-1}>
         <Container>
           <h1 css={headingStyles}>

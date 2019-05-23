@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Helmet } from "react-helmet-async";
 import PackagePageBanner from "./package-page-banner";
 import {
   PackagePageContentRow,
@@ -14,6 +15,10 @@ export default function PackagePage({
 }) {
   return (
     <>
+      <Helmet>
+        <title>{metadata.name} | nupum</title>
+      </Helmet>
+
       <PackagePageBanner
         name={metadata.name}
         version={metadata.version}

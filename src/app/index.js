@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import invariant from "tiny-invariant";
+import { HelmetProvider } from "react-helmet-async";
 import Router, { preloadRoutes } from "../router";
 import { ModuleCacheProvider } from "../module-cache";
 import { ResourceCacheProvider } from "../resource-cache";
@@ -16,20 +17,27 @@ import PageNotFound from "./page-not-found";
 
 const PRELOAD_TIMEOUT = process.env.NODE_ENV === "test" ? 0 : 2000;
 
-export default function App({ history, moduleCache, resourceCache }) {
+export default function App({
+  history,
+  moduleCache,
+  resourceCache,
+  helmetContext,
+}) {
   return (
-    <HydrationProvider>
-      <ModuleCacheProvider cache={moduleCache}>
-        <ResourceCacheProvider cache={resourceCache}>
-          <Router
-            history={history}
-            routes={routes}
-            preloadTimeout={PRELOAD_TIMEOUT}
-            preloadProps={{ moduleCache, resourceCache }}
-          />
-        </ResourceCacheProvider>
-      </ModuleCacheProvider>
-    </HydrationProvider>
+    <HelmetProvider context={helmetContext}>
+      <HydrationProvider>
+        <ModuleCacheProvider cache={moduleCache}>
+          <ResourceCacheProvider cache={resourceCache}>
+            <Router
+              history={history}
+              routes={routes}
+              preloadTimeout={PRELOAD_TIMEOUT}
+              preloadProps={{ moduleCache, resourceCache }}
+            />
+          </ResourceCacheProvider>
+        </ModuleCacheProvider>
+      </HydrationProvider>
+    </HelmetProvider>
   );
 }
 
@@ -37,6 +45,7 @@ App.propTypes = {
   history: PropTypes.object.isRequired,
   moduleCache: PropTypes.object.isRequired,
   resourceCache: PropTypes.object.isRequired,
+  helmetContext: PropTypes.object,
 };
 
 export function preloadApp({ history, moduleCache, resourceCache }) {
