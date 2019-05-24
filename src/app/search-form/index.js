@@ -118,10 +118,6 @@ function SearchInput({
 }) {
   const inputAutoFocus = !!useMatch("/");
 
-  function onFocus(event) {
-    event.target.select();
-  }
-
   return (
     <Input
       css={inputStyles}
@@ -144,7 +140,6 @@ function SearchInput({
       autoCapitalize="off"
       value={value}
       onChangeValue={onChangeValue}
-      onFocus={onFocus}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
     />
