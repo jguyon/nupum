@@ -89,3 +89,57 @@ const add = (a, b) => a + b;
 
   expect(container).toMatchSnapshot();
 });
+
+test("html is passed on", () => {
+  const { container } = renderWithContext(
+    <PackagePageReadme
+      contents={`
+<p>Hello, world!</p>
+`}
+    />,
+  );
+
+  expect(container).toMatchSnapshot();
+});
+
+test("html is protected against xss", () => {
+  const { container } = renderWithContext(
+    <PackagePageReadme
+      contents={`
+<script>console.log("MWAHAHA");</script>
+`}
+    />,
+  );
+
+  expect(container).toMatchSnapshot();
+});
+
+test("local links are prefixed", () => {
+  const { container } = renderWithContext(
+    <PackagePageReadme
+      repository="https://github.com/user/project"
+      contents={`
+[local link](local/link)
+
+<a href="local/link">local link</a>
+`}
+    />,
+  );
+
+  expect(container).toMatchSnapshot();
+});
+
+test("local images are prefixed", () => {
+  const { container } = renderWithContext(
+    <PackagePageReadme
+      repository="https://github.com/user/project"
+      contents={`
+![local image](local/image.jpg)
+
+<img alt="local image" src="local/image.jpg" />
+`}
+    />,
+  );
+
+  expect(container).toMatchSnapshot();
+});
