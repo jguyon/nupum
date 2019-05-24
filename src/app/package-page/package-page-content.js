@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { css } from "@emotion/core";
 import { rhythm, color } from "../theme";
 import Container from "../container";
@@ -11,13 +12,30 @@ export function PackagePageContentRow({ children }) {
   );
 }
 
-export function PackagePageContentMain({ children }) {
-  return <section css={contentMainColumnStyles}>{children}</section>;
+PackagePageContentRow.propTypes = {
+  children: PropTypes.node,
+};
+
+export function PackagePageContentMain({ label, children }) {
+  return (
+    <section css={contentMainColumnStyles} aria-label={label}>
+      {children}
+    </section>
+  );
 }
+
+PackagePageContentMain.propTypes = {
+  label: PropTypes.string,
+  children: PropTypes.node,
+};
 
 export function PackagePageContentAside({ children }) {
   return <aside css={contentAsideColumnStyles}>{children}</aside>;
 }
+
+PackagePageContentAside.propTypes = {
+  children: PropTypes.node,
+};
 
 const contentRowBreakpoint = "@media (min-width: 56em)";
 
