@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
-import Markdown from "react-markdown";
+import ReactMarkdown from "react-markdown";
 import {
   rhythm,
   scale,
@@ -13,14 +13,13 @@ import {
 import { useModule, MODULE_SUCCESS } from "../../module-cache";
 import languageModules from "./package-page-readme-language-modules";
 
-export default function PackagePageReadme({ contents }) {
+export default function PackagePageReadme({ repository, contents }) {
   if (contents) {
     return (
       <Markdown
         css={readmeStyles}
-        escapeHtml={false}
-        renderers={renderers}
-        source={contents}
+        repository={repository}
+        contents={contents}
       />
     );
   } else {
@@ -29,6 +28,7 @@ export default function PackagePageReadme({ contents }) {
 }
 
 PackagePageReadme.propTypes = {
+  repository: PropTypes.string,
   contents: PropTypes.string,
 };
 
@@ -214,9 +214,72 @@ const readmeStyles = css`
   }
 `;
 
-const renderers = {
-  code: CodeBlock,
-};
+function Markdown({ className, repository, contents }) {
+  const { transformImageUri, transformLinkUri } = makeUriTransforms(repository);
+
+  return (
+    <ReactMarkdown
+      className={className}
+      escapeHtml={false}
+      renderers={{
+        code: CodeBlock,
+      }}
+      transformImageUri={transformImageUri}
+      transformLinkUri={transformLinkUri}
+      source={contents}
+    />
+  );
+}
+
+function makeUriTransforms(repository) {
+  const githubInfo = (() => {
+    if (repository) {
+      const matches = repository.match(
+        /^https:\/\/github.com\/([^/]+)\/([^/]+)/,
+      );
+
+      if (matches) {
+        return {
+          user: matches[1],
+          project: matches[2],
+        };
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  })();
+
+  function transformImageUri(uri) {
+    if (!githubInfo || uri.indexOf("//") > -1) {
+      return uri;
+    } else {
+      const { user, project } = githubInfo;
+      const path = uri.replace(/^\//, "");
+
+      return `https://raw.githubusercontent.com/${user}/${project}/master/${path}`;
+    }
+  }
+
+  function transformLinkUri(uri) {
+    uri = ReactMarkdown.uriTransformer(uri);
+
+    if (!githubInfo || uri.indexOf("//") > -1) {
+      return uri;
+    } else {
+      const { user, project } = githubInfo;
+      const path = uri.replace(/^\//, "");
+
+      return `https://github.com/${user}/${project}/tree/master/${path}`;
+    }
+  }
+
+  return {
+    transformImageUri,
+    transformLinkUri,
+  };
+}
 
 function CodeBlock({ language, value }) {
   const languageResult = useModule(

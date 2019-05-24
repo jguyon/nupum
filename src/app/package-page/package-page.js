@@ -60,7 +60,10 @@ export default function PackagePage({
         </PackagePageContentAside>
 
         <PackagePageContentMain label="Readme file">
-          <PackagePageReadme contents={metadata.readme} />
+          <PackagePageReadme
+            repository={metadata.links.repository}
+            contents={metadata.readme}
+          />
         </PackagePageContentMain>
       </PackagePageContentRow>
     </>
