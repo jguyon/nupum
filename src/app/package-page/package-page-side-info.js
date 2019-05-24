@@ -33,12 +33,12 @@ export default function PackagePageSideInfo({
         <DListDescription>{license ? license : "N/A"}</DListDescription>
         <DListTitle>Dependencies</DListTitle>
         <DListDescription>{dependenciesCount}</DListDescription>
-        {peerDependenciesCount > 0 && (
+        {peerDependenciesCount > 0 ? (
           <>
             <DListTitle>Peer dependencies</DListTitle>
             <DListDescription>{peerDependenciesCount}</DListDescription>
           </>
-        )}
+        ) : null}
       </DList>
     </Section>
   );
@@ -47,22 +47,22 @@ export default function PackagePageSideInfo({
     <Section>
       <Heading>Popularity</Heading>
       <DList>
-        {npmDownloadsLastMonthCount && (
+        {npmDownloadsLastMonthCount ? (
           <>
             <DListTitle>Downloads last month</DListTitle>
             <DListDescription>
               {millify(npmDownloadsLastMonthCount, { precision: 1 })}
             </DListDescription>
           </>
-        )}
-        {githubStarsCount && (
+        ) : null}
+        {githubStarsCount ? (
           <>
             <DListTitle>GitHub stars</DListTitle>
             <DListDescription>
               {millify(githubStarsCount, { precision: 1 })}
             </DListDescription>
           </>
-        )}
+        ) : null}
         <DListTitle>Dependents</DListTitle>
         <DListDescription>
           {millify(npmDependentsCount, { precision: 1 })}
@@ -75,22 +75,22 @@ export default function PackagePageSideInfo({
     <Section>
       <Heading>Activity</Heading>
       <DList>
-        {githubCommitsLast3MonthsCount && (
+        {githubCommitsLast3MonthsCount ? (
           <>
             <DListTitle>Commits last 3 months</DListTitle>
             <DListDescription>
               {millify(githubCommitsLast3MonthsCount, { precision: 1 })}
             </DListDescription>
           </>
-        )}
-        {githubOpenIssuesCount && (
+        ) : null}
+        {githubOpenIssuesCount ? (
           <>
             <DListTitle>Open issues</DListTitle>
             <DListDescription>
               {millify(githubOpenIssuesCount, { precision: 1 })}
             </DListDescription>
           </>
-        )}
+        ) : null}
       </DList>
     </Section>
   );
