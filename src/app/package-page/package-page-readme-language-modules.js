@@ -8,6 +8,7 @@ const SUPPORTED_LANGUAGES = [
   { lang: "flow", aliases: [] },
   { lang: "graphql", aliases: ["gql"] },
   { lang: "javascript", aliases: ["js"] },
+  { lang: "json", aliases: [] },
   { lang: "jsx", aliases: [] },
   { lang: "markdown", aliases: ["md"] },
   { lang: "markup", aliases: ["html", "xml", "svg"] },
