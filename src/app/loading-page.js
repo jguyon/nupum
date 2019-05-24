@@ -27,7 +27,7 @@ LoadingPage.propTypes = {
 
 const loadingStyles = css`
   text-align: center;
-  margin: ${rhythm(1)} 0;
+  margin: ${rhythm(2)} 0;
 `;
 
 const rotateAnimation = keyframes`

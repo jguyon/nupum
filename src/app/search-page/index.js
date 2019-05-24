@@ -43,7 +43,7 @@ export default function LazySearchPage({ location }) {
     searchPageResult.status === MODULE_FAILURE ||
     packageSearchResult.status === RESOURCE_FAILURE
   ) {
-    return <ErrorPage msg="Could not fetch the search results." />;
+    return <ErrorPage msg="Could not fetch the search results" />;
   } else {
     return <LoadingPage name={`search results for "${query}"`} />;
   }

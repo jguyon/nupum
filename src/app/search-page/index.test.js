@@ -12,7 +12,7 @@ import { packageSearch } from "../../resources";
 import SearchPage from ".";
 
 const RESULTS_PER_PAGE = 10;
-const ERROR_TEXT = "Could not fetch the search results.";
+const ERROR_TEXT = "Could not fetch the search results";
 const SEARCH_RESULT_HEADING_TEST_ID = "search-result-heading";
 
 function loadingText(searchQuery) {

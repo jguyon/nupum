@@ -32,7 +32,7 @@ export default function LazyPackagePage({ name }) {
     packagePageResult.status === MODULE_FAILURE ||
     packageInfoResult.status === RESOURCE_FAILURE
   ) {
-    return <ErrorPage msg="Could not fetch the package information." />;
+    return <ErrorPage msg="Could not fetch the package information" />;
   } else {
     return <LoadingPage name={`${name} package`} />;
   }

@@ -6,7 +6,7 @@ import { packageInfo } from "../../resources";
 import PackagePage from ".";
 
 const NOT_FOUND_TEXT = "Page not found";
-const ERROR_TEXT = "Could not fetch the package information.";
+const ERROR_TEXT = "Could not fetch the package information";
 const PACKAGE_HEADING_TEST_ID = "package-heading";
 
 function loadingText(packageName) {

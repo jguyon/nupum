@@ -2,11 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { css } from "@emotion/core";
 import { Helmet } from "react-helmet-async";
-import AlertIcon from "react-feather/dist/icons/alert-circle";
+import ErrorIcon from "react-feather/dist/icons/x-circle";
+import { useStatusCode } from "../router";
 import { rhythm, scale, color } from "./theme";
 import Container from "./container";
 
-export default function ErrorPage({ msg }) {
+export default function ErrorPage({ code = 500, msg }) {
+  useStatusCode(code);
+
   return (
     <>
       <Helmet>
@@ -15,7 +18,7 @@ export default function ErrorPage({ msg }) {
 
       <Container>
         <p css={errorStyles}>
-          <AlertIcon css={errorIconStyles} size="1em" aria-hidden /> {msg}
+          <ErrorIcon css={errorIconStyles} size="1em" aria-hidden /> {msg}
         </p>
       </Container>
     </>
@@ -23,9 +26,9 @@ export default function ErrorPage({ msg }) {
 }
 
 const errorStyles = css`
-  ${scale(0, 1)}
+  ${scale(0, 2)}
   text-align: center;
-  margin: ${rhythm(1)} 0;
+  margin: ${rhythm(2)} 0;
   color: ${color("red", 7)};
 `;
 
@@ -34,5 +37,6 @@ const errorIconStyles = css`
 `;
 
 ErrorPage.propTypes = {
+  code: PropTypes.number,
   msg: PropTypes.string.isRequired,
 };
