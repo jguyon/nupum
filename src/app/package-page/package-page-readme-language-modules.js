@@ -25,12 +25,12 @@ const languageModules = new Map();
 
 for (const { lang, aliases } of SUPPORTED_LANGUAGES) {
   const module = createModule(async () => {
-    const [Refractor, grammar] = await Promise.all([
-      importRefractor(),
-      importLanguage(lang),
-    ]);
+    const Refractor = await importRefractor();
 
-    Refractor.registerLanguage(grammar);
+    if (!Refractor.hasLanguage(lang)) {
+      const grammar = await importLanguage(lang);
+      Refractor.registerLanguage(grammar);
+    }
 
     return function HighlightLanguage(props) {
       return <Refractor {...props} language={lang} />;
