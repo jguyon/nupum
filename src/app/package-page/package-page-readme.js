@@ -2,6 +2,7 @@ import React from "react";
 import { css } from "@emotion/core";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
+import xss from "xss";
 import {
   rhythm,
   scale,
@@ -223,6 +224,13 @@ function Markdown({ className, repository, contents }) {
       escapeHtml={false}
       renderers={{
         code: CodeBlock,
+        html: props => (
+          <Html
+            {...props}
+            transformImageUri={transformImageUri}
+            transformLinkUri={transformLinkUri}
+          />
+        ),
       }}
       transformImageUri={transformImageUri}
       transformLinkUri={transformLinkUri}
@@ -256,7 +264,7 @@ function makeUriTransforms(repository) {
       return uri;
     } else {
       const { user, project } = githubInfo;
-      const path = uri.replace(/^\//, "");
+      const path = uri.replace(/^\.?\//, "");
 
       return `https://raw.githubusercontent.com/${user}/${project}/master/${path}`;
     }
@@ -269,7 +277,7 @@ function makeUriTransforms(repository) {
       return uri;
     } else {
       const { user, project } = githubInfo;
-      const path = uri.replace(/^\//, "");
+      const path = uri.replace(/^\.?\//, "");
 
       return `https://github.com/${user}/${project}/tree/master/${path}`;
     }
@@ -298,5 +306,23 @@ function CodeBlock({ language, value }) {
         </code>
       </pre>
     );
+  }
+}
+
+function Html({ transformImageUri, transformLinkUri, isBlock, value }) {
+  const html = xss(value, {
+    onTagAttr: (tag, name, value, isWhiteAttr) => {
+      if (tag === "a" && name === "href") {
+        return `href=${JSON.stringify(transformLinkUri(value))}`;
+      } else if (tag === "img" && name === "src") {
+        return `src=${JSON.stringify(transformImageUri(value))}`;
+      }
+    },
+  });
+
+  if (isBlock) {
+    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  } else {
+    return <span dangerouslySetInnerHTML={{ __html: html }} />;
   }
 }
