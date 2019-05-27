@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/core";
 import SearchIcon from "react-feather/dist/icons/search";
 import { useNavigate, usePreload, useMatch } from "../../router";
@@ -21,12 +21,22 @@ export { SearchFormProvider };
 
 export default function SearchForm(props) {
   const [query, setQuery] = useSearchFormQuery();
+  const autoFocus = !!useMatch("/");
+  const [isFocused, setIsFocused] = useState(autoFocus);
   const navigate = useNavigate();
   const preload = usePreload();
   const isHydrating = useHydration();
 
   // we want the form to look like it can be used while the js is downloading
   const isSubmitDisabled = !isHydrating && query.trim().length === 0;
+
+  function onFormFocus() {
+    setIsFocused(true);
+  }
+
+  function onFormBlur() {
+    setIsFocused(false);
+  }
 
   function onFormSubmit(event) {
     event.preventDefault();
@@ -44,13 +54,19 @@ export default function SearchForm(props) {
   return (
     <div {...props} role="search">
       <form
-        css={formStyles}
+        css={[formStyles, isFocused && formFocusStyles]}
         data-testid="search-form"
         method="GET"
         action="/search"
+        onFocus={onFormFocus}
+        onBlur={onFormBlur}
         onSubmit={onFormSubmit}
       >
-        <SearchInputWithSuggestions query={query} setQuery={setQuery} />
+        <SearchInputWithSuggestions
+          query={query}
+          setQuery={setQuery}
+          autoFocus={autoFocus}
+        />
 
         <button
           css={[submitStyles, isSubmitDisabled && submitDisabledStyles]}
@@ -66,7 +82,7 @@ export default function SearchForm(props) {
   );
 }
 
-function SearchInputWithSuggestions({ query, setQuery }) {
+function SearchInputWithSuggestions({ query, setQuery, autoFocus }) {
   const navigate = useNavigate();
   const preload = usePreload();
   const {
@@ -90,6 +106,7 @@ function SearchInputWithSuggestions({ query, setQuery }) {
       <SearchInput
         menuExpanded={menuExpanded}
         currentIndex={currentIndex}
+        autoFocus={autoFocus}
         value={query}
         onChangeValue={setQuery}
         onBlur={onInputBlur}
@@ -111,17 +128,16 @@ function SearchInputWithSuggestions({ query, setQuery }) {
 function SearchInput({
   menuExpanded,
   currentIndex,
+  autoFocus,
   value,
   onChangeValue,
   onBlur,
   onKeyDown,
 }) {
-  const inputAutoFocus = !!useMatch("/");
-
   return (
     <Input
       css={inputStyles}
-      autoFocus={inputAutoFocus}
+      autoFocus={autoFocus}
       type="search"
       name="q"
       role="combobox"
@@ -192,6 +208,13 @@ function SearchSuggestions({
 
 const formStyles = css`
   display: flex;
+
+  border-radius: 999px;
+  transition: box-shadow 0.15s ease-out;
+`;
+
+const formFocusStyles = css`
+  box-shadow: 0 0 0 2px ${color(primaryColor, 1)};
 `;
 
 const inputContainerStyles = css`
