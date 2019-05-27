@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import serialize from "serialize-javascript";
 
 export default function Document({ html, scripts, data, helmet }) {
   return (
@@ -18,10 +19,11 @@ export default function Document({ html, scripts, data, helmet }) {
 
       <body {...helmet.bodyAttributes.toComponent()}>
         <div id="root" dangerouslySetInnerHTML={{ __html: html }} />
-
-        <div hidden id="data">
-          {JSON.stringify(data)}
-        </div>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.SERIALIZED_DATA=${serialize(data)}`,
+          }}
+        />
       </body>
     </html>
   );

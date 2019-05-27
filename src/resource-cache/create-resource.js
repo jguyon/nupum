@@ -3,12 +3,12 @@ import { IS_RESOURCE, RESOURCE_FETCH, RESOURCE_HASH } from "./constants";
 
 // IMPORTANT NOTE:
 // The fetch function should resolve or reject to data that will be kept intact
-// if serialized to JSON. For resolves that will typically always be the case
-// since it will most likely have been itself parsed from JSON. However for
-// rejections you should not rely on extending the Error constructor and
-// expecting the user of the resource to use the instanceof operator to test
-// for specific failures. Instead set particular properties on the error object
-// that the user can test for the presence of.
+// if serialized with the serialize-javascript library. For resolves that will
+// typically always be the case since it will most likely have been parsed from
+// JSON. However for rejections you should not rely on extending the Error
+// constructor and expecting the user of the resource to use the instanceof
+// operator to test for specific failures. Instead set particular properties on
+// the error object that the user can test for the presence of.
 export default function createResource(fetch, hashInput) {
   return {
     [IS_RESOURCE]: true,

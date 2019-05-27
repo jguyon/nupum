@@ -10,9 +10,6 @@ import App, { preloadApp } from "../app";
 const RESOURCE_CACHE_MAX_SIZE = 100;
 const RESOURCE_CACHE_MAX_AGE = 30 * 60 * 1000; // 30min
 
-const rootNode = document.getElementById("root");
-const dataNode = document.getElementById("data");
-
 renderApp(true);
 
 if (module.hot) {
@@ -33,7 +30,7 @@ function renderApp(shouldPopulate) {
   });
 
   if (shouldPopulate) {
-    resourceCache.populate(resources, JSON.parse(dataNode.textContent));
+    resourceCache.populate(resources, window.SERIALIZED_DATA);
   }
 
   preloadApp({
@@ -50,7 +47,7 @@ function renderApp(shouldPopulate) {
             resourceCache={resourceCache}
           />
         </StrictMode>,
-        rootNode,
+        document.getElementById("root"),
       );
     },
     error => {
