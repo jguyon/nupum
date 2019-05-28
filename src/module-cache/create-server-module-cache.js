@@ -44,10 +44,14 @@ export default function createServerModuleCache() {
     const entry = entries.get(module);
 
     if (entry) {
-      if (entry.status === MODULE_PENDING && entry.promise) {
-        return entry.promise;
+      if (entry.status === MODULE_PENDING) {
+        if (entry.promise) {
+          return entry.promise;
+        } else {
+          return createEntry(module);
+        }
       } else {
-        return Promise.resolve();
+        return Promise.resolve(entry);
       }
     } else {
       return createEntry(module);

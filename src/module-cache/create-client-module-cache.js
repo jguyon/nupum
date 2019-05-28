@@ -78,7 +78,7 @@ export default function createClientModuleCache() {
         result.listen(resolve);
       });
     } else {
-      return Promise.resolve();
+      return Promise.resolve(result);
     }
   }
 

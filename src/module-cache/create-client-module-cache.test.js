@@ -273,12 +273,17 @@ test("failed result is rendered when requested module has unsuccessfully been pr
 });
 
 test("preloading a module multiple times does not refetch it", async () => {
-  const fetch = jest.fn(() => Promise.resolve());
+  const fetch = jest.fn(() => Promise.resolve("module data"));
   const module = createModule(fetch);
   const cache = createClientModuleCache();
 
-  cache.preload(module);
+  const promisedResultOne = cache.preload(module);
   expect(fetch).toHaveBeenCalledTimes(1);
-  await cache.preload(module);
+  const resultTwo = await cache.preload(module);
   expect(fetch).toHaveBeenCalledTimes(1);
+  const resultThree = await cache.preload(module);
+  expect(fetch).toHaveBeenCalledTimes(1);
+  const resultOne = await promisedResultOne;
+  expect(resultTwo).toBe(resultOne);
+  expect(resultThree).toBe(resultOne);
 });

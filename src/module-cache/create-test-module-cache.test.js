@@ -392,3 +392,18 @@ test("failed result is rendered when requested module has been failed during pre
     error: "module error",
   });
 });
+
+test("preloading a module multiple times works", async () => {
+  const module = createModule(() => Promise.resolve("module data"));
+  const cache = createTestModuleCache();
+
+  const promisedResultOne = cache.preload(module);
+  const promisedResultTwo = cache.preload(module);
+  await cache.wait(module);
+  const resultOne = await promisedResultOne;
+  const resultTwo = await promisedResultTwo;
+  const resultThree = await cache.preload(module);
+
+  expect(resultTwo).toBe(resultOne);
+  expect(resultThree).toBe(resultOne);
+});
