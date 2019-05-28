@@ -92,7 +92,7 @@ export default function createClientResourceCache(opts) {
         result.listen(resolve);
       });
     } else {
-      return Promise.resolve();
+      return Promise.resolve(result);
     }
   }
 

@@ -456,13 +456,18 @@ test("failed result is rendered when requested resource has unsuccessfully been 
 });
 
 test("preloading a resource multiple times does not refetch it", async () => {
-  const fetch = jest.fn(() => Promise.resolve());
+  const fetch = jest.fn(() => Promise.resolve("resource data"));
   const resource = createResource(fetch);
   const cache = createClientResourceCache();
 
-  cache.preload(resource, "input");
+  const promisedResultOne = cache.preload(resource, "input");
   expect(fetch).toHaveBeenCalledTimes(1);
   expect(fetch).toHaveBeenCalledWith("input");
-  await cache.preload(resource, "input");
+  const resultTwo = await cache.preload(resource, "input");
   expect(fetch).toHaveBeenCalledTimes(1);
+  const resultThree = await cache.preload(resource, "input");
+  expect(fetch).toHaveBeenCalledTimes(1);
+  const resultOne = await promisedResultOne;
+  expect(resultTwo).toBe(resultOne);
+  expect(resultThree).toBe(resultOne);
 });

@@ -355,3 +355,17 @@ test("failed result is rendered when requested resource has been failed during p
     error: "resource error",
   });
 });
+
+test("preloading a resource multiple times works", async () => {
+  const resource = createResource(fetch);
+  const cache = createTestResourceCache();
+
+  const promisedResultOne = cache.preload(resource, "input");
+  const promisedResultTwo = cache.preload(resource, "input");
+  cache.succeed(resource, "input", "resource data");
+  const resultOne = await promisedResultOne;
+  const resultTwo = await promisedResultTwo;
+  const resultThree = await cache.preload(resource, "input");
+  expect(resultTwo).toBe(resultOne);
+  expect(resultThree).toBe(resultOne);
+});

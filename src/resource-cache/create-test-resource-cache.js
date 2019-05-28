@@ -96,7 +96,7 @@ export default function createTestResourceCache() {
         entry.listen(resolve);
       });
     } else {
-      return Promise.resolve();
+      return Promise.resolve(entry);
     }
   }
 

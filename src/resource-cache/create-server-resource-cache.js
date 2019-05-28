@@ -61,16 +61,23 @@ export default function createServerResourceCache(resourcesToPreload) {
     const entry = resourceEntries.get(hash);
 
     if (entry) {
-      if (entry.status === RESOURCE_PENDING && entry.promise) {
-        return entry.promise;
+      if (entry.status === RESOURCE_PENDING) {
+        if (entry.promise) {
+          return entry.promise;
+        } else {
+          checkResourceToPreload(resource);
+
+          return createResourceEntry(
+            resourceEntries,
+            hash,
+            resource[RESOURCE_FETCH](input),
+          );
+        }
       } else {
-        return Promise.resolve();
+        return Promise.resolve(entry);
       }
     } else {
-      invariant(
-        resourceNames.has(resource),
-        "expected resource to have been specified as a resource to preload",
-      );
+      checkResourceToPreload(resource);
 
       return createResourceEntry(
         resourceEntries,
@@ -95,6 +102,13 @@ export default function createServerResourceCache(resourcesToPreload) {
       entries.set(resource, newResourceEntries);
       return newResourceEntries;
     }
+  }
+
+  function checkResourceToPreload(resource) {
+    invariant(
+      resourceNames.has(resource),
+      "expected resource to have been specified as a resource to preload",
+    );
   }
 
   function createResourceEntry(resourceEntries, hash, promise) {
