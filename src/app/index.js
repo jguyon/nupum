@@ -5,6 +5,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Router, { preloadRoutes } from "../router";
 import { ModuleCacheProvider } from "../module-cache";
 import { ResourceCacheProvider } from "../resource-cache";
+import ErrorBoundary from "./error-boundary";
 import { HydrationProvider } from "./use-hydration";
 import RootLayout from "./root-layout";
 import { LocationFocusProvider } from "./location-focus";
@@ -25,18 +26,20 @@ export default function App({
 }) {
   return (
     <HelmetProvider context={helmetContext}>
-      <HydrationProvider>
-        <ModuleCacheProvider cache={moduleCache}>
-          <ResourceCacheProvider cache={resourceCache}>
-            <Router
-              history={history}
-              routes={routes}
-              preloadTimeout={PRELOAD_TIMEOUT}
-              preloadProps={{ moduleCache, resourceCache }}
-            />
-          </ResourceCacheProvider>
-        </ModuleCacheProvider>
-      </HydrationProvider>
+      <ErrorBoundary>
+        <HydrationProvider>
+          <ModuleCacheProvider cache={moduleCache}>
+            <ResourceCacheProvider cache={resourceCache}>
+              <Router
+                history={history}
+                routes={routes}
+                preloadTimeout={PRELOAD_TIMEOUT}
+                preloadProps={{ moduleCache, resourceCache }}
+              />
+            </ResourceCacheProvider>
+          </ModuleCacheProvider>
+        </HydrationProvider>
+      </ErrorBoundary>
     </HelmetProvider>
   );
 }
