@@ -1,4 +1,4 @@
-# nupum
+# [nupum](https://nupum.now.sh/)
 
 A web app for searching npm packages, built with an emphasis on speed.
 
