@@ -13,6 +13,8 @@ real world project, but doing so there was a great way to learn.
 - **Server-side rendering**: the project follows a progressive enhancement
   philosophy, it is almost completely usable before the javascript has been
   downloaded and run.
+- **Code splitting**: the bundle is splitted between pages so that the user
+  never has to download more js code than what they need
 - **Loading spinners only when needed**: switching pages happens only once the
   data needed for rendering the next page has been fetched, improving perceived
   performance, showing a loading spinner only if fetching the data is taking too
