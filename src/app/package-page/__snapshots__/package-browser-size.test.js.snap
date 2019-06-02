@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`browser size is rendered when request succeeds 1`] = `
+<div>
+  2.1KB
+</div>
+`;
+
+exports[`error indicator is rendered when request fails 1`] = `
+<div>
+  N/A
+</div>
+`;
+
+exports[`loading indicator is rendered while request fetches 1`] = `
+.emotion-0 {
+  border: 0;
+  -webkit-clip: rect(0 0 0 0);
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+<div>
+  <span
+    class="emotion-0"
+  >
+    Loading
+  </span>
+  …
+</div>
+`;

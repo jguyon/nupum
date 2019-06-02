@@ -10,9 +10,11 @@ import {
   monoFontFamily,
 } from "../theme";
 import PackagePageUser from "./package-page-user";
+import PackageBrowserSize from "./package-browser-size";
 
 export default function PackagePageSideInfo({
   name,
+  version,
   license,
   dependenciesCount,
   peerDependenciesCount,
@@ -40,6 +42,10 @@ export default function PackagePageSideInfo({
             <DListDescription>{peerDependenciesCount}</DListDescription>
           </>
         ) : null}
+        <DListTitle>Size in browser</DListTitle>
+        <DListDescription>
+          <PackageBrowserSize name={name} version={version} />
+        </DListDescription>
       </DList>
     </Section>
   );
@@ -127,6 +133,7 @@ export default function PackagePageSideInfo({
 
 PackagePageSideInfo.propTypes = {
   name: PropTypes.string.isRequired,
+  version: PropTypes.string.isRequired,
   license: PropTypes.string,
   dependenciesCount: PropTypes.number.isRequired,
   peerDependenciesCount: PropTypes.number.isRequired,

@@ -1,4 +1,5 @@
-const faker = require("faker");
+import faker from "faker";
+import invariant from "tiny-invariant";
 
 beforeEach(() => {
   faker.seed(42);
@@ -239,4 +240,27 @@ function fakeDeps() {
   }
 
   return deps;
+}
+
+export function fakePackageBrowserSize({ name, version }) {
+  invariant(typeof name === "string", "expected name to be a string");
+  invariant(typeof version === "string", "expected version to be a string");
+
+  return {
+    name,
+    version,
+    scoped: faker.random.boolean(),
+    description: faker.random.boolean() ? faker.lorem.sentence() : undefined,
+    repository: faker.internet.url(),
+    hasJSModule: faker.random.boolean(),
+    hasJSNext: faker.random.boolean(),
+    hasSideEffects: faker.random.boolean(),
+    size: faker.random.number(),
+    gzip: faker.random.number(),
+    dependencyCount: faker.random.number(20),
+    dependencySizes: Array.from({ length: faker.random.number(9) }).map(() => ({
+      approximateSize: faker.random.number(),
+      name: fakeSlug(),
+    })),
+  };
 }

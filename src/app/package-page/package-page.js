@@ -33,6 +33,7 @@ export default function PackagePage({
         <PackagePageContentAside>
           <PackagePageSideInfo
             name={metadata.name}
+            version={metadata.version}
             license={metadata.license}
             dependenciesCount={
               metadata.dependencies

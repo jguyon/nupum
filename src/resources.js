@@ -112,3 +112,25 @@ async function fetchGithubFile(repository, filename) {
 
   return await response.text();
 }
+
+export const packageBrowserSize = createResource(
+  async ({ name, version }) => {
+    invariant(typeof name === "string", "expected name to be a string");
+    invariant(typeof version === "string", "expected version to be a string");
+
+    const params = new URLSearchParams({
+      package: `${name}@${version}`,
+    });
+    const response = await fetch(
+      `https://bundlephobia.com/api/size?${params.toString()}`,
+    );
+
+    invariant(
+      response.status === 200,
+      `expected response status to be 200 but got ${response.status}`,
+    );
+
+    return await response.json();
+  },
+  ({ name, version }) => JSON.stringify([name, version]),
+);
