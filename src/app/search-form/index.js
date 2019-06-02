@@ -140,6 +140,7 @@ function SearchInput({
       autoFocus={autoFocus}
       type="search"
       name="q"
+      placeholder={`Search packages, e.g. "express" or "react"`}
       role="combobox"
       aria-label="Search query"
       aria-autocomplete="list"
@@ -234,6 +235,10 @@ const inputStyles = css`
 
   &:focus {
     outline: none;
+  }
+
+  &::placeholder {
+    color: ${color("gray", 5)};
   }
 
   // https://blog.maximerouiller.com/post/remove-the-x-from-internet-explorer-and-chrome-input-type-search/
