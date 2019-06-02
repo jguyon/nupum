@@ -55,6 +55,9 @@ export default function PackagePage({
                 : null
             }
             githubOpenIssuesCount={github ? github.issues.openCount : null}
+            releasesLast3MonthsCount={
+              metadata.releases.length > 1 ? metadata.releases[1].count : null
+            }
             maintainers={metadata.maintainers}
           />
         </PackagePageContentAside>

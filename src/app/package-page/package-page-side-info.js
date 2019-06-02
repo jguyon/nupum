@@ -21,6 +21,7 @@ export default function PackagePageSideInfo({
   githubStarsCount,
   githubOpenIssuesCount,
   githubCommitsLast3MonthsCount,
+  releasesLast3MonthsCount,
   maintainers,
 }) {
   const usage = (
@@ -71,10 +72,20 @@ export default function PackagePageSideInfo({
     </Section>
   );
 
-  const activity = (githubCommitsLast3MonthsCount || githubOpenIssuesCount) && (
+  const activity = (releasesLast3MonthsCount ||
+    githubCommitsLast3MonthsCount ||
+    githubOpenIssuesCount) && (
     <Section>
       <Heading>Activity</Heading>
       <DList>
+        {releasesLast3MonthsCount ? (
+          <>
+            <DListTitle>Releases last 3 months</DListTitle>
+            <DListDescription>
+              {millify(releasesLast3MonthsCount, { precision: 1 })}
+            </DListDescription>
+          </>
+        ) : null}
         {githubCommitsLast3MonthsCount ? (
           <>
             <DListTitle>Commits last 3 months</DListTitle>
@@ -124,6 +135,7 @@ PackagePageSideInfo.propTypes = {
   githubStarsCount: PropTypes.number,
   githubCommitsLast3MonthsCount: PropTypes.number,
   githubOpenIssuesCount: PropTypes.number,
+  releasesLast3MonthsCount: PropTypes.number,
   maintainers: PropTypes.arrayOf(
     PropTypes.shape({
       username: PropTypes.string.isRequired,
