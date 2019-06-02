@@ -30,7 +30,17 @@
     },
     {
       "src": "/favicon.ico",
+      "headers": {
+        "cache-control": "public,max-age=0,s-maxage=31536000,must-revalidate"
+      },
       "dest": "/public/favicon.ico"
+    },
+    {
+      "src": "/",
+      "headers": {
+        "cache-control": "public,max-age=0,s-maxage=31536000,must-revalidate"
+      },
+      "dest": "/index.js"
     },
     {
       "src": "/(.*)",
