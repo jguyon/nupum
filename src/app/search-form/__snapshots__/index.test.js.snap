@@ -15,6 +15,22 @@ exports[`changing input value expands menu when it is not expanded 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -40,6 +56,7 @@ exports[`changing input value expands menu when it is not expanded 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react router"
@@ -275,6 +292,22 @@ exports[`changing input value updates suggestions when menu is expanded 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -300,6 +333,7 @@ exports[`changing input value updates suggestions when menu is expanded 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react router"
@@ -520,6 +554,22 @@ exports[`changing input value when a suggestion is selected unselects it 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -545,6 +595,7 @@ exports[`changing input value when a suggestion is selected unselects it 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -780,6 +831,22 @@ exports[`clicking on a suggestion navigates to package page 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -805,6 +872,7 @@ exports[`clicking on a suggestion navigates to package page 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -1057,6 +1125,22 @@ exports[`hovering a suggestion selects it 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -1083,6 +1167,7 @@ exports[`hovering a suggestion selects it 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -1336,6 +1421,22 @@ exports[`leaving input collapses menu 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -1361,6 +1462,7 @@ exports[`leaving input collapses menu 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -1615,6 +1717,22 @@ exports[`menu does not expand when input is empty 2`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -1640,6 +1758,7 @@ exports[`menu does not expand when input is empty 2`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="  "
@@ -1702,6 +1821,22 @@ exports[`menu does not expand when there are no suggestions 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -1727,6 +1862,7 @@ exports[`menu does not expand when there are no suggestions 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -1789,6 +1925,22 @@ exports[`menu is initialized as collapsed 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -1814,6 +1966,7 @@ exports[`menu is initialized as collapsed 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -2066,6 +2219,22 @@ exports[`menu keeps previous suggestions when fetching next suggestions fails 1`
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -2091,6 +2260,7 @@ exports[`menu keeps previous suggestions when fetching next suggestions fails 1`
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react router"
@@ -2326,6 +2496,22 @@ exports[`menu keeps previous suggestions while next suggestions are fetching 1`]
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -2351,6 +2537,7 @@ exports[`menu keeps previous suggestions while next suggestions are fetching 1`]
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react router"
@@ -2586,6 +2773,22 @@ exports[`pressing down arrow key expands menu when it is not expanded 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -2611,6 +2814,7 @@ exports[`pressing down arrow key expands menu when it is not expanded 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -2846,6 +3050,22 @@ exports[`pressing down arrow key selects first suggestion when menu is expanded 
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -2872,6 +3092,7 @@ exports[`pressing down arrow key selects first suggestion when menu is expanded 
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -3115,6 +3336,22 @@ exports[`pressing down arrow key selects next suggestion when a suggestion is se
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -3141,6 +3378,7 @@ exports[`pressing down arrow key selects next suggestion when a suggestion is se
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -3384,6 +3622,22 @@ exports[`pressing down arrow key unselects suggestion when last suggestion is se
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -3409,6 +3663,7 @@ exports[`pressing down arrow key unselects suggestion when last suggestion is se
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -3644,6 +3899,22 @@ exports[`pressing end key when a suggestion is selected unselects it 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -3669,6 +3940,7 @@ exports[`pressing end key when a suggestion is selected unselects it 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -3904,6 +4176,22 @@ exports[`pressing enter key when a suggestion is selected navigates to package p
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -3929,6 +4217,7 @@ exports[`pressing enter key when a suggestion is selected navigates to package p
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -4181,6 +4470,22 @@ exports[`pressing escape key clears text when menu is collapsed 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -4206,6 +4511,7 @@ exports[`pressing escape key clears text when menu is collapsed 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value=""
@@ -4227,6 +4533,22 @@ exports[`pressing escape key collapses menu when menu is expanded 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -4252,6 +4574,7 @@ exports[`pressing escape key collapses menu when menu is expanded 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -4504,6 +4827,22 @@ exports[`pressing home key when a suggestion is selected unselects it 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -4529,6 +4868,7 @@ exports[`pressing home key when a suggestion is selected unselects it 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -4764,6 +5104,22 @@ exports[`pressing left arrow key when a suggestion is selected unselects it 1`] 
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -4789,6 +5145,7 @@ exports[`pressing left arrow key when a suggestion is selected unselects it 1`] 
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -5024,6 +5381,22 @@ exports[`pressing right arrow key when a suggestion is selected unselects it 1`]
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -5049,6 +5422,7 @@ exports[`pressing right arrow key when a suggestion is selected unselects it 1`]
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -5284,6 +5658,22 @@ exports[`pressing up arrow key expands menu when it is not expanded 1`] = `
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -5309,6 +5699,7 @@ exports[`pressing up arrow key expands menu when it is not expanded 1`] = `
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -5544,6 +5935,22 @@ exports[`pressing up arrow key selects last suggestion when menu is expanded wit
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -5570,6 +5977,7 @@ exports[`pressing up arrow key selects last suggestion when menu is expanded wit
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -5813,6 +6221,22 @@ exports[`pressing up arrow key selects previous suggestion when a suggestion is 
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -5839,6 +6263,7 @@ exports[`pressing up arrow key selects previous suggestion when a suggestion is 
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -6082,6 +6507,22 @@ exports[`pressing up arrow key unselects suggestion when first suggestion is sel
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -6107,6 +6548,7 @@ exports[`pressing up arrow key unselects suggestion when first suggestion is sel
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react"
@@ -6332,10 +6774,10 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -22,23 +22,23 @@
-            autocorrect="off"
-            class="css-5wnmzh-inputStyles"
+@@ -23,23 +23,23 @@
+            class="css-o7k51z-inputStyles"
             name="q"
+            placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
             role="combobox"
             type="search"
 -           value="react"
@@ -6366,10 +6808,10 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -22,23 +22,23 @@
-            autocorrect="off"
-            class="css-5wnmzh-inputStyles"
+@@ -23,23 +23,23 @@
+            class="css-o7k51z-inputStyles"
             name="q"
+            placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
             role="combobox"
             type="search"
 -           value=""
@@ -6410,6 +6852,22 @@ exports[`suggestion selected before next suggestions are fetched is kept selecte
   outline: none;
 }
 
+.emotion-0::-webkit-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::-moz-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0:-ms-input-placeholder {
+  color: #adb5bd;
+}
+
+.emotion-0::placeholder {
+  color: #adb5bd;
+}
+
 .emotion-0::-ms-clear,
 .emotion-0::-ms-reveal {
   display: none;
@@ -6436,6 +6894,7 @@ exports[`suggestion selected before next suggestions are fetched is kept selecte
   autocorrect="off"
   class="emotion-0"
   name="q"
+  placeholder="Search packages, e.g. \\"express\\" or \\"react\\""
   role="combobox"
   type="search"
   value="react router"
