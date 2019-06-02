@@ -10,5 +10,8 @@ module.exports = {
     // are not the same in the client build and the server build.
     ["@emotion/babel-preset-css-prop", { sourceMap: false }],
   ],
-  plugins: ["babel-plugin-dev-expression"],
+  plugins: [
+    "babel-plugin-dev-expression",
+    process.env.NODE_ENV !== "test" && "babel-plugin-jsx-remove-data-test-id",
+  ].filter(Boolean),
 };
