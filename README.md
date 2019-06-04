@@ -26,6 +26,18 @@ real world project, but doing so there was a great way to learn.
 - **Network cache**: all network requests are cached using an LRU mechanism,
   making going back to a previous page instant.
 
+## Codebase structure
+
+- [src/client](src/client): the client-side entrypoint
+- [src/server](src/server): the server-side entrypoint
+- [src/router](src/router): utilities for rendering, navigating, and preloading
+  routes
+- [src/module-cache](src/module-cache): utilities for importing modules
+  dynamically
+- [src/resource-cache](src/resource-cache): utilities for caching network
+  requests
+- [src/app](src/app): the UI components
+
 ## Local development
 
 ```sh
