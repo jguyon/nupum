@@ -31,7 +31,7 @@ export function LocationFocusProvider({ location, action, children }) {
         if (!node.contains(document.activeElement)) {
           node.focus();
         }
-        if (action === "PUSH") {
+        if (action === "PUSH" && node.scrollIntoView) {
           node.scrollIntoView(true);
         }
       } else {
