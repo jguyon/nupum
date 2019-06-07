@@ -1,5 +1,5 @@
 import React, { StrictMode } from "react";
-import { render as rtlRender, cleanup } from "react-testing-library";
+import { render as rtlRender, cleanup } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import { HelmetProvider } from "react-helmet-async";
 import Router from "../router";
@@ -13,7 +13,7 @@ afterEach(() => {
   cleanup();
 });
 
-export * from "react-testing-library";
+export * from "@testing-library/react";
 
 export function render(ui) {
   const { rerender: rtlRerender, ...rest } = rtlRender(wrapUi(ui));
