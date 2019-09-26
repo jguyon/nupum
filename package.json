@@ -4,7 +4,7 @@
     "lint": "eslint --ext .js .",
     "test": "jest",
     "format": "prettier --write '**/*.{js,json,md}'",
-    "now-build": "webpack",
+    "now-build": "webpack --config-name=client && webpack --config-name=server",
     "now-dev": "webpack-dev-server --config-name=client"
   },
   "dependencies": {

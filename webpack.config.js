@@ -178,8 +178,6 @@ module.exports = [
           BABEL_RUNTIME_REGEXP,
         ],
       }),
-      // the manifest won't be there at build time so we don't want to bundle it
-      path.join(__dirname, "build/assets.json"),
     ],
     mode,
     devtool,
@@ -208,9 +206,6 @@ module.exports = [
           isDev ? "development" : "production",
         ),
         "process.env.TARGET": JSON.stringify("server"),
-        "process.env.MANIFEST_PATH": JSON.stringify(
-          path.join(__dirname, "build/assets.json"),
-        ),
       }),
       // prevent creating multiple chunks
       new webpack.optimize.LimitChunkCountPlugin({

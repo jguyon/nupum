@@ -2,6 +2,7 @@ import "./polyfill";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import invariant from "tiny-invariant";
+import manifest from "../../build/assets.json";
 import { createStaticHistory } from "../router";
 import { createServerModuleCache } from "../module-cache";
 import { createServerResourceCache } from "../resource-cache";
@@ -57,8 +58,6 @@ export default async function handle(req, res) {
     res.end(SERVER_ERROR_TEXT);
   }
 }
-
-const manifest = require(process.env.MANIFEST_PATH);
 
 function scriptsFor(entry, chunks) {
   const scripts = new Set();
