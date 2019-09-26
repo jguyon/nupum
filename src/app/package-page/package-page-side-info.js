@@ -78,39 +78,40 @@ export default function PackagePageSideInfo({
     </Section>
   );
 
-  const activity = (releasesLast3MonthsCount ||
+  const activity =
+    releasesLast3MonthsCount ||
     githubCommitsLast3MonthsCount ||
-    githubOpenIssuesCount) && (
-    <Section>
-      <Heading>Activity</Heading>
-      <DList>
-        {releasesLast3MonthsCount ? (
-          <>
-            <DListTitle>Releases last 3 months</DListTitle>
-            <DListDescription>
-              {millify(releasesLast3MonthsCount, { precision: 1 })}
-            </DListDescription>
-          </>
-        ) : null}
-        {githubCommitsLast3MonthsCount ? (
-          <>
-            <DListTitle>Commits last 3 months</DListTitle>
-            <DListDescription>
-              {millify(githubCommitsLast3MonthsCount, { precision: 1 })}
-            </DListDescription>
-          </>
-        ) : null}
-        {githubOpenIssuesCount ? (
-          <>
-            <DListTitle>Open issues</DListTitle>
-            <DListDescription>
-              {millify(githubOpenIssuesCount, { precision: 1 })}
-            </DListDescription>
-          </>
-        ) : null}
-      </DList>
-    </Section>
-  );
+    githubOpenIssuesCount ? (
+      <Section>
+        <Heading>Activity</Heading>
+        <DList>
+          {releasesLast3MonthsCount ? (
+            <>
+              <DListTitle>Releases last 3 months</DListTitle>
+              <DListDescription>
+                {millify(releasesLast3MonthsCount, { precision: 1 })}
+              </DListDescription>
+            </>
+          ) : null}
+          {githubCommitsLast3MonthsCount ? (
+            <>
+              <DListTitle>Commits last 3 months</DListTitle>
+              <DListDescription>
+                {millify(githubCommitsLast3MonthsCount, { precision: 1 })}
+              </DListDescription>
+            </>
+          ) : null}
+          {githubOpenIssuesCount ? (
+            <>
+              <DListTitle>Open issues</DListTitle>
+              <DListDescription>
+                {millify(githubOpenIssuesCount, { precision: 1 })}
+              </DListDescription>
+            </>
+          ) : null}
+        </DList>
+      </Section>
+    ) : null;
 
   const maintainersList = (
     <Section>
