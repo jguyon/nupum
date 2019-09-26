@@ -18,6 +18,8 @@ const publicPath = "/static/";
 
 const FILE_LOADER_REGEXP = /\.woff2?$/;
 
+const BABEL_RUNTIME_REGEXP = /@babel(?:\/|\\{1,2})runtime/;
+
 function createRules(isServer) {
   return [
     // first, lint javascript files with eslint
@@ -46,7 +48,7 @@ function createRules(isServer) {
         },
         // process dependencies
         {
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
+          exclude: BABEL_RUNTIME_REGEXP,
           loader: require.resolve("babel-loader"),
           options: {
             babelrc: false,
@@ -169,8 +171,12 @@ module.exports = [
     externals: [
       // we don't want to bundle node_modules in the server
       nodeExternals({
-        // we need to bundle static files to get their urls
-        whitelist: [FILE_LOADER_REGEXP],
+        whitelist: [
+          // we need to bundle static files to get their urls
+          FILE_LOADER_REGEXP,
+          // we need to bundle @babel/runtime because it uses ES modules
+          BABEL_RUNTIME_REGEXP,
+        ],
       }),
       // the manifest won't be there at build time so we don't want to bundle it
       path.join(__dirname, "build/assets.json"),
