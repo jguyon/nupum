@@ -11,7 +11,7 @@
     "@emotion/core": "^10.0.10",
     "history": "^4.9.0",
     "millify": "^3.0.2",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^3.1.1",
     "open-color": "^1.6.3",
     "p-any": "^2.1.0",
     "polished": "^3.2.0",
